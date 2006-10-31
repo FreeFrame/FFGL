@@ -1,0 +1,324 @@
+// !$*UTF8*$!
+{
+	2D21902D0AF02467007154B7 /* FFGLBrightness-Info.plist */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {887, 591}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRect = "{{0, 0}, {887, 591}}";
+			sepNavWindowFrame = "{{38, 86}, {926, 720}}";
+		};
+	};
+	2D21905A0AF0270A007154B7 /* FFGLBrightness */ = {
+		activeExec = 0;
+	};
+	2D2190870AF02BC1007154B7 /* FFGLMirror.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {887, 1666}}";
+			sepNavSelRange = "{281, 0}";
+			sepNavVisRect = "{{0, 495}, {887, 591}}";
+			sepNavWindowFrame = "{{84, 44}, {926, 720}}";
+		};
+	};
+	2D2190890AF02BD1007154B7 /* FFGLMirror */ = {
+		activeExec = 0;
+	};
+	2D2190970AF02BD1007154B7 /* FFGLMirror-Info.plist */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {887, 591}}";
+			sepNavSelRange = "{583, 0}";
+			sepNavVisRect = "{{0, 0}, {887, 591}}";
+			sepNavWindowFrame = "{{15, 107}, {926, 720}}";
+		};
+	};
+	2DA285930AEE5D640030A4DD /* Project object */ = {
+		activeBuildConfigurationName = Debug;
+		activeTarget = 2D21905A0AF0270A007154B7 /* FFGLBrightness */;
+		addToTargets = (
+			2DFDB2BB0AF6739E00367FE2 /* FFGLHeat */,
+		);
+		breakpoints = (
+			2DFDB3C00AF6850200367FE2 /* FFGLHeat.cpp:98 */,
+			2DFDB41D0AF689D600367FE2 /* FFGLShader.cpp:104 */,
+		);
+		breakpointsGroup = 2DA285AF0AEE60590030A4DD /* XCBreakpointsBucket */;
+		codeSenseManager = 2DA285980AEE5D640030A4DD /* Code sense */;
+		ignoreBreakpointsInProjectsDict = {
+		};
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					231,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXConfiguration.PBXTargetDataSource.PBXTargetDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					200,
+					51,
+					20,
+					48,
+					43,
+					43,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXTargetDataSource_PrimaryAttribute,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 183936819;
+			PBXWorkspaceStateSaveDate = 183936819;
+		};
+		perUserProjectItems = {
+			2DFDB3570AF6800100367FE2 /* PBXTextBookmark */ = 2DFDB3570AF6800100367FE2 /* PBXTextBookmark */;
+			2DFDB3580AF6800100367FE2 /* PBXTextBookmark */ = 2DFDB3580AF6800100367FE2 /* PBXTextBookmark */;
+			2DFDB35A0AF6800100367FE2 /* PBXTextBookmark */ = 2DFDB35A0AF6800100367FE2 /* PBXTextBookmark */;
+			2DFDB35C0AF6800100367FE2 /* PBXTextBookmark */ = 2DFDB35C0AF6800100367FE2 /* PBXTextBookmark */;
+			2DFDB35D0AF6800100367FE2 /* PBXTextBookmark */ = 2DFDB35D0AF6800100367FE2 /* PBXTextBookmark */;
+		};
+		sourceControlManager = 2DA285970AEE5D640030A4DD /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	2DA285970AEE5D640030A4DD /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+		};
+		scmType = "";
+	};
+	2DA285980AEE5D640030A4DD /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	2DA285A50AEE5F780030A4DD /* FFGLBrightness.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1064, 1946}}";
+			sepNavSelRange = "{748, 0}";
+			sepNavVisRect = "{{0, 0}, {1064, 351}}";
+			sepNavWindowFrame = "{{130, 76}, {954, 646}}";
+		};
+	};
+	2DA285AF0AEE60590030A4DD /* XCBreakpointsBucket */ = {
+		isa = XCBreakpointsBucket;
+		name = FFGLPlugins;
+		objects = (
+			2DFDB3C00AF6850200367FE2 /* FFGLHeat.cpp:98 */,
+			2DFDB41D0AF689D600367FE2 /* FFGLShader.cpp:104 */,
+		);
+	};
+	2DA285C80AEE61AF0030A4DD /* FFGLPluginInfo.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1064, 1484}}";
+			sepNavSelRange = "{3117, 0}";
+			sepNavVisRect = "{{0, 1105}, {1064, 351}}";
+		};
+	};
+	2DA285C90AEE61AF0030A4DD /* FFGLPluginInfoData.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1064, 351}}";
+			sepNavSelRange = "{102, 0}";
+			sepNavVisRect = "{{0, 0}, {1064, 351}}";
+			sepNavWindowFrame = "{{107, 23}, {926, 720}}";
+		};
+	};
+	2DA285CA0AEE61AF0030A4DD /* FFGLPluginManager.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1064, 3192}}";
+			sepNavSelRange = "{500, 0}";
+			sepNavVisRect = "{{0, 2841}, {1064, 351}}";
+		};
+	};
+	2DA285CB0AEE61AF0030A4DD /* FFGLPluginSDK.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1064, 1316}}";
+			sepNavSelRange = "{850, 0}";
+			sepNavVisRect = "{{0, 280}, {1064, 351}}";
+			sepNavWindowFrame = "{{15, 200}, {625, 627}}";
+		};
+	};
+	2DA285CC0AEE61AF0030A4DD /* FFGL.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1064, 5740}}";
+			sepNavSelRange = "{3687, 0}";
+			sepNavVisRect = "{{0, 854}, {1064, 351}}";
+			sepNavWindowFrame = "{{15, 200}, {625, 627}}";
+		};
+	};
+	2DC889D80AF4057200199EB1 /* FFGLTile */ = {
+		activeExec = 0;
+	};
+	2DC889E60AF4057200199EB1 /* FFGLTile-Info.plist */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {887, 591}}";
+			sepNavSelRange = "{477, 0}";
+			sepNavVisRect = "{{0, 0}, {887, 591}}";
+			sepNavWindowFrame = "{{107, 23}, {926, 720}}";
+		};
+	};
+	2DC889ED0AF405C700199EB1 /* FFGLTile.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {620, 2786}}";
+			sepNavSelRange = "{2478, 943}";
+			sepNavVisRect = "{{0, 1076}, {558, 652}}";
+			sepNavWindowFrame = "{{531, 274}, {750, 558}}";
+		};
+	};
+	2DC88A380AF40E6300199EB1 /* FFGLShader.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {678, 2632}}";
+			sepNavSelRange = "{3266, 0}";
+			sepNavVisRect = "{{0, 1839}, {678, 424}}";
+			sepNavWindowFrame = "{{84, 44}, {926, 720}}";
+		};
+	};
+	2DC88AC60AF4153F00199EB1 /* FFGLExtensions.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {920, 3360}}";
+			sepNavSelRange = "{51, 0}";
+			sepNavVisRect = "{{0, 0}, {678, 424}}";
+			sepNavWindowFrame = "{{50, 274}, {750, 558}}";
+		};
+	};
+	2DFDB2BB0AF6739E00367FE2 /* FFGLHeat */ = {
+		activeExec = 0;
+	};
+	2DFDB2CB0AF6739E00367FE2 /* FFGLHeat-Info.plist */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {887, 591}}";
+			sepNavSelRange = "{477, 0}";
+			sepNavVisRect = "{{0, 0}, {887, 591}}";
+			sepNavWindowFrame = "{{84, 44}, {926, 720}}";
+		};
+	};
+	2DFDB2E90AF674AB00367FE2 /* FFGLHeat.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {14828, 3402}}";
+			sepNavSelRange = "{8337, 0}";
+			sepNavVisRect = "{{0, 1235}, {711, 429}}";
+			sepNavWindowFrame = "{{345, 251}, {750, 558}}";
+		};
+	};
+	2DFDB3570AF6800100367FE2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2DC889ED0AF405C700199EB1 /* FFGLTile.cpp */;
+		name = "FFGLTile.cpp: 85";
+		rLen = 1021;
+		rLoc = 2478;
+		rType = 0;
+		vrLen = 1559;
+		vrLoc = 2310;
+	};
+	2DFDB3580AF6800100367FE2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2DFDB3590AF6800100367FE2 /* FFGLHeat.h */;
+		name = "(null): 40";
+		rLen = 176;
+		rLoc = 873;
+		rType = 0;
+		vrLen = 995;
+		vrLoc = 70;
+	};
+	2DFDB3590AF6800100367FE2 /* FFGLHeat.h */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = FFGLHeat.h;
+		path = /Users/trey/Desktop/FFGLSDK/Projects/FFGLPlugins/XCode/../../../Source/FFGLPlugins/FFGLHeat/FFGLHeat.h;
+		sourceTree = "<absolute>";
+	};
+	2DFDB35A0AF6800100367FE2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2DFDB35B0AF6800100367FE2 /* FFGL.h */;
+		rLen = 0;
+		rLoc = 2147483647;
+		rType = 0;
+	};
+	2DFDB35B0AF6800100367FE2 /* FFGL.h */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = FFGL.h;
+		path = /Users/trey/Desktop/FFGLSDK/Include/FFGL.h;
+		sourceTree = "<absolute>";
+	};
+	2DFDB35C0AF6800100367FE2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2DC889ED0AF405C700199EB1 /* FFGLTile.cpp */;
+		name = "FFGLTile.cpp: 85";
+		rLen = 1021;
+		rLoc = 2478;
+		rType = 0;
+		vrLen = 1559;
+		vrLoc = 2310;
+	};
+	2DFDB35D0AF6800100367FE2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2DFDB35E0AF6800100367FE2 /* FFGLHeat.h */;
+		name = "(null): 40";
+		rLen = 176;
+		rLoc = 873;
+		rType = 0;
+		vrLen = 995;
+		vrLoc = 70;
+	};
+	2DFDB35E0AF6800100367FE2 /* FFGLHeat.h */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
+		name = FFGLHeat.h;
+		path = /Users/trey/Desktop/FFGLSDK/Projects/FFGLPlugins/XCode/../../../Source/FFGLPlugins/FFGLHeat/FFGLHeat.h;
+		sourceTree = "<absolute>";
+	};
+	2DFDB3C00AF6850200367FE2 /* FFGLHeat.cpp:98 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		delayBeforeContinue = 0;
+		fileReference = 2DFDB2E90AF674AB00367FE2 /* FFGLHeat.cpp */;
+		functionName = "FFGLHeat::ProcessOpenGL()";
+		hitCount = 1;
+		lineNumber = 98;
+		location = FFGLHeat_debug;
+		modificationTime = 183932186.315149;
+		state = 1;
+	};
+	2DFDB41D0AF689D600367FE2 /* FFGLShader.cpp:104 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		delayBeforeContinue = 0;
+		fileReference = 2DC88A380AF40E6300199EB1 /* FFGLShader.cpp */;
+		functionName = "FFGLShader::Compile()";
+		hitCount = 1;
+		lineNumber = 104;
+		location = FFGLTile_debug;
+		modificationTime = 183932158.530607;
+		state = 1;
+	};
+}
