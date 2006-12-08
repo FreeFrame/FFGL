@@ -67,7 +67,7 @@ void FFGLPluginInstance::SetFloatParameter(int paramNum, float value)
 
     //be careful with this cast.. ArgStruct.NewParameterValue is DWORD
     //for this to compile correctly, sizeof(DWORD) must == sizeof(float)
-	  ((float *)&ArgStruct.NewParameterValue)[0] = value;
+	  *((float *)&ArgStruct.NewParameterValue) = value;
 
   	m_ffPluginMain(FF_SETPARAMETER,(DWORD)(&ArgStruct), m_ffInstanceID);
   }
@@ -86,7 +86,7 @@ float FFGLPluginInstance::GetFloatParameter(int paramNum)
   DWORD ffParameterType = m_ffPluginMain(FF_GETPARAMETERTYPE,(DWORD)paramNum,0).ivalue;
   if (ffParameterType!=FF_TYPE_TEXT)
   {
-  	plugMainUnion result = m_ffPluginMain(FF_GETPARAMETER,(DWORD)&paramNum, m_ffInstanceID);
+  	plugMainUnion result = m_ffPluginMain(FF_GETPARAMETER,(DWORD)paramNum, m_ffInstanceID);
 
     //make sure the call to get the parameter succeeded before
     //reading the float value 
