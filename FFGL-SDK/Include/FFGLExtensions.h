@@ -79,9 +79,15 @@ THE POSSIBILITY OF SUCH DAMAGE.
 #define APIENTRY
 
 #else
+#ifdef __linux__
+
+// APIENTRY is defined in gl.h
+
+#else
 
 #error #define APIENTRY for your platform
 
+#endif
 #endif
 #endif
 

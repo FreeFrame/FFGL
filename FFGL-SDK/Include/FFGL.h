@@ -68,9 +68,15 @@
 #include <OpenGL/gl.h>
 
 #else
+#ifdef __linux__
+
+#include <GL/gl.h>
+
+#else
 
 #error define this for your OS
 
+#endif
 #endif
 #endif
 
@@ -109,7 +115,7 @@ typedef struct FFGLTexCoordsTag
 //helper function to return the s,t,r coordinate
 //that cooresponds to the width,height,depth of the used
 //portion of the texture
-static FFGLTexCoords GetMaxGLTexCoords(FFGLTextureStruct t)
+inline FFGLTexCoords GetMaxGLTexCoords(FFGLTextureStruct t)
 {
   //these are some basic OpenGL extensions we need 
   const GLuint _GL_TEXTURE_3D = 0x806F;
