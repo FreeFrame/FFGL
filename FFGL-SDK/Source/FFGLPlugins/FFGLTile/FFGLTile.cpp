@@ -54,7 +54,7 @@ FFGLTile::FFGLTile()
 {
 	// Plugin properties
 	SetProcessFrameCopySupported(false);
-  SetProcessOpenGLSupported(true);
+	SetProcessOpenGLSupported(true);
 	SetSupportedFormats(FF_RGB_24);
 	SetSupportedOptimizations(FF_OPT_NONE);
 	
@@ -166,10 +166,10 @@ DWORD FFGLTile::GetParameter(DWORD dwIndex)
 	switch (dwIndex) {
 
 	case FFPARAM_TileX:
-    *((float *)&dwRet) = m_TileX;
+    *((float *)(unsigned)&dwRet) = m_TileX;
 		return dwRet;
 	case FFPARAM_TileY:
-    *((float *)&dwRet) = m_TileY;
+    *((float *)(unsigned)&dwRet) = m_TileY;
 		return dwRet;
 
 	default:
@@ -184,10 +184,10 @@ DWORD FFGLTile::SetParameter(const SetParameterStruct* pParam)
 		switch (pParam->ParameterNumber) {
 
 		case FFPARAM_TileX:
-			m_TileX = *((float *)&(pParam->NewParameterValue));
+			m_TileX = *((float *)(unsigned)&(pParam->NewParameterValue));
 			break;
 		case FFPARAM_TileY:
-			m_TileY = *((float *)&(pParam->NewParameterValue));
+			m_TileY = *((float *)(unsigned)&(pParam->NewParameterValue));
 			break;
 
 		default:

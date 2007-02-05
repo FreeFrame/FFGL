@@ -213,7 +213,7 @@ DWORD FFGLHeat::GetParameter(DWORD dwIndex)
 	switch (dwIndex) {
 
 	case FFPARAM_Heat:
-    *((float *)&dwRet) = m_Heat;
+    *((float *)(unsigned)&dwRet) = m_Heat;
 		return dwRet;
 	default:
 		return FF_FAIL;
@@ -227,7 +227,7 @@ DWORD FFGLHeat::SetParameter(const SetParameterStruct* pParam)
 		switch (pParam->ParameterNumber) {
 
 		case FFPARAM_Heat:
-			m_Heat = *((float *)&(pParam->NewParameterValue));
+			m_Heat = *((float *)(unsigned)&(pParam->NewParameterValue));
 			break;
 
 		default:

@@ -9,7 +9,7 @@
 
 static CFFGLPluginInfo PluginInfo ( 
 	FFGLBrightness::CreateInstance,	// Create method
-	"GLPT",								// Plugin unique ID											
+	"GLPT",								// Plugin unique ID
 	"FFGLBrightness",     // Plugin name											
 	1,						   			// API major version number 													
 	000,								  // API minor version number	
@@ -107,7 +107,7 @@ DWORD FFGLBrightness::GetParameter(DWORD dwIndex)
 
 	case FFPARAM_BRIGHTNESS:
     //sizeof(DWORD) must == sizeof(float)
-    *((float *)&dwRet) = m_brightness;
+    *((float *)(unsigned)(&dwRet)) = m_brightness;
 		return dwRet;
 
 	default:
@@ -123,7 +123,7 @@ DWORD FFGLBrightness::SetParameter(const SetParameterStruct* pParam)
 
 		case FFPARAM_BRIGHTNESS:
       //sizeof(DWORD) must == sizeof(float)
-      m_brightness = *((float *)&(pParam->NewParameterValue));
+      m_brightness = *((float *)(unsigned)&(pParam->NewParameterValue));
 			break;
 
 		default:

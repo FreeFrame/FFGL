@@ -201,7 +201,7 @@ DWORD FFGLLumaKey::GetParameter(DWORD dwIndex)
 	switch (dwIndex) {
 
 	case FFPARAM_Luma:
-    *((float *)&dwRet) = m_Luma;
+    *((float *)(unsigned)&dwRet) = m_Luma;
 		return dwRet;
 
 	default:
@@ -216,7 +216,7 @@ DWORD FFGLLumaKey::SetParameter(const SetParameterStruct* pParam)
 		switch (pParam->ParameterNumber) {
 
 		case FFPARAM_Luma:
-			m_Luma = *((float *)&(pParam->NewParameterValue));
+			m_Luma = *((float *)(unsigned)&(pParam->NewParameterValue));
 			break;
 
 		default:

@@ -37,7 +37,7 @@ protected:
 	
 	int m_initResources;
 	FFGLExtensions m_extensions;
-    FFGLShader m_shader;
+	FFGLShader m_shader;
 	GLint m_inputTextureLocation;
 	GLint m_maxCoordsLocation;
 	GLint m_tileAmountLocation;

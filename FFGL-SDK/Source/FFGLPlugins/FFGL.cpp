@@ -89,7 +89,7 @@ void *getInfo()
 DWORD initialise()
 {
 	if ((g_CurrPluginInfo != NULL) && (s_pPrototype == NULL)) {
-		DWORD dwRet = (*(g_CurrPluginInfo->GetFactoryMethod()))((void**)&s_pPrototype);
+		DWORD dwRet = (*(g_CurrPluginInfo->GetFactoryMethod()))((void**)(unsigned)&s_pPrototype);
 		return dwRet;
 	}
 	if (s_pPrototype != NULL) return FF_SUCCESS; 
@@ -229,13 +229,13 @@ DWORD instantiate(const VideoInfoStruct* pVideoInfo)
 		
 		// Creating plugin instance
 		CFreeFrameGLPlugin* pInstance = NULL;
-		DWORD dwRet = (*(g_CurrPluginInfo->GetFactoryMethod()))((void**)&pInstance);
+		DWORD dwRet = (*(g_CurrPluginInfo->GetFactoryMethod()))((void**)(unsigned)&pInstance);
 		if ((dwRet == FF_FAIL) || (pInstance == NULL)) return FF_FAIL;
 		pInstance->m_pPlugin = pInstance;
 		
 		// Initializing instance with default values
 		for (int i = 0; i < s_pPrototype->GetNumParams(); ++i) {
-			DWORD dwType = s_pPrototype->GetParamType(DWORD(i));
+			//DWORD dwType = s_pPrototype->GetParamType(DWORD(i));
 			void* pValue = s_pPrototype->GetParamDefault(DWORD(i));
 			SetParameterStruct ParamStruct;
 			ParamStruct.ParameterNumber = DWORD(i);
@@ -276,11 +276,10 @@ DWORD deInstantiate(void *instanceID)
 
    plugMainUnion plugMain(DWORD functionCode, DWORD inputValue, DWORD instanceID) 
 
-#elif LINUX
+#elif __linux__
 
-extern "C" {
    plugMainUnion plugMain(DWORD functionCode, DWORD inputValue, DWORD instanceID)
-   
+
 #endif	
 
 {
@@ -403,7 +402,3 @@ extern "C" {
 	
 	return retval;
 }
-
-#ifdef LINUX	
-} /* extern "C" */
-#endif

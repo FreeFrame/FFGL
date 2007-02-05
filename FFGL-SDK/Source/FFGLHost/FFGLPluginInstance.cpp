@@ -67,7 +67,7 @@ void FFGLPluginInstance::SetFloatParameter(int paramNum, float value)
 
     //be careful with this cast.. ArgStruct.NewParameterValue is DWORD
     //for this to compile correctly, sizeof(DWORD) must == sizeof(float)
-	  *((float *)&ArgStruct.NewParameterValue) = value;
+	  *((float *)(unsigned)&ArgStruct.NewParameterValue) = value;
 
   	m_ffPluginMain(FF_SETPARAMETER,(DWORD)(&ArgStruct), m_ffInstanceID);
   }
@@ -151,7 +151,7 @@ DWORD FFGLPluginInstance::InitPluginLibrary()
     return rval;
 
   //get the parameter names
-  m_numParameters = (int)m_ffPluginMain(FF_GETNUMPARAMETERS,NULL,0).ivalue;		
+  m_numParameters = (int)m_ffPluginMain(FF_GETNUMPARAMETERS, 0, 0).ivalue;		
 
 	int i;
 	for (i=0; i<m_numParameters; i++)
@@ -270,7 +270,7 @@ DWORD FFGLPluginInstance::DeinitPluginLibrary()
   
   if (m_ffPluginMain!=NULL)
   {
-    rval = m_ffPluginMain(FF_DEINITIALISE,NULL,0).ivalue;
+    rval = m_ffPluginMain(FF_DEINITIALISE,0,0).ivalue;
 	if (rval != FF_SUCCESS)
     {
       FFDebugMessage("FreeFrame DeInit failed");
