@@ -4,10 +4,14 @@ FreeFrameGL SDK
 Host and Plugin Samples (w/source code) for Windows and OSX
 by Trey Harrison - www.harrisondigitalmedia.com
 
+Host and Plugin Samples converted for Linux, based on Trey's OSX code
+by Gabor Papp - www.mndl.hu
+
 FFGLHeat and FFGLTile Plugins by Edwin De Konig - www.resolume.com
 
-Many .h and .cpp's were taken from the FreeFrame SDK by Gualtiero Volpe (Gualtiero.Volpe@unige.it) and
-extended / modified to support the new processing function, ProcessOpenGL.
+Many .h and .cpp's were taken from the FreeFrame SDK by Gualtiero Volpe
+(Gualtiero.Volpe@unige.it) and extended / modified to support the new 
+processing function, ProcessOpenGL.
 --------------------------------------------------------------------------
 
 --------------------
@@ -31,8 +35,20 @@ The source code was written and compiled with XCode 2.4. The project files proba
 open with anything older than that.
 
 To test the FFGL host and sample plugins, open a terminal window, navigate to the Binaries/OSX
-folder, and run ./FFGLHost (for some reason, running FFGLHost from the finder does not work because
-the finder doesnt start the application in its own directory)
+folder, and run ./FFGLHost (for some reason, running FFGLHost from the finder does not work
+because the finder doesnt start the application in its own directory)
+
+Mouse movement is used to assign values to plugin #1 parameter #0 and plugin #2 parameter #0.
+
+------------------
+Linux Instructions
+------------------
+
+The code is based on the OSX source files and it was compiled with gcc 4.1.1.
+
+To compile the sample plugins, open a terminal window, navigate to the
+Projects/FFGLPlugins/Linux folder and type make. To test the FFGL host go to the
+Projects/FFGLHost/Linux folder, type make and run ./FFGLHost.
 
 Mouse movement is used to assign values to plugin #1 parameter #0 and plugin #2 parameter #0.
 
@@ -91,6 +107,9 @@ Source/
 
     Win32/
       Files specific to Win32 implementation of the host
+      
+    Linux/
+      Files specific to GNU/Linux implementation of the host   
 
 
   FFGLPlugins/
@@ -124,6 +143,10 @@ Projects/
     MSVC/
       MSVC project files for FFGLHost
 
+    Linux/
+      GCC makefile for FFGLHost
+      
+
   FFGLPlugins/
 
     MSVC/
@@ -132,4 +155,6 @@ Projects/
     XCode/
       XCode project files for FFGLPlugins
 
+    Linux/
+      GCC makefile for FFGLPlugins
 
