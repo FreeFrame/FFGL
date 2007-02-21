@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="FreeFrameTest">
+</Property><Property Name="Solution File" Value="C:\Documents and Settings\yoy\Bureau\FreeFrame.NET\FreeFrameTest.sln">
+</Property><Property Name="User Options File" Value="C:\Documents and Settings\yoy\Bureau\FreeFrame.NET\FreeFrameTest.suo">
+</Property><Property Name="Date" Value="lundi 18 décembre 2006">
+</Property><Property Name="Time" Value="13:49">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="FreeFrameTest.sln" Description="File successfully backed up as C:\Documents and Settings\yoy\Bureau\FreeFrame.NET\Backup\FreeFrameTest.sln">
+</Event><Event ErrorLevel="0" Project="" Source="FreeFrameTest.suo" Description="File successfully backed up as C:\Documents and Settings\yoy\Bureau\FreeFrame.NET\Backup\FreeFrameTest.suo">
+</Event><Event ErrorLevel="0" Project="FreeFrameTest" Source="FreeFrameTest.csproj" Description="Project file successfully backed up as C:\Documents and Settings\yoy\Bureau\FreeFrame.NET\Backup\FreeFrameTest.csproj">
+</Event><Event ErrorLevel="0" Project="FreeFrameTest" Source="FreeFrameTest.csproj.user" Description="Project user file successfully backed up as C:\Documents and Settings\yoy\Bureau\FreeFrame.NET\Backup\FreeFrameTest.csproj.user">
+</Event><Event ErrorLevel="0" Project="FreeFrameTest" Source="AssemblyInfo.cs" Description="File successfully backed up as C:\Documents and Settings\yoy\Bureau\FreeFrame.NET\Backup\AssemblyInfo.cs">
+</Event><Event ErrorLevel="0" Project="FreeFrameTest" Source="Form1.cs" Description="File successfully backed up as C:\Documents and Settings\yoy\Bureau\FreeFrame.NET\Backup\Form1.cs">
+</Event><Event ErrorLevel="0" Project="FreeFrameTest" Source="FreeFrame.cs" Description="File successfully backed up as C:\Documents and Settings\yoy\Bureau\FreeFrame.NET\Backup\FreeFrame.cs">
+</Event><Event ErrorLevel="0" Project="FreeFrameTest" Source="Video.cs" Description="File successfully backed up as C:\Documents and Settings\yoy\Bureau\FreeFrame.NET\Backup\Video.cs">
+</Event><Event ErrorLevel="0" Project="FreeFrameTest" Source="WebCam.cs" Description="File successfully backed up as C:\Documents and Settings\yoy\Bureau\FreeFrame.NET\Backup\WebCam.cs">
+</Event><Event ErrorLevel="0" Project="FreeFrameTest" Source="App.ico" Description="File successfully backed up as C:\Documents and Settings\yoy\Bureau\FreeFrame.NET\Backup\App.ico">
+</Event><Event ErrorLevel="0" Project="FreeFrameTest" Source="Form1.resx" Description="File successfully backed up as C:\Documents and Settings\yoy\Bureau\FreeFrame.NET\Backup\Form1.resx">
+</Event><Event ErrorLevel="0" Project="FreeFrameTest" Source="FreeFrameTest.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="FreeFrameTest" Source="FreeFrameTest.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="FreeFrameTest.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="FreeFrameTest.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="FreeFrameTest" Source="FreeFrameTest.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>

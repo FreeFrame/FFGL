@@ -1,0 +1,7 @@
+bin\Debug\FreeFrameTest.exe
+bin\Debug\FreeFrameTest.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\FreeFrameTest.Form1.resources
+obj\Debug\FreeFrameTest.csproj.GenerateResource.Cache
+obj\Debug\FreeFrameTest.exe
+obj\Debug\FreeFrameTest.pdb
