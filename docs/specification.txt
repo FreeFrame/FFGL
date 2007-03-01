@@ -630,26 +630,42 @@ getPluginCaps
    case, the return value can be represented as a 32-bit unsigned integer.
 
    capsIndex value capsIndex meaning return values
-   0 16 bit video FF_SUPPORTED: plugin supports 16 bit video
+   0 (FF_CAP_16BITVIDEO) 16 bit video FF_SUPPORTED: plugin supports 16 bit
+   video
    FF_UNSUPPORTED: plugin doesn't support 16 bit video
-   1 24 bit video FF_SUPPORTED: plugin supports 24 bit video
+   1 (FF_CAP_24BITVIDEO) 24 bit video FF_SUPPORTED: plugin supports 24 bit
+   video
    FF_UNSUPPORTED: plugin doesn't support 24 bit video
-   2 32 bit video FF_SUPPORTED: plugin supports 32 bit video
+   2 (FF_CAP_32BITVIDEO) 32 bit video FF_SUPPORTED: plugin supports 32 bit
+   video
    FF_UNSUPPORTED: plugin doesn't support 32 bit video
-   3 processFrameCopy support FF_SUPPORTED: plugin supports processFrameCopy
+   3 (FF_CAP_PROCESSFRAMECOPY) processFrameCopy support FF_SUPPORTED: plugin
+   supports processFrameCopy
    FF_UNSUPPORTED: plugin doesn't support processFrameCopy
-   10  Minimum input frames Returns minimum number of input frames plugin
-   requires or FF_FALSE if capability not supported.
-   11 Maximum input frames Returns maximum number of input frames plugin can
-   process or FF_FALSE if capability not supported.
-   15 Plugin optimization Return value indicates whether plugin is optimized
-   for Copy or InPlace processing.
-   0 = no preference
-   1 = InPlace processing is faster
-   2 = Copy processing is faster
-   3 = Both are optimized
+   4 (FF_CAP_PROCESSOPENGL) processOpengl support FF_SUPPORTED: plugin supports
+   processOpengl
+   FF_UNSUPPORTED: plugin doesn't support processOpengl
+   10 (FF_CAP_MINIMUMINPUTFRAMES) Minimum input frames Returns minimum number
+   of input frames plugin requires or FF_FALSE if capability not supported.
+   11 (FF_CAP_MAXIMUMINPUTFRAMES) Maximum input frames Returns maximum number
+   of input frames plugin can process or FF_FALSE if capability not supported.
+   15 (FF_CAP_COPYORINPLACE) Plugin optimization Return value indicates whether
+   plugin is optimized for Copy or InPlace processing.
+   0 (FF_CAP_PREFER_NONE) = no preference
+   1 (FF_CAP_PREFER_INPLACE) = InPlace processing is faster
+   2 (FF_CAP_PREFER_COPY) = Copy processing is faster
+   3 (FF_CAP_PREFER_BOTH) = Both are optimized
+   FFGL plugins should return 0 (FF_CAP_PREFER_NONE).
 
     Remarks:
+
+   Plugins should either support CPU or GPU processing but not both. This means
+   that  if a plugin supports FF_CAP_PROCESSOPENGL it is required that it
+   returns   FF_UNSUPPORTED   to   FF_CAP_16BITVIDEO,  FF_CAP_24BITVIDEO,
+   FF_CAP_32BITVIDEO and FF_CAP_PROCESSFRAMECOPY queries. And vice versa, if
+   the  plugin  supports  either  FF_CAP_16BITVIDEO, FF_CAP_24BITVIDEO or
+   FF_CAP_32BITVIDEO, it must reply FF_UNSUPPORTED to the FF_CAP_PROCESSOPENGL
+   query.
 
    Bitdepth format of the video:
    The host asks the plugin if it is capable of its favorite bit depth, and

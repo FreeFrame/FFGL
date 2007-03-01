@@ -1262,7 +1262,7 @@ represented as a 32-bit unsigned integer.
 		<td valign=top><b>return values</b></td>
 	</tr>
 	<tr>
-		<td valign=top>0</td>
+		<td valign=top>0 (FF_CAP_16BITVIDEO)</td>
 		<td valign=top>16 bit video</td>
 		<td valign=top>
 			<a href="#FF_SUPPORTED">FF_SUPPORTED</a>: plugin supports 16 bit video<br>
@@ -1270,7 +1270,7 @@ represented as a 32-bit unsigned integer.
 		</td>
 	</tr>
 	<tr>
-		<td valign=top>1</td>
+		<td valign=top>1 (FF_CAP_24BITVIDEO)</td>
 		<td valign=top>24 bit video</td>
 		<td valign=top>
 			<a href="#FF_SUPPORTED">FF_SUPPORTED</a>: plugin supports 24 bit video<br>
@@ -1278,7 +1278,7 @@ represented as a 32-bit unsigned integer.
 		</td>
 	</tr>
 	<tr>
-		<td valign=top>2</td>
+		<td valign=top>2 (FF_CAP_32BITVIDEO)</td>
 		<td valign=top>32 bit video</td>
 		<td valign=top>
 			<a href="#FF_SUPPORTED">FF_SUPPORTED</a>: plugin supports 32 bit video<br>
@@ -1286,7 +1286,7 @@ represented as a 32-bit unsigned integer.
 		</td>
 	</tr>
 	<tr>
-		<td valign=top>3</td>
+		<td valign=top>3 (FF_CAP_PROCESSFRAMECOPY)</td>
 		<td valign=top><a href="#processFrameCopy">processFrameCopy</a> support</td>
 		<td valign=top>
 			<a href="#FF_SUPPORTED">FF_SUPPORTED</a>: plugin supports <a href="#processFrameCopy">processFrameCopy</a><br>
@@ -1294,29 +1294,47 @@ represented as a 32-bit unsigned integer.
 		</td>
 	</tr>
 	<tr>
-		<td valign=top>10</td>
+		<td valign=top>4 (FF_CAP_PROCESSOPENGL)</td>
+		<td valign=top><a href="#processOpengl">processOpengl</a> support</td>
+		<td valign=top>
+			<a href="#FF_SUPPORTED">FF_SUPPORTED</a>: plugin supports <a href="#processOpengl">processOpengl</a><br>
+			<a href="#FF_UNSUPPORTED">FF_UNSUPPORTED</a>: plugin doesn't support <a href="#processOpengl">processOpengl</a>
+		</td>
+	</tr>
+	<tr>
+		<td valign=top>10 (FF_CAP_MINIMUMINPUTFRAMES)</td>
 		<td>Minimum input frames</td>
 		<td>Returns minimum number of input frames plugin requires or <a href="#FF_FALSE">FF_FALSE</a> if capability not supported.</td>
 	</tr>
 	<tr>
-		<td valign=top>11</td>
+		<td valign=top>11 (FF_CAP_MAXIMUMINPUTFRAMES)</td>
 		<td valign=top>Maximum input frames</td>
 		<td valign=top>Returns maximum number of input frames plugin can process or <a href="#FF_FALSE">FF_FALSE</a> if capability not supported.</td>
 	</tr>
 	<tr>
-		<td valign=top>15</td>
+		<td valign=top>15 (FF_CAP_COPYORINPLACE)</td>
 		<td valign=top>Plugin optimization</td>
 		<td valign=top>
 			Return value indicates whether plugin is optimized for Copy or InPlace processing.<br>
-			0 = no preference<br>
-			1 = InPlace processing is faster<br>
-			2 = Copy processing is faster<br>
-			3 = Both are optimized
+			0 (FF_CAP_PREFER_NONE) = no preference<br>
+			1 (FF_CAP_PREFER_INPLACE) = InPlace processing is faster<br>
+			2 (FF_CAP_PREFER_COPY) = Copy processing is faster<br>
+			3 (FF_CAP_PREFER_BOTH) = Both are optimized<br><br>
+			FFGL plugins should return 0 (FF_CAP_PREFER_NONE).
 		</td>
 	</tr>
 </table>
 
 <h4>Remarks:</h4>
+<p>
+Plugins should either support CPU or GPU processing but not both. This means
+that if a plugin supports FF_CAP_PROCESSOPENGL it is required that it returns
+FF_UNSUPPORTED to FF_CAP_16BITVIDEO, FF_CAP_24BITVIDEO, FF_CAP_32BITVIDEO and 
+FF_CAP_PROCESSFRAMECOPY queries. And vice versa, if the plugin supports either
+FF_CAP_16BITVIDEO, FF_CAP_24BITVIDEO or FF_CAP_32BITVIDEO, it must reply
+FF_UNSUPPORTED to the FF_CAP_PROCESSOPENGL query.
+</p>
+
 <p>
 Bitdepth format of the video:<br>
 The host asks the plugin if it is capable of its favorite bit depth,
