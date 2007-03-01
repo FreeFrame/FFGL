@@ -228,10 +228,14 @@ PluginCapsIndex
 
    3 = Plugin supports processFrameCopy function
 
+   4 = Plugin supports processOpengl function
+
    Calls to these caps indexes are only meaningful if the plugin has reported
-   that it supports processFrameCopy:
+   that it supports processFrameCopy or processOpengl:
    10 = Minimum input frames
    11 = Maximum input frames
+   Calls to this caps index are only meaningful if the plugin has reported that
+   it supports processFrameCopy:
    15 = Plugin optimized for copy or in-place processing
 
     Remarks:
@@ -494,6 +498,7 @@ ProcessFrameCopyStruct{
    12 deInstantiate none Success/error code
    14 processFrameCopy Pointer to ProcessFrameCopyStruct Success/error code
    16 getInputStatus InputChannel InputStatus
+   17 processOpengl pointer to FFGLTextureStruct Success/fail
 
 
 5.1. Global functions
@@ -728,6 +733,31 @@ processFrame
    frameport for source plugins.
    HOST: pFrame needs to be a valid pointer throughout this call as the plugin
    processes the frame 'in place'.
+     _________________________________________________________________
+
+processOpengl
+
+    (function code = 4, needs valid instanceID!)
+
+    Input value:
+
+   pFFGLTextureStruct: pointer to FFGLTextureStruct structure.
+
+    Return value:
+
+   FF_SUCCESS if successful, FF_FAIL if failed. (32-bit unsigned integer)
+
+    Remarks:
+
+   PLUGIN: PLUGINS MUST RESTORE ANY OPENGL STATES THEY CHANGE TO THE DEFAULT
+   STATE DEFINED BY THE OPENGL SPEC BEFORE THE PLUGIN'S PROCESSOPENGL FUNCTION
+   RETURNS, WITH THE FOLLOWING EXCEPTIONS
+     * If a plugin creates its own framebuffer objects for internal rendering,
+       the plugin HAVE TO restore the host's fbo and it will HAVE TO restore
+       the host's viewport setting.
+     * more to come
+
+   HOST:  
      _________________________________________________________________
 
 getParameterDisplay
