@@ -889,7 +889,140 @@ ProcessFrameCopyStruct{
 </tr>
 </table>
 
+<hr>
 
+<!-- /****************** FFGLTextureStruct ******************/ -->
+<a name="FFGLTextureStruct">
+	<table border=0 bgcolor="#E8E8E8"><tr>
+		<td valign=top><h3>FFGLTextureStruct</h3></td>
+		<td valign=top>&nbsp;(size = 32 bytes)</td>
+	</tr></table>
+</a>
+
+<pre>
+FFGLTextureStruct {
+  <b>Width:</b> 32-bit unsigned integer
+  <b>Height:</b> 32-bit unsigned integer
+  <b>Depth:</b> 32-bit unsigned integer
+  <b>HardwareWidth:</b> 32-bit unsigned integer
+  <b>HardwareHeight:</b> 32-bit unsigned integer
+  <b>HardwareDepth:</b> 32-bit unsigned integer
+  <b>Target:</b> 32-bit unsigned integer (GLuint)
+  <b>Handle:</b> 32-bit unsigned integer (GLuint)
+  GLuint Target;
+  GLuint Handle;
+}
+</pre>
+
+<h4>Fields:</h4>
+<table border=0>
+<tr>
+	<td valign=top><i>Width:</i></td>
+	<td>Width of video frame in pixels</td>
+</tr>
+<tr>
+	<td valign=top><i>Height:</i></td>
+	<td>Height of video frame in pixels</td>
+</tr>
+<tr>
+	<td valign=top><i>Depth:</i></td>
+	<td>Depth of video frame in pixels reserved for 3D frames</td>
+</tr>
+<tr>
+	<td valign=top><i>HardwareWidth:</i></td>
+	<td>Width of texture storing the video frame in pixels</td>
+</tr>
+<tr>
+	<td valign=top><i>HardwareHeight:</i></td>
+	<td>Height of texture storing the video frame in pixels</td>
+</tr>
+<tr>
+	<td valign=top><i>HardwareDepth:</i></td>
+	<td>Depth of texture storing the video frame in pixels</td>
+</tr>
+<tr>
+	<td valign=top><i>Target:</i></td>
+	<td>Texture target (GL_TEXTURE_1D, GL_TEXTURE_2D,
+	GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_3D, etc.)</td>
+</tr>
+<tr>
+	<td valign=top><i>Handle:</i></td>
+	<td>the actual texture handle, from glGenTextures</td>
+</tr>
+</table>
+
+<hr>
+
+<!-- /****************** OpenGLViewportStruct ******************/ -->
+<a name="OpenGLViewportStruct">
+	<table border=0 bgcolor="#E8E8E8"><tr>
+		<td valign=top><h3>OpenGLViewportStruct</h3></td>
+		<td valign=top>&nbsp;(size = 16 bytes)</td>
+	</tr></table>
+</a>
+
+<pre>
+OpenGLViewportStruct {
+   <b>x:</b> 32-bit unsigned integer
+   <b>y:</b> 32-bit unsigned integer
+   <b>width:</b> 32-bit unsigned integer
+   <b>height:</b> 32-bit unsigned integer
+}
+</pre>
+
+<h4>Fields:</h4>
+<table border=0>
+<tr>
+	<td valign=top><i>x:</i></td>
+	<td>X-coordinate of the viewport's bottom left corner</td>
+</tr>
+<tr>
+	<td valign=top><i>y:</i></td>
+	<td>Y-coordinate of the viewport's bottom left corner</td>
+</tr>
+<tr>
+	<td valign=top><i>width:</i></td>
+	<td>Width of viewport</td>
+</tr>
+<tr>
+	<td valign=top><i>height:</i></td>
+	<td>Height of viewport</td>
+</tr>
+</table>
+
+<hr>
+
+<!-- /****************** ProcessOpenGLStruct ******************/ -->
+<a name="ProcessOpenGLStruct">
+	<table border=0 bgcolor="#E8E8E8"><tr>
+		<td valign=top><h3>ProcessOpenGLStruct</h3></td>
+		<td valign=top>&nbsp;(size = 24 bytes)</td>
+	</tr></table>
+</a>
+
+<pre>
+ProcessOpenGLStruct {
+   <b>numInputTextures:</b> 32-bit unsigned integer
+   <b>ppInputTextures:</b> 32-bit pointer to array of pointers
+   <b>hostViewport:</b> OpenGLViewportStruct
+}
+</pre>
+
+<h4>Fields:</h4>
+<table border=0>
+<tr>
+	<td valign=top><i>numInputTextures:</i></td>
+	<td>Number of input textures contained in ppInputTextures</td>
+</tr>
+<tr>
+	<td valign=top><i>ppInputTextures:</i></td>
+	<td>A pointer to an array of pointers to input textures</td>
+</tr>
+<tr>
+	<td valign=top><i>hostViewport:</i></td>
+	<td>Viewport of the host</td>
+</tr>
+</table>
 
 
 <p>&nbsp;</p>

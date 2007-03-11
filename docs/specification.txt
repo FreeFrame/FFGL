@@ -463,6 +463,72 @@ ProcessFrameCopyStruct{
    numInputFrames: Number of input frames contained in ppInputFrames.
    ppInputFrames:  A pointer to an array of pointers to input frames.
    pOutputFrame:   Pointer to output frame.
+     _________________________________________________________________
+
+FFGLTextureStruct
+
+    (size = 32 bytes)
+
+FFGLTextureStruct {
+  Width: 32-bit unsigned integer
+  Height: 32-bit unsigned integer
+  Depth: 32-bit unsigned integer
+  HardwareWidth: 32-bit unsigned integer
+  HardwareHeight: 32-bit unsigned integer
+  HardwareDepth: 32-bit unsigned integer
+  Target: 32-bit unsigned integer (GLuint)
+  Handle: 32-bit unsigned integer (GLuint)
+  GLuint Target;
+  GLuint Handle;
+}
+
+    Fields:
+
+   Width: Width of video frame in pixels
+   Height: Height of video frame in pixels
+   Depth: Depth of video frame in pixels reserved for 3D frames
+   HardwareWidth: Width of texture storing the video frame in pixels
+   HardwareHeight: Height of texture storing the video frame in pixels
+   HardwareDepth: Depth of texture storing the video frame in pixels
+   Target: Texture target (GL_TEXTURE_1D, GL_TEXTURE_2D,
+   GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_3D, etc.)
+   Handle: the actual texture handle, from glGenTextures
+     _________________________________________________________________
+
+OpenGLViewportStruct
+
+    (size = 16 bytes)
+
+OpenGLViewportStruct {
+   x: 32-bit unsigned integer
+   y: 32-bit unsigned integer
+   width: 32-bit unsigned integer
+   height: 32-bit unsigned integer
+}
+
+    Fields:
+
+   x:      X-coordinate of the viewport's bottom left corner
+   y:      Y-coordinate of the viewport's bottom left corner
+   width:  Width of viewport
+   height: Height of viewport
+     _________________________________________________________________
+
+ProcessOpenGLStruct
+
+    (size = 24 bytes)
+
+ProcessOpenGLStruct {
+   numInputTextures: 32-bit unsigned integer
+   ppInputTextures: 32-bit pointer to array of pointers
+   hostViewport: OpenGLViewportStruct
+}
+
+    Fields:
+
+   numInputTextures: Number of input textures contained in ppInputTextures
+   ppInputTextures:  A pointer to an array of pointers to input textures
+   hostViewport:     Viewport of the host
 
 
 5. Functions
