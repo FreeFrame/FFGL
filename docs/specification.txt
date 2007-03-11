@@ -1,7 +1,7 @@
 
               FreeFrame Open Video Plugin System Specification
 
-                              Version 1.0 - 03
+                                Version 1.5
 
    1. OS integration
    2. Basic types and constants
@@ -12,7 +12,7 @@
        5.2. Instance specific functions
 
 
-   Copyright (c) 2002, 2003 www.freeframe.org
+   Copyright (c) 2002-2007 www.freeframe.org
    All rights reserved.
 
    This document is a functional specification for the FreeFrame application
@@ -478,8 +478,6 @@ FFGLTextureStruct {
   HardwareDepth: 32-bit unsigned integer
   Target: 32-bit unsigned integer (GLuint)
   Handle: 32-bit unsigned integer (GLuint)
-  GLuint Target;
-  GLuint Handle;
 }
 
     Fields:
