@@ -1568,14 +1568,19 @@ failed. (32-bit unsigned integer)
 
 <table border=0>
 <tr>
-	<td valign=top>PLUGIN:</td>
-	<td>Process a frame of video 'in place'. This is also the basic frameport for source plugins.</td>
+	<td valign=top>CPU PLUGIN:</td>
+	<td>Process a frame of video 'in place'. This is also the basic
+	frameport for source plugins.</td>
+</tr>
+<tr>
+	<td valign=top>GPU PLUGIN:</td>
+	<td>Plugins need not implement this function. They must return
+	FF_FAIL leaving the video frame data intact when called.</td>
 </tr>
 <tr>
 	<td valign=top>HOST:</td>
-	<td>
-		pFrame needs to be a valid pointer throughout this call as the plugin processes
-		the frame 'in place'.
+	<td>pFrame needs to be a valid pointer throughout this call as the plugin processes
+	the frame 'in place'.
 	</td>
 </tr>
 </table>
@@ -1592,9 +1597,9 @@ failed. (32-bit unsigned integer)
 <h4>Input value:</h4>
 <table border=0>
 <tr>
-	<td><i>pFFGLTextureStruct:</i></td>
+	<td><i>pProcessOpenGLStruct:</i></td>
 	<td>
-		pointer to FFGLTextureStruct structure.
+		pointer to ProcessOpenGLStruct structure.
 	</td>
 </tr>
 </table>
@@ -1607,7 +1612,12 @@ failed. (32-bit unsigned integer)
 
 <table border=0>
 <tr>
-	<td valign=top>PLUGIN:</td>
+	<td valign=top>CPU PLUGIN:</td>
+	<td>Plugins need not implement this function. They must return
+	FF_FAIL when called.</td>
+</tr>
+<tr>
+	<td valign=top>GPU PLUGIN:</td>
 	<td>PLUGINS MUST RESTORE ANY OPENGL STATES THEY CHANGE TO THE DEFAULT STATE DEFINED
 	BY THE OPENGL SPEC BEFORE THE PLUGIN'S PROCESSOPENGL FUNCTION RETURNS, WITH
 	THE FOLLOWING EXCEPTIONS

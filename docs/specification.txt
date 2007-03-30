@@ -793,8 +793,10 @@ processFrame
 
     Remarks:
 
-   PLUGIN: Process a frame of video 'in place'. This is also the basic
+   CPU PLUGIN: Process a frame of video 'in place'. This is also the basic
    frameport for source plugins.
+   GPU PLUGIN: Plugins need not implement this function. They must return
+   FF_FAIL leaving the video frame data intact when called.
    HOST: pFrame needs to be a valid pointer throughout this call as the plugin
    processes the frame 'in place'.
      _________________________________________________________________
@@ -805,7 +807,7 @@ processOpengl
 
     Input value:
 
-   pFFGLTextureStruct: pointer to FFGLTextureStruct structure.
+   pProcessOpenGLStruct: pointer to ProcessOpenGLStruct structure.
 
     Return value:
 
@@ -813,15 +815,17 @@ processOpengl
 
     Remarks:
 
-   PLUGIN: PLUGINS MUST RESTORE ANY OPENGL STATES THEY CHANGE TO THE DEFAULT
-   STATE DEFINED BY THE OPENGL SPEC BEFORE THE PLUGIN'S PROCESSOPENGL FUNCTION
-   RETURNS, WITH THE FOLLOWING EXCEPTIONS
+   CPU PLUGIN: Plugins need not implement this function. They must return
+   FF_FAIL when called.
+   GPU  PLUGIN: PLUGINS MUST RESTORE ANY OPENGL STATES THEY CHANGE TO THE
+   DEFAULT STATE DEFINED BY THE OPENGL SPEC BEFORE THE PLUGIN'S PROCESSOPENGL
+   FUNCTION RETURNS, WITH THE FOLLOWING EXCEPTIONS
      * If a plugin creates its own framebuffer objects for internal rendering,
        the plugin HAVE TO restore the host's fbo and it will HAVE TO restore
        the host's viewport setting.
      * more to come
 
-   HOST:  
+   HOST:
      _________________________________________________________________
 
 getParameterDisplay
