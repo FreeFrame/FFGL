@@ -1,7 +1,9 @@
 
               FreeFrame Open Video Plugin System Specification
 
-                                Version 1.5
+ Proposal for an OpenGL hardware format extension to the existing FreeFrame 1.0
+				
+Version 1.5 alpha - see SVN revision of this file for version number during development of the spec 
 
    1. OS integration
    2. Basic types and constants
