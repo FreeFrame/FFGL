@@ -1765,19 +1765,24 @@ Returns <a href="#FF_FAIL">FF_FAIL</a> on error.
 		function returns. The instance identifier you provide to the host must
 		be the unique identifier of this instance until a call to deinitialise.
 		<br><br>
-		GPU: VideoInfoStruct should be ignored because the host viewport and texture sizes may change over time. Refer to
-		the sizes passed into the ProcessOpenGL call for correct size information.
+		GPU: Allocate GPU resources, textures, shader programs, etc. VideoInfoStruct should be ignored, refer to
+		the viewport and texture sizes passed into the ProcessOpenGL call for correct size information. 
 		<br><br>
 	</td>
 </tr>
 <tr>
 	<td valign=top>HOST:</td>
 	<td>
-		This function *must* return before a call to processFrame.  Pointer to
-		<a href="#VideoInfoStruct">VideoInfoStruct</a> *must* be valid until function returns. The
-		<a href="#InstanceIdentifier">InstanceIdentifier</a> provided by the plugin is your handle to this
+		This function *must* return before a call to processFrame. The <a href="#InstanceIdentifier">InstanceIdentifier</a> provided by the plugin is your handle to this
 		instance of the plugin. The host must keep this instance identifier,
 		and provide it in all calls to the plugin regarding that instance.
+		<br><br>
+		CPU: Pointer to <a href="#VideoInfoStruct">VideoInfoStruct</a> *must* be valid until function returns.
+		<br><br>
+		GPU: Host must ensure that a valid OpenGL context is active during this call so that plugins can allocate
+		GPU resources.
+		<br><br>
+		
 	</td>
 </tr>
 </table>
@@ -1800,11 +1805,10 @@ Returns <a href="#FF_SUCCESS">FF_SUCCESS</a> if successful or <a href="#FF_FAIL"
 <h4>Remarks:</h4>
 <table border=0>
 <tr>
-	<td valign=top>PLUGIN:</td>
+	<td valign=top>PLUGINS:</td>
 	<td>
-		Tidy up, deallocate memory<br>
-		All memory associated with the instance being deinited must be freed
-		here.
+		Tidy up, deallocate memory. All memory associated with the instance being deinited must be freed
+		here.	GPU plugins should release all GPU resources they've created.
 	</td>
 </tr>
 <tr>
@@ -1812,6 +1816,7 @@ Returns <a href="#FF_SUCCESS">FF_SUCCESS</a> if successful or <a href="#FF_FAIL"
 	<td>
 		This function must be called to close an instance of the plugin.
 		All instances should be closed before <a href="#deInitialise">deInitialising</a> the plugin!
+		GPU hosts must ensure a valid OpenGL context is active during this call so that plugins can free GPU resources.
 	</td>
 </tr>
 </table>
