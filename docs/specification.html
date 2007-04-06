@@ -1002,8 +1002,8 @@ OpenGLViewportStruct {
 <pre>
 ProcessOpenGLStruct {
    <b>numInputTextures:</b> 32-bit unsigned integer
-   <b>ppInputTextures:</b> 32-bit pointer to array of pointers
-   <b>hostViewport:</b> OpenGLViewportStruct
+   <b>ppInputTextures:</b> 32-bit pointer to array of pointers to <a href="#FFGLTextureStruct">FFGLTextureStruct</a>
+   <b>hostViewport:</b> <a href="#OpenGLViewportStruct">OpenGLViewportStruct</a>
 }
 </pre>
 
@@ -1181,7 +1181,7 @@ that are the same for all instances, and so do not require a valid InstanceID.
 	<tr>
 		<td>17</td>
 		<td><a href="#ProcessOpengl">processOpengl</a></td>
-		<td>pointer to <a href="#">FFGLTextureStruct</a></td>
+		<td>pointer to <a href="#ProcessOpenGLStruct">ProcessOpenGLStruct</a></td>
 		<td>Success/fail</td>
 	</tr>
 
@@ -1755,15 +1755,19 @@ Returns <a href="#FF_FAIL">FF_FAIL</a> on error.
 
 <table border=0>
 <tr>
-	<td valign=top>PLUGIN:</td>
+	<td valign=top>PLUGINS:</td>
 	<td>
 		Prepare an instance of the Plug-in for processing.
 		Set default values, allocate memory
 		When the plug-in returns from this function it must be ready to process a frame.
-		<br>
-		Make a copy of the <a href="#VideoInfoStruct">VideoInfoStruct</a> locally as pointer may not be valid after
+		<br><br>
+		CPU: Make a copy of the <a href="#VideoInfoStruct">VideoInfoStruct</a> locally as pointer may not be valid after
 		function returns. The instance identifier you provide to the host must
 		be the unique identifier of this instance until a call to deinitialise.
+		<br><br>
+		GPU: VideoInfoStruct should be ignored because the host viewport and texture sizes may change over time. Refer to
+		the sizes passed into the ProcessOpenGL call for correct size information.
+		<br><br>
 	</td>
 </tr>
 <tr>
