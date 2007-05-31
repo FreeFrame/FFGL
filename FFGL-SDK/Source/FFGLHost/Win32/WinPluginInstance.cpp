@@ -52,10 +52,8 @@ DWORD WinPluginInstance::Load(const char *fname)
   DWORD rval = InitPluginLibrary();
   if (rval!=FF_SUCCESS)
     return rval;
-  
-  rval = CreatePluginInstance();
 
-  return rval;
+  return FF_SUCCESS;
 }
 
 DWORD WinPluginInstance::Unload()

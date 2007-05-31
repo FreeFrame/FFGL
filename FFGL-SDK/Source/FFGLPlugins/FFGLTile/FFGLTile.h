@@ -9,7 +9,7 @@ public CFreeFrameGLPlugin
 {
 public:
   FFGLTile();
-  ~FFGLTile() {}
+  virtual ~FFGLTile() {}
 
 	///////////////////////////////////////////////////
 	// FreeFrame plugin methods
@@ -18,17 +18,20 @@ public:
 	DWORD	SetParameter(const SetParameterStruct* pParam);		
 	DWORD	GetParameter(DWORD dwIndex);					
 	DWORD	ProcessOpenGL(ProcessOpenGLStruct *pGL);
+  DWORD InitGL(const FFGLViewportStruct *vp);
+  DWORD DeInitGL();
 
 	///////////////////////////////////////////////////
 	// Factory method
 	///////////////////////////////////////////////////
 
-	static DWORD __stdcall CreateInstance(void** ppInstance)
-    {
-  	  *ppInstance = new FFGLTile();
-	  if (*ppInstance != NULL) return FF_SUCCESS;
+	static DWORD __stdcall CreateInstance(CFreeFrameGLPlugin **ppOutInstance)
+  {
+ 	  *ppOutInstance = new FFGLTile();
+	  if (*ppOutInstance != NULL)
+      return FF_SUCCESS;
 	  return FF_FAIL;
-    }
+  }
 
 protected:	
 	// Parameters

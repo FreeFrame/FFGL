@@ -1,4 +1,5 @@
 #include <FFGL.h>
+#include <FFGLLib.h>
 #include "FFGLMirror.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -26,12 +27,6 @@ static CFFGLPluginInfo PluginInfo (
 FFGLMirror::FFGLMirror()
 : CFreeFrameGLPlugin()
 {
-	// Plugin properties
-	SetProcessFrameCopySupported(false);
-  SetProcessOpenGLSupported(true);
-	SetSupportedFormats(FF_RGB_24);
-	SetSupportedOptimizations(FF_OPT_NONE);
-	
 	// Input properties
 	SetMinInputs(1);
 	SetMaxInputs(1);

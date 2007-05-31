@@ -27,7 +27,7 @@ extern CFFGLPluginInfo* g_CurrPluginInfo;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 CFFGLPluginInfo::CFFGLPluginInfo(
-		FPCREATEINSTANCE* pCreateInstance,
+		FPCREATEINSTANCEGL* pCreateInstance,
 		const char* pchUniqueID,
 		const char* pchPluginName,
 		DWORD dwAPIMajorVersion,
@@ -99,7 +99,7 @@ const PluginExtendedInfoStruct* CFFGLPluginInfo::GetPluginExtendedInfo() const
 	return &m_PluginExtendedInfo;
 }
 
-FPCREATEINSTANCE* CFFGLPluginInfo::GetFactoryMethod() const
+FPCREATEINSTANCEGL* CFFGLPluginInfo::GetFactoryMethod() const
 {
 	return m_pCreateInstance;
 }

@@ -26,21 +26,12 @@
 
 CFFGLPluginManager::CFFGLPluginManager()
 {
-	m_bIsProcessFrameCopySupported = false;
-  m_bIsProcessOpenGLSupported = false;
-	m_dwSupportedFormats = FF_RGB_24;
-	m_dwSupportedOptimizations = FF_OPT_NONE;
 	m_iMinInputs = 0;
 	m_iMaxInputs = 0;
 
 	m_NParams = 0;
 	m_pFirst = NULL;
 	m_pLast = NULL;
-	
-	m_VideoInfo.BitDepth = FF_DEPTH_24;
-	m_VideoInfo.FrameHeight = 0;
-	m_VideoInfo.FrameWidth = 0;
-	m_VideoInfo.Orientation = FF_ORIENTATION_TL;
 }
 
 CFFGLPluginManager::~CFFGLPluginManager()
@@ -73,27 +64,6 @@ CFFGLPluginManager::~CFFGLPluginManager()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // CFFGLPluginManager methods
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void CFFGLPluginManager::SetProcessFrameCopySupported(bool bIsSupported)
-{
-	m_bIsProcessFrameCopySupported = bIsSupported;
-}
-
-void CFFGLPluginManager::SetProcessOpenGLSupported(bool bIsSupported)
-{
-	m_bIsProcessOpenGLSupported = bIsSupported;
-}
-
-void CFFGLPluginManager::SetSupportedFormats(DWORD dwFlags)
-{
-	m_dwSupportedFormats = dwFlags;
-}
-
-void CFFGLPluginManager::SetSupportedOptimizations(DWORD dwFlags)
-{
-	m_dwSupportedOptimizations = dwFlags;
-}
-
 void CFFGLPluginManager::SetMinInputs(int iMinInputs)
 {
 	m_iMinInputs = iMinInputs;
@@ -217,11 +187,4 @@ void* CFFGLPluginManager::GetParamDefault(DWORD dwIndex) const
 			return (void*) &pCurr->DefaultValue;
 	}
 	return NULL;
-}
-
-void CFFGLPluginManager::SetVideoInfo(const VideoInfoStruct* pVideoInfo)
-{
-	if (pVideoInfo != NULL) {
-		memcpy(&m_VideoInfo, pVideoInfo, sizeof(VideoInfoStruct));
-	}
 }

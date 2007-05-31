@@ -1,4 +1,6 @@
 #include <FFGL.h>
+#include <FFGLLib.h>
+
 #include "FFGLTile.h"
 
 #define FFPARAM_TileX (0)
@@ -52,12 +54,6 @@ FFGLTile::FFGLTile()
  m_tileAmountLocation(-1),
  m_initResources(1)
 {
-	// Plugin properties
-	SetProcessFrameCopySupported(false);
-	SetProcessOpenGLSupported(true);
-	SetSupportedFormats(FF_RGB_24);
-	SetSupportedOptimizations(FF_OPT_NONE);
-	
 	// Input properties
 	SetMinInputs(1);
 	SetMaxInputs(1);
@@ -74,6 +70,41 @@ FFGLTile::FFGLTile()
 //  Methods
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+DWORD FFGLTile::InitGL(const FFGLViewportStruct *vp)
+{
+  m_extensions.Initialize();
+    
+  if (m_extensions.ARB_shader_objects==0)
+    return FF_FAIL;
+      
+  m_shader.SetExtensions(&m_extensions);
+  m_shader.Compile(vertexShaderCode,fragmentShaderCode);
+ 
+  //activate our shader
+  m_shader.BindShader();
+    
+  //to assign values to parameters in the shader, we have to lookup
+  //the "location" of each value.. then call one of the glUniform* methods
+  //to assign a value
+  m_inputTextureLocation = m_shader.FindUniform("inputTexture");
+  m_maxCoordsLocation = m_shader.FindUniform("maxCoords");
+  m_tileAmountLocation = m_shader.FindUniform("tileAmount");
+
+  //the 0 means that the 'inputTexture' in
+  //the shader will use the texture bound to GL texture unit 0
+  m_extensions.glUniform1iARB(m_inputTextureLocation, 0);
+
+  m_shader.UnbindShader();
+
+  return FF_SUCCESS;
+}
+
+DWORD FFGLTile::DeInitGL()
+{
+  m_shader.FreeGLResources();
+  return FF_SUCCESS;
+}
+
 DWORD FFGLTile::ProcessOpenGL(ProcessOpenGLStruct *pGL)
 {
   if (pGL->numInputTextures<1)
@@ -82,38 +113,8 @@ DWORD FFGLTile::ProcessOpenGL(ProcessOpenGLStruct *pGL)
   if (pGL->inputTextures[0]==NULL)
     return FF_FAIL;
 
-  //initialize GL extensions and compile our shader in the first
-  //call to processOpenGL  
-  if (m_initResources==1)
-  {
-    m_initResources = 0;
-    m_extensions.Initialize();
-    
-    if (m_extensions.ARB_shader_objects==0)
-      return FF_FAIL;
-      
-    m_shader.SetExtensions(&m_extensions);
-    m_shader.Compile(vertexShaderCode,fragmentShaderCode);
- 
-    //activate our shader
-    m_shader.BindShader();
-    
-    //to assign values to parameters in the shader, we have to lookup
-    //the "location" of each value.. then call one of the glUniform* methods
-    //to assign a value
-    m_inputTextureLocation = m_shader.FindUniform("inputTexture");
-    m_maxCoordsLocation = m_shader.FindUniform("maxCoords");
-    m_tileAmountLocation = m_shader.FindUniform("tileAmount");
-
-    //the 0 means that the 'inputTexture' in
-    //the shader will use the texture bound to GL texture unit 0
-    m_extensions.glUniform1iARB(m_inputTextureLocation, 0);
-  }
-  else
-  {
-    //activate our shader
-    m_shader.BindShader();
-  }
+  //activate our shader
+  m_shader.BindShader();
   
   FFGLTextureStruct &Texture = *(pGL->inputTextures[0]);
   
@@ -166,10 +167,10 @@ DWORD FFGLTile::GetParameter(DWORD dwIndex)
 	switch (dwIndex) {
 
 	case FFPARAM_TileX:
-    *((float *)(unsigned)&dwRet) = m_TileX;
+    *((float *)&dwRet) = m_TileX;
 		return dwRet;
 	case FFPARAM_TileY:
-    *((float *)(unsigned)&dwRet) = m_TileY;
+    *((float *)&dwRet) = m_TileY;
 		return dwRet;
 
 	default:
@@ -184,10 +185,10 @@ DWORD FFGLTile::SetParameter(const SetParameterStruct* pParam)
 		switch (pParam->ParameterNumber) {
 
 		case FFPARAM_TileX:
-			m_TileX = *((float *)(unsigned)&(pParam->NewParameterValue));
+			m_TileX = *((float *)&(pParam->NewParameterValue));
 			break;
 		case FFPARAM_TileY:
-			m_TileY = *((float *)(unsigned)&(pParam->NewParameterValue));
+			m_TileY = *((float *)&(pParam->NewParameterValue));
 			break;
 
 		default:

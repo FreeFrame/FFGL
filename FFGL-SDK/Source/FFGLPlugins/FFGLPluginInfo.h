@@ -32,7 +32,9 @@
 	#define __stdcall
 #endif
 
-typedef DWORD __stdcall FPCREATEINSTANCE(void**);
+//FPCREATEINSTANCEGL is a pointer to a function that creates FFGL plugins
+//in this SDK, all FFGL plugins must derive from CFreeFrameGLPlugin
+typedef DWORD __stdcall FPCREATEINSTANCEGL(class CFreeFrameGLPlugin **ppOutInstance);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \class		CFFGLPluginInfo
@@ -94,7 +96,7 @@ public:
 	///											version 1.0. Therefore, at the moment the default value (NULL) 
 	///											should be used for this parameter
 	CFFGLPluginInfo(
-		FPCREATEINSTANCE* pCreateInstance,
+		FPCREATEINSTANCEGL* pCreateInstance,
 		const char* pchUniqueID,
 		const char* pchPluginName,
 		DWORD dwAPIMajorVersion,
@@ -134,7 +136,7 @@ public:
 	///	called by the FreeFrame SDK when creating a new instance of the plugin.
 	///
 	/// \return		A pointer to the factory method of the plugin subclass.
-	FPCREATEINSTANCE* GetFactoryMethod() const;
+	FPCREATEINSTANCEGL* GetFactoryMethod() const;
 
 private:
 	
@@ -143,7 +145,7 @@ private:
 	PluginExtendedInfoStruct m_PluginExtendedInfo;
 
 	// Pointer to the factory method of the plugin subclass
-	FPCREATEINSTANCE* m_pCreateInstance;
+	FPCREATEINSTANCEGL* m_pCreateInstance;
 };
 
 

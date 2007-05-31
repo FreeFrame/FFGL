@@ -8,7 +8,7 @@ public CFreeFrameGLPlugin
 {
 public:
 	FFGLBrightness();
-  ~FFGLBrightness() {}
+  virtual ~FFGLBrightness();
 
 	///////////////////////////////////////////////////
 	// FreeFrame plugin methods
@@ -22,7 +22,7 @@ public:
 	// Factory method
 	///////////////////////////////////////////////////
 
-	static DWORD __stdcall CreateInstance(void** ppInstance)
+	static DWORD __stdcall CreateInstance(CFreeFrameGLPlugin **ppInstance)
   {
   	*ppInstance = new FFGLBrightness();
 	  if (*ppInstance != NULL) return FF_SUCCESS;

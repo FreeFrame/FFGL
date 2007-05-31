@@ -8,7 +8,7 @@ public CFreeFrameGLPlugin
 {
 public:
 	FFGLMirror();
-  ~FFGLMirror() {}
+  virtual ~FFGLMirror() {}
 
 	///////////////////////////////////////////////////
 	// FreeFrame plugin methods
@@ -20,10 +20,11 @@ public:
 	// Factory method
 	///////////////////////////////////////////////////
 
-	static DWORD __stdcall CreateInstance(void** ppInstance)
+	static DWORD __stdcall CreateInstance(CFreeFrameGLPlugin **ppOutInstance)
   {
-  	*ppInstance = new FFGLMirror();
-	  if (*ppInstance != NULL) return FF_SUCCESS;
+  	*ppOutInstance = new FFGLMirror();
+	  if (*ppOutInstance != NULL)
+      return FF_SUCCESS;
 	  return FF_FAIL;
   }
 };

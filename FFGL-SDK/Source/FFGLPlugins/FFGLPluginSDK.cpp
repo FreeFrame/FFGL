@@ -47,10 +47,15 @@ char* CFreeFrameGLPlugin::GetParameterDisplay(DWORD dwIndex)
 {	
 	DWORD dwType = m_pPlugin->GetParamType(dwIndex);
 	DWORD dwValue = m_pPlugin->GetParameter(dwIndex);
-	if ((dwValue != FF_FAIL) && (dwType != FF_FAIL)) {
+
+	if ((dwValue != FF_FAIL) && (dwType != FF_FAIL))
+  {
 		if (dwType == FF_TYPE_TEXT)
-			return (char*)dwValue;
-		else {
+    {
+			return (char *)dwValue;
+    }
+		else
+    {
 			float fValue;
 			memcpy(&fValue, &dwValue, 4);
 			memset(s_DisplayValue, 0, 5);
@@ -70,21 +75,6 @@ DWORD CFreeFrameGLPlugin::GetParameter(DWORD dwIndex)
 { 
 	return FF_FAIL;
 }					
-
-DWORD CFreeFrameGLPlugin::ProcessFrame(void* pFrame) 
-{
-	return FF_FAIL;
-}
-
-DWORD CFreeFrameGLPlugin::ProcessOpenGL(ProcessOpenGLStruct *pOpenGLData)
-{
-	return FF_FAIL;
-}
-
-DWORD CFreeFrameGLPlugin::ProcessFrameCopy(ProcessFrameCopyStruct* pFrameData) 
-{
-	return FF_FAIL;
-}
 
 DWORD CFreeFrameGLPlugin::GetInputStatus(DWORD dwIndex)
 {

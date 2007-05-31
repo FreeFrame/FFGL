@@ -42,46 +42,12 @@
 /// return to the host information about a plugin inputs, parameters, and capabilities.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class CFFGLPluginManager {
-
+class CFFGLPluginManager
+{
 public:
-
-	/// \enum	FormatsFlags
-	/// \brief	Flags indicating which image formats a plugin supports.
-	///
-	/// CFFGLPluginManager::FormatsFlags enumerates flags indicating which image formats a plugin supports. 
-	/// According to the FreeFrame specification three image formats are allowed: RGB16, RGB24, RGB32. 
-	/// The values of this enum are used to exchange information with the host on the formats a plugin supports. 
-	/// A plugin may support more than one image format. 
-	enum FormatsFlags {
-		FF_RGB_16 = 0x1,			///<  The plugin supports RGB16 image format
-		FF_RGB_24 = 0x2,			///<  The plugin supports RGB24 image format
-		FF_RGB_32 = 0x4				///<  The plugin supports RGB32 image format
-	};
-
-	/// \enum	OptimizationFlags
-	/// \brief	Flags indicating which optimizations a plugin supports.
-	///
-	/// CFFGLPluginManager::OptimizationFlags enumerates flags indicating which optimizations a plugin supports. 
-	///	According to the FreeFrame specification a plugin may be optimized either for in place processing, 
-	/// or for ProcessFrameCopy processing, or for both or none of them. Values of this enum are used to exchange 
-	/// information with the host on the optimizations a plugin supports. 
-	enum OptimizationFlags {
-		FF_OPT_NONE		= 0x1,		///<  No particular optimization is supported by this plugin
-		FF_OPT_INPLACE	= 0x2,		///<  This plugin is optimized for in place processing
-		FF_OPT_COPY		= 0x4,		///<  This plugin is optimized for ProcessFrameCopy processing
-		FF_OPT_BOTH		= 0x8		///<  This plugin is optimized for both kinds of processing
-	};
-
+	
 	/// The standard destructor of CFFGLPluginManager.
 	virtual ~CFFGLPluginManager();
-
-	/// This method is called to know if the plugin supports ProcessFrameCopy working mode. 
-	/// It is usually called by the default implementations of the FreeFrame global functions.
-	///
-	/// \return		True if the plugin supports ProcessFrameCopy mode, 
-	///				false if only in place working mode is supported. 
-	bool IsProcessFrameCopySupported() const;
 
 	/// This method is called to know if the plugin supports ProcessOpenGL working mode. 
 	/// It is usually called by the default implementations of the FreeFrame global functions.
@@ -90,21 +56,6 @@ public:
 	///				false if only in place working mode is supported. 
 	bool IsProcessOpenGLSupported() const;
 
-	/// This method is called to know which formats the plugin supports. It is usually called by 
-	/// the default implementations of the FreeFrame global functions. Its return value should be checked 
-	/// against the flags defined by the CFFGLPluginManager::FormatsFlags enumeration.
-	///
-	/// \return		A combination of flags as defined by the CFFGLPluginManager::FormatsFlags enumeration. 
-	DWORD GetSupportedFormat() const;
-
-	/// This method is called to know which optimizations the plugin supports.
-	/// It is usually called by the default implementations of the FreeFrame global functions.
-	/// Its return value should be cheked agianst the flags defined by the 
-	/// CFFGLPluginManager::OptimizationFlags enumeration.
-	///
-	/// \return		A combination of flags as defined by the CFFGLPluginManager::OptimizationFlags enumeration.
-	DWORD GetSupportedOptimization() const;
-	
 	/// This method returns the minimum number of inputs the host must provide. 
 	/// It is usually called by the default implementations of the FreeFrame global functions.
 	///
@@ -153,15 +104,6 @@ public:
 	///						in any other case. In case of error, NULL is returned.
 	void* GetParamDefault(DWORD dwIndex) const;
 
-	/// This method is called to provide the plugin with information about the images it is going to process. 
-	/// It is usually called by the default implementations of the FreeFrame global functions once the host 
-	/// communicated the format of the images that have to be processed.
-	///
-	/// \param	pVideoInfo	A pointer to a VideoInfoStruct (see definition in FreeFrame.h) containing information 
-	///						about the width, height, depth, and orientation of the images the plugin is going to receive.
-	void SetVideoInfo(const VideoInfoStruct* pVideoInfo);
-
-
 protected:
 
 	///	The standard constructor of CFFGLPluginManager. 
@@ -169,37 +111,6 @@ protected:
 	///			objects nor CFreeFramePlugin objects should be created directly, but only objects of the subclasses 
 	///			implementing specific plugins should be instantiated.
 	CFFGLPluginManager();
-
-	/// This method is called by a plugin subclass, derived from this class, to indicate whether ProcessFrameCopy mode 
-	/// is supported. This method is usually called when a plugin object is instantiated (i.e., in the plugin subclass 
-	/// constructor).
-	///
-	/// \param	bIsSupported	The plugin subclass should set it either to true if ProcessFrameCopy mode is supported, 
-	///							or to false if only in place processing is supported. 
-	void SetProcessFrameCopySupported(bool bIsSupported);
-
-	/// This method is called by a plugin subclass, derived from this class, to indicate whether ProcessOpenGL mode 
-	/// is supported. This method is usually called when a plugin object is instantiated (i.e., in the plugin subclass 
-	/// constructor).
-	///
-	/// \param	bIsSupported	The plugin subclass should set it either to true if ProcessOpenGL mode is supported, 
-	///							or to false if only in place processing is supported. 
-	void SetProcessOpenGLSupported(bool bIsSupported);
-
-	/// This method is called by a plugin subclass to indicate which image formats the plugin supports. 
-	/// This method is usually called when a plugin object is instantiated (i.e., in the plugin subclass constructor).
-	///
-	/// \param	dwFlags		The plugin subclass should set it to a combination of the flags defined by the 
-	///						CFFGLPluginManager::FormatsFlags enum. More than one image format may be supported.
-	void SetSupportedFormats(DWORD dwFlags);
-
-	/// This method is called by a plugin subclass, derived from this class, to indicate which optimizations 
-	/// the plugin supports. This method is usually called when a plugin object is instantiated (i.e., in 
-	/// the plugin subclass constructor).
-	///
-	/// \param	dwFlags		The plugin subclass should set it to a combination of the flags defined by the 
-	///						CFFGLPluginManager::OptimizationFlags enumeration.
-	void SetSupportedOptimizations(DWORD dwFlags);
 	
 	/// This method is called by a plugin subclass, derived from this class, to indicate the minimum number 
 	/// of inputs the host must provide. This method is usually called when a plugin object is instantiated 
@@ -262,32 +173,6 @@ protected:
 	/// \param	pchDefaultValue	A string to be used as the default value of the plugin parameter.
 	void SetParamInfo(DWORD dwIndex, const char* pchName, DWORD dwType, const char* pchDefaultValue);
 
-	/// This method is called by a plugin subclass, derived from this class, to know the width of the images 
-	/// that it will have to process. This method is usually called before starting processing frames.
-	///
-	/// \return	The width of the images the plugin will have to process.
-	int GetFrameWidth() const;
-	
-	/// This method is called by a plugin subclass, derived from this class, to know the height of the images 
-	/// that it will have to process. This method is usually called before starting processing frames.
-	///
-	/// \return The height of the images the plugin will have to process.
-	int GetFrameHeight() const;
-
-	/// This method is called by a plugin subclass, derived from this class, to know the depth of the images 
-	/// that it will have to process. This method is usually called before starting processing frames.
-	///
-	/// \return The depth of the images the plugin will have to process, where 0 is 16 bits, 1 is 24 bits,
-	///			2 is 32 bits (see FreeFrame specification).
-	DWORD GetFrameDepth() const;
-
-	/// This method is called by a plugin subclass, derived from this class, to know the orientation of the 
-	/// images that it will have to process. This method is usually called before starting processing frames.
-	///
-	/// \return The orientation of the images the plugin will have to process, where 1 is top left and 2 is
-	///			bottom left (see FreeFrame specification).
-	DWORD GetFrameOrientation() const;
-
 private:
 		
 	// Structure for keeping information about each plugin parameter
@@ -304,19 +189,10 @@ private:
 	int m_NParams;
 	ParamInfo* m_pFirst;
 	ParamInfo* m_pLast;
-
-	// Plugin capabilities
-	bool m_bIsProcessFrameCopySupported;
-	bool m_bIsProcessOpenGLSupported;
-	DWORD m_dwSupportedFormats;
-	DWORD m_dwSupportedOptimizations;
 	
 	// Inputs
 	int m_iMinInputs;
 	int m_iMaxInputs;
-
-	// Information on the incoming images
-	VideoInfoStruct m_VideoInfo;
 };
 
 

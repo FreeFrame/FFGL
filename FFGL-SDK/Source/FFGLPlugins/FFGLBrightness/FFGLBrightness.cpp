@@ -1,4 +1,5 @@
 #include <FFGL.h>
+#include <FFGLLib.h>
 #include "FFGLBrightness.h"
 
 #define FFPARAM_BRIGHTNESS (0)
@@ -28,12 +29,6 @@ static CFFGLPluginInfo PluginInfo (
 FFGLBrightness::FFGLBrightness()
 : CFreeFrameGLPlugin()
 {
-	// Plugin properties
-	SetProcessFrameCopySupported(false);
-  SetProcessOpenGLSupported(true);
-	SetSupportedFormats(FF_RGB_24);
-	SetSupportedOptimizations(FF_OPT_NONE);
-	
 	// Input properties
 	SetMinInputs(1);
 	SetMaxInputs(1);
@@ -43,6 +38,10 @@ FFGLBrightness::FFGLBrightness()
 	m_brightness = 0.5f;
 }
 
+FFGLBrightness::~FFGLBrightness()
+{
+  
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //  Methods
 ////////////////////////////////////////////////////////////////////////////////////////////////////

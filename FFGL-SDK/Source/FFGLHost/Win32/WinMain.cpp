@@ -1,3 +1,6 @@
+//by Trey Harrison
+//http://www.harrisondigitalmedia.com
+
 #include <FFGLFBO.h>
 #include "../FFGLPluginInstance.h"
 #include "../Timer.h"
@@ -10,8 +13,11 @@ HINSTANCE g_hinst; // the process/application "instance"
 HWND      g_hwnd;  // the output window
 HGLRC     g_glrc;  // the opengl rendering context
 
+//this flag is used to tell the application to free gl resources and exit
+int  g_wantToClose = 0; 
+
 //when the mouse moves, these values are updated according to the
-//x/y position of the mosue. (0,0) corresponds to the lower left
+//x/y position of the mouse. (0,0) corresponds to the lower left
 //corner of the window, (1,1) corresponds to the upper right. the
 //mouse values are then assigned to the plugins each time they draw
 //x -> plugin 1 parameter 0
@@ -26,7 +32,7 @@ BOOL CreateOpenGLWindow();
 //(can only be called when there is an active opengl rendering context)
 FFGLTextureStruct CreateOpenGLTexture(int textureWidth, int textureHeight);
 
-//these are the default filenames used to load into the above plugin handlers
+//these are the default filenames used to locate the sample plugins
 #ifdef _DEBUG
   const char *FFGLBrightnessFile = "FFGLBrightness_debug.dll";
   const char *FFGLMirrorFile     = "FFGLMirror_debug.dll";
@@ -66,7 +72,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
   const char *pluginFile2 = FFGLTileFile;
 
   //if a plugin is provided on the command line this will be set to 1
-  //and pluginFile2 will point to the name of the file on the command line
   int usingCustomPlugin = 0; 
 
   //see if a .dll is given on the command line
@@ -86,7 +91,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
     usingCustomPlugin = 1;    
   }
 
-  //init first plugin
+  //load first plugin dll (*DOES NOT INSTANTIATE*)
   FFGLPluginInstance *plugin1 = FFGLPluginInstance::New();
   if (plugin1->Load(pluginFile1)==FF_FAIL)
   {
@@ -94,7 +99,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
     return 0;
   }
 
-  //init second plugin
+  //load second plugin dll (*DOES NOT INSTANTIATE*)
   FFGLPluginInstance *plugin2 = FFGLPluginInstance::New();
   if (plugin2->Load(pluginFile2)==FF_FAIL)
   {
@@ -120,11 +125,28 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
   HDC hdc = GetDC(g_hwnd);
   
   //activate gl rendering to the window
+  //after this statement completes, we have an active OpenGL
+  //context, so all calls to gl* methods will work, and plugin
+  //instantiation can be done
   wglMakeCurrent(hdc, g_glrc);
 
-  //first thing, we need to initialize the
-  //gl extensions (without the extensions we can't do
-  //swap control or framebuffer objects)
+  //instantiate the first plugin
+  if (plugin1->CreatePluginInstance()!=FF_SUCCESS)
+  {
+    FFDebugMessage("Plugin1 instantiate failed");
+    return 0;
+  }
+
+  //instantiate the second plugin
+  if (plugin2->CreatePluginInstance()!=FF_SUCCESS)
+  {
+    FFDebugMessage("Plugin2 instantiate failed");
+    return 0;
+  }
+
+  //the host needs to initialize the glExtensions structure
+  //(without the extensions we can't do swap control or
+  //use EXT_framebuffer_objects)
   FFGLExtensions glExtensions;
 
   glExtensions.Initialize();
@@ -184,149 +206,175 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
   while (keepRunning)
   {
-    //get the window's display context
-    HDC hdc = GetDC(g_hwnd);
-
-    //activate gl rendering to the window
-    wglMakeCurrent(hdc, g_glrc);
-
-    //whats the current time on the timer?
-    double curFrameTime = time->GetElapsedTime();
-
-    //get the next frame from the avi
-    int curFrame = (int)(curFrameTime * aviFile.GetFramerate());
-    void *bitmapData = aviFile.GetFrameData(curFrame);
-
-    //bind the gl texture so we can upload the next video frame
-    glBindTexture(aviTexture.Target, aviTexture.Handle);
-
-    //upload it to the gl texture. use subimage because
-    //the video frame size is probably smaller than the
-    //size of the texture on the gpu hardware
-    glTexSubImage2D(aviTexture.Target, 0,
-                    0, 0,
-                    aviFile.GetWidth(),
-                    aviFile.GetHeight(),
-                    GL_BGR_EXT,
-                    GL_UNSIGNED_BYTE,
-                    bitmapData);
-
-    //unbind the gl texture
-    glBindTexture(aviTexture.Target, 0);
-
-    //activate the fbo as our render target
-    if (!fbo.BindAsRenderTarget(glExtensions))
+    if (g_hwnd!=NULL && g_glrc!=NULL)
     {
-      FFDebugMessage("FBO Bind As Render Target Failed");
-      return 0;
-    }
-
-    //set the gl viewport to equal the size of the FBO
-    glViewport(0,0, fbo.GetWidth(), fbo.GetHeight());
-
-    //prepare gl state for rendering the first plugin (brightness)
     
-    //make sure all the matrices are reset
-    glMatrixMode(GL_TEXTURE);
-    glLoadIdentity();
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+      //get the window's display context
+      HDC hdc = GetDC(g_hwnd);
+
+      //activate gl rendering to the window
+      wglMakeCurrent(hdc, g_glrc);
+
+      //whats the current time on the timer?
+      double curFrameTime = time->GetElapsedTime();
+
+      //get the next frame from the avi
+      int curFrame = (int)(curFrameTime * aviFile.GetFramerate());
+      void *bitmapData = aviFile.GetFrameData(curFrame);
+
+      //bind the gl texture so we can upload the next video frame
+      glBindTexture(aviTexture.Target, aviTexture.Handle);
+
+      //upload it to the gl texture. use subimage because
+      //the video frame size is probably smaller than the
+      //size of the texture on the gpu hardware
+      glTexSubImage2D(aviTexture.Target, 0,
+                      0, 0,
+                      aviFile.GetWidth(),
+                      aviFile.GetHeight(),
+                      GL_BGR_EXT,
+                      GL_UNSIGNED_BYTE,
+                      bitmapData);
+
+      //unbind the gl texture
+      glBindTexture(aviTexture.Target, 0);
+
+      //activate the fbo as our render target
+      if (!fbo.BindAsRenderTarget(glExtensions))
+      {
+        FFDebugMessage("FBO Bind As Render Target Failed");
+        return 0;
+      }
+
+      //set the gl viewport to equal the size of the FBO
+      glViewport(0,0, fbo.GetWidth(), fbo.GetHeight());
+
+      //prepare gl state for rendering the first plugin (brightness)
+      
+      //make sure all the matrices are reset
+      glMatrixMode(GL_TEXTURE);
+      glLoadIdentity();
+      glMatrixMode(GL_PROJECTION);
+      glLoadIdentity();
+      glMatrixMode(GL_MODELVIEW);
+      glLoadIdentity();
+      
+      //clear the depth and color buffers
+      glClearColor(0,0,0,0);
+      glClearDepth(1.0);
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+      //plugin 1 parameter #0 is mouse X
+      plugin1->SetFloatParameter(0, mouseX);
+
+      //prepare the structure used to call
+      //the plugin's ProcessOpenGL method
+      ProcessOpenGLStructTag processStruct;
     
-    //clear the depth and color buffers
-    glClearColor(0,0,0,0);
-    glClearDepth(1.0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+      //provide the 1 input texture we allocated above
+      processStruct.numInputTextures = 1;
+      
+      //create the array of OpenGLTextureStruct * to be passed
+      //to the plugin
+      FFGLTextureStruct *inputTextures[1];
+      inputTextures[0] = &aviTexture;
+      
+      processStruct.inputTextures = inputTextures;
 
-    //plugin 1 parameter #0 is mouse X
-    plugin1->SetFloatParameter(0, mouseX);
+      //call the plugin's ProcessOpenGL
+      if (plugin1->CallProcessOpenGL(processStruct)==FF_SUCCESS)
+      {
+        //if the plugin call succeeds, the drawning is complete
+      }
+      else
+      {
+        //the plugin call failed, exit
+        FFDebugMessage("Plugin 1's ProcessOpenGL failed");
+        return 0;
+      }
 
-    //prepare the structure used to call
-    //the plugin's ProcessOpenGL method
-    ProcessOpenGLStructTag processStruct;
-  
-    //provide the 1 input texture we allocated above
-    processStruct.numInputTextures = 1;
-    
-    //create the array of OpenGLTextureStruct * to be passed
-    //to the plugin
-    FFGLTextureStruct *inputTextures[1];
-    inputTextures[0] = &aviTexture;
-    
-    processStruct.inputTextures = inputTextures;
+      //deactivate rendering to the fbo
+      //(this re-activates rendering to the window)
+      fbo.UnbindAsRenderTarget(glExtensions);
 
-    //call the plugin's ProcessOpenGL
-    if (plugin1->CallProcessOpenGL(processStruct)==FF_SUCCESS)
-    {
-      //if the plugin call succeeds, the drawning is complete
+      //set the gl viewport to equal the size of our output window
+      RECT clientRect;
+      GetClientRect(g_hwnd, &clientRect);
+      int viewportWidth = clientRect.right - clientRect.left;
+      int viewportHeight = clientRect.bottom - clientRect.top;
+
+      glViewport(0, 0, viewportWidth, viewportHeight);
+
+      //prepare to render the 2nd plugin (the mirror effect or the custom plugin)
+
+      //reset all matrices
+      glMatrixMode(GL_TEXTURE);
+      glLoadIdentity();
+      glMatrixMode(GL_PROJECTION);
+      glLoadIdentity();
+      glMatrixMode(GL_MODELVIEW);
+      glLoadIdentity();
+
+      //clear the color and depth buffers
+      glClearColor(0,0,0,0);
+      glClearDepth(1.0);
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+      //now pass the contents of the FBO as a texture to the mirror plugin
+      FFGLTextureStruct fboTexture = fbo.GetTextureInfo();
+
+      //all we need to change in our processStruct
+      //is where texture #0 points to (now it points to the FBO texture)
+      inputTextures[0] = &fboTexture;
+
+      //plugin 2 parameter #0 is mouse Y
+      plugin2->SetFloatParameter(0, mouseY);
+
+      //call the mirror plugin's ProcessOpenGL
+      if (plugin2->CallProcessOpenGL(processStruct)==FF_SUCCESS)
+      {
+        //if the plugin call succeeds, the drawning is complete
+      }
+      else
+      {
+        //the plugin call failed, exit
+        FFDebugMessage("Plugin 2's ProcessOpenGL failed");
+        return 0;
+      }
+          
+      //swapbuffers tells opengl to finish all of the pending
+      //drawing instructions (which are to the "back" buffer)
+      //and copy/swap them to the front buffer
+      SwapBuffers(hdc);
+
+      if (g_wantToClose==1)
+      {
+        //if this is our last frame, we need to free OpenGL resources
+        //while the gl context is still active      
+
+        //release plugin resources
+        plugin1->DeletePluginInstance();
+        plugin2->DeletePluginInstance();
+
+        //release the fbo
+        fbo.FreeResources(glExtensions);
+
+        //delete the avi texture
+        glDeleteTextures(1,&aviTexture.Handle);
+      }
+
+      //deactivate rendering to the window
+      wglMakeCurrent(NULL,NULL);
+
+      //release the window's display context
+      ReleaseDC(g_hwnd, hdc);
     }
-    else
+
+    if (g_hwnd!=NULL && g_wantToClose==1)
     {
-      //the plugin call failed, exit
-      FFDebugMessage("Plugin 1's ProcessOpenGL failed");
-      return 0;
+      DestroyWindow(g_hwnd);
+      g_hwnd = NULL;
     }
-
-    //deactivate rendering to the fbo
-    //(this re-activates rendering to the window)
-    fbo.UnbindAsRenderTarget(glExtensions);
-
-    //set the gl viewport to equal the size of our output window
-    RECT clientRect;
-    GetClientRect(g_hwnd, &clientRect);
-    int viewportWidth = clientRect.right - clientRect.left;
-    int viewportHeight = clientRect.bottom - clientRect.top;
-
-    glViewport(0, 0, viewportWidth, viewportHeight);
-
-    //prepare to render the 2nd plugin (the mirror effect or the custom plugin)
-
-    //reset all matrices
-    glMatrixMode(GL_TEXTURE);
-    glLoadIdentity();
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-    //clear the color and depth buffers
-    glClearColor(0,0,0,0);
-    glClearDepth(1.0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    //now pass the contents of the FBO as a texture to the mirror plugin
-    FFGLTextureStruct fboTexture = fbo.GetTextureInfo();
-
-    //all we need to change in our processStruct
-    //is where texture #0 points to (now it points to the FBO texture)
-    inputTextures[0] = &fboTexture;
-
-    //plugin 2 parameter #0 is mouse Y
-    plugin2->SetFloatParameter(0, mouseY);
-
-    //call the mirror plugin's ProcessOpenGL
-    if (plugin2->CallProcessOpenGL(processStruct)==FF_SUCCESS)
-    {
-      //if the plugin call succeeds, the drawning is complete
-    }
-    else
-    {
-      //the plugin call failed, exit
-      FFDebugMessage("Plugin 2's ProcessOpenGL failed");
-      return 0;
-    }
-        
-    //swapbuffers tells opengl to finish all of the pending
-    //drawing instructions (which are to the "back" buffer)
-    //and copy/swap them to the front buffer
-    SwapBuffers(hdc);
-
-    //deactivate rendering to the window
-    wglMakeCurrent(NULL,NULL);
-
-    //release the window's display context
-    ReleaseDC(g_hwnd, hdc);
 
     //dispatch any pending windows msgs
     MSG msg;
@@ -345,11 +393,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
       }
     }
   }
-
-  //TODO: release the remaining gl resources
-  //(aviTexture, fbo, plus whatever the plugins have allocated)
-  //this is tricky because most of the gl resources require
-  //an active gl context in order to free them.
 
   //delete the gl rendering context
   wglDeleteContext(g_glrc);
@@ -387,6 +430,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     ValidateRect(hWnd, NULL);
     break;
 
+  case WM_CLOSE:
+    //by returning 0, we override the window close behavior. we need to
+    //free up OpengL resources before allowing the window to close, so we
+    //set this global flag to tell the main thread to draw its last frame,
+    //free resources, and *then* close the window
+    g_wantToClose = 1;
+    return 0;
+
   case WM_MOUSEMOVE:
     //be carefule using ints instead of shorts.. you would 
     //need to sign-extend mx and my with these macros
@@ -405,7 +456,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     
     mouseX = (double)(mx - r.left) / (double)((r.right - r.left)-1);
     mouseY = 1.0 - ((double)(my - r.top) / (double)((r.bottom - r.top)-1));
-
     break;
 
   case WM_DESTROY:

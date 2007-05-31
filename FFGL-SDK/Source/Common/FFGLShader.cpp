@@ -10,22 +10,49 @@ FFGLShader::FFGLShader()
 }
 
 void FFGLShader::CreateGLResources()
-  {
-    if (m_extensions==NULL)
-	  return;
+{
+  if (m_extensions==NULL)
+    return;
 	  
-    if (m_glProgram==0)
-      m_glProgram = m_extensions->glCreateProgramObjectARB();
+  if (m_glProgram==0)
+    m_glProgram = m_extensions->glCreateProgramObjectARB();
 
-    if (m_glVertexShader==0)
-      m_glVertexShader = m_extensions->glCreateShaderObjectARB(GL_VERTEX_SHADER_ARB);
+  if (m_glVertexShader==0)
+    m_glVertexShader = m_extensions->glCreateShaderObjectARB(GL_VERTEX_SHADER_ARB);
 
-    if (m_glFragmentShader==0)
-      m_glFragmentShader = m_extensions->glCreateShaderObjectARB(GL_FRAGMENT_SHADER_ARB);
+  if (m_glFragmentShader==0)
+    m_glFragmentShader = m_extensions->glCreateShaderObjectARB(GL_FRAGMENT_SHADER_ARB);
+}
+
+void FFGLShader::FreeGLResources()
+{
+  if (m_extensions==NULL)
+    return;
+
+  if (m_glFragmentShader)
+  {
+    m_extensions->glDeleteObjectARB(m_glFragmentShader);
+    m_glFragmentShader = 0;
   }
-  
+
+  if (m_glVertexShader)
+  {
+    m_extensions->glDeleteObjectARB(m_glVertexShader);
+    m_glVertexShader = 0;
+  }
+
+  if (m_glProgram)
+  {
+    m_extensions->glDeleteObjectARB(m_glProgram);
+    m_glProgram = 0;
+  }
+}
+
 int FFGLShader::BindShader()
 {
+  if (m_extensions==NULL)
+    return 0;
+
   //make sure the program type is supported
   if (m_extensions->ARB_shader_objects==0)
     return 0;

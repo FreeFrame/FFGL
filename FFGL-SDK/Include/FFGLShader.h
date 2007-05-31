@@ -20,7 +20,9 @@ public:
   
   int BindShader();
   int UnbindShader();
-  
+
+  void FreeGLResources();
+
 private:
   FFGLExtensions *m_extensions;
   GLenum m_glProgram;

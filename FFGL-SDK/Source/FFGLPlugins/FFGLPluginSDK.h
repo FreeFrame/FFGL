@@ -40,12 +40,31 @@
 /// plugin is responsible of providing its specific implementation of such default methods.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class CFreeFrameGLPlugin : public CFFGLPluginManager {
-
+class CFreeFrameGLPlugin :
+public CFFGLPluginManager
+{
 public:
 
 	/// The standard destructor of CFreeFrameGLPlugin.
 	virtual ~CFreeFrameGLPlugin();
+
+  /// Default implementation of the FFGL InitGL instance specific function. This function allocates
+  /// the OpenGL resources the plugin needs during its lifetime
+	///
+	/// \param		vp Pointer to a FFGLViewportStruct structure (see the definition in FFGL.h and 
+	///						the description in the FFGL specification).
+	/// \return		The default implementation always returns FF_SUCCESS. 
+	///						A custom implementation must be provided by every specific plugin that allocates
+  ///           any OpenGL resources
+  virtual DWORD InitGL(const FFGLViewportStruct *vp) { return FF_SUCCESS; }
+
+  /// Default implementation of the FFGL DeInitGL instance specific function. This function frees
+  /// any OpenGL resources the plugin has allocated
+	///
+	/// \return		The default implementation always returns FF_SUCCESS. 
+	///						A custom implementation must be provided by every specific plugin that allocates
+  ///           any OpenGL resources
+  virtual DWORD DeInitGL() { return FF_SUCCESS; }
 
 	/// Default implementation of the FreeFrame getParameterDisplay instance specific function. It provides a string 
 	/// to display as the value of the plugin parameter whose index is passed as parameter to the method. This default 
@@ -79,37 +98,15 @@ public:
 	///							A custom implementation must be provided by every specific plugin
 	virtual DWORD GetParameter(DWORD dwIndex);
 	
-	/// Default implementation of the FreeFrame processFrame instance specific function. This function performs 
-	///	in place processing of the frame passed as parameter. This default implementation always returns FF_FAIL. 
-	/// A custom implementation must be provided by every specific plugin.
+	/// Default implementation of the FFGL ProcessOpenGL instance specific function. This function processes 
+	/// the input texture(s) by 
 	///
-	/// \param		pFrame		Pointer to the frame that has to be processed by the plugin.
-	/// \return					The default implementation always returns FF_FAIL. 
-	///							A custom implementation must be provided by every specific plugin.
-	virtual DWORD ProcessFrame(void* pFrame);
+	/// \param		pOpenGLData to a ProcessOpenGLStruct structure (see the definition in FFGL.h and 
+	///						the description in the FFGL specification).
+	/// \return		The default implementation always returns FF_FAIL. 
+	///						A custom implementation must be provided by every specific plugin.
+  virtual DWORD ProcessOpenGL(ProcessOpenGLStruct* pOpenGLData) { return FF_FAIL; }
 
-	/// Default implementation of the FFGL processFrameCopy instance specific function. This function processes 
-	/// the input frame(s) by possibly performing copy operations. This default implementation always returns FF_FAIL. 
-	/// A custom implementation must be provided by every specific plugin supporting processFrameCopy processing mode. 
-	/// In case only in place processing is supported the empty default implementation will suit.
-	///
-	/// \param		pFrameData	Pointer to a ProcessFrameCopyStruct structure (see the definition in FreeFrame.h and 
-	///							the description in the FreeFrame specification).
-	/// \return					The default implementation always returns FF_FAIL. 
-	///							A custom implementation must be provided by every specific plugin.
-	virtual DWORD ProcessOpenGL(ProcessOpenGLStruct* pOpenGLData);
-
-	/// Default implementation of the FreeFrame processFrameCopy instance specific function. This function processes 
-	/// the input frame(s) by possibly performing copy operations. This default implementation always returns FF_FAIL. 
-	/// A custom implementation must be provided by every specific plugin supporting processFrameCopy processing mode. 
-	/// In case only in place processing is supported the empty default implementation will suit.
-	///
-	/// \param		pFrameData	Pointer to a ProcessFrameCopyStruct structure (see the definition in FreeFrame.h and 
-	///							the description in the FreeFrame specification).
-	/// \return					The default implementation always returns FF_FAIL. 
-	///							A custom implementation must be provided by every specific plugin.
-	virtual DWORD ProcessFrameCopy(ProcessFrameCopyStruct* pFrameData);
-	
 	/// Default implementation of the FreeFrame getInputStatus instance specific function. This function is called 
 	/// to know whether a given input is currently in use. For the default implementation every input is always in use. 
 	/// A custom implementation may be provided by every specific plugin.
@@ -123,8 +120,7 @@ public:
 	/// The only public data field CFreeFrameGLPlugin contains is m_pPlugin, a pointer to the plugin instance. 
 	/// Subclasses may use this pointer for self-referencing (e.g., a plugin may pass this pointer to external modules, 
 	/// so that they can use it for calling the plugin methods).
-	CFreeFrameGLPlugin* m_pPlugin;
-
+	CFreeFrameGLPlugin *m_pPlugin;
 
 protected:
 

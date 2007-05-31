@@ -200,14 +200,17 @@ DWORD FFGLPluginInstance::CreatePluginInstance()
     return FF_SUCCESS;
   }
 
-  VideoInfoStruct videoInfo;
-  videoInfo.FrameWidth = 1;
-  videoInfo.FrameHeight = 1;
-  videoInfo.Orientation = 1;
-  videoInfo.BitDepth = 0;
+  GLint glvp[4];
+  glGetIntegerv(GL_VIEWPORT, glvp);
   
+  FFGLViewportStruct viewport;
+  viewport.x = glvp[0];
+  viewport.y = glvp[1];
+  viewport.width = glvp[2];
+  viewport.height = glvp[3];
+
   //instantiate 1 of the plugins
-  m_ffInstanceID = m_ffPluginMain(FF_INSTANTIATE, (DWORD)&videoInfo, 0).ivalue;
+  m_ffInstanceID = m_ffPluginMain(FF_INSTANTIATEGL, (DWORD)&viewport, 0).ivalue;
 
   //if it instantiated ok, return success
   if (m_ffInstanceID==INVALIDINSTANCE)
@@ -246,7 +249,7 @@ DWORD FFGLPluginInstance::DeletePluginInstance()
   
   try
   {
-    rval = m_ffPluginMain(FF_DEINSTANTIATE, 0, (DWORD)m_ffInstanceID).ivalue;
+    rval = m_ffPluginMain(FF_DEINSTANTIATEGL, 0, (DWORD)m_ffInstanceID).ivalue;
   }
   catch (...)
   {
@@ -271,7 +274,7 @@ DWORD FFGLPluginInstance::DeinitPluginLibrary()
   if (m_ffPluginMain!=NULL)
   {
     rval = m_ffPluginMain(FF_DEINITIALISE,0,0).ivalue;
-	if (rval != FF_SUCCESS)
+    if (rval != FF_SUCCESS)
     {
       FFDebugMessage("FreeFrame DeInit failed");
     }

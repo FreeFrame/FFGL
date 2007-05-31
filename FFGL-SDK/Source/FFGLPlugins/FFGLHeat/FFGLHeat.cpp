@@ -1,4 +1,6 @@
 #include <FFGL.h>
+#include <FFGLLib.h>
+
 #include "FFGLHeat.h"
 
 #define FFPARAM_Heat  (0)
@@ -64,12 +66,6 @@ FFGLHeat::FFGLHeat()
  m_maxCoordsLocation(-1),
  m_heatAmountLocation(-1)
 {
-	// Plugin properties
-	SetProcessFrameCopySupported(false);
-  SetProcessOpenGLSupported(true);
-	SetSupportedFormats(FF_RGB_24);
-	SetSupportedOptimizations(FF_OPT_NONE);
-	
 	// Input properties
 	SetMinInputs(1);
 	SetMaxInputs(1);
@@ -83,7 +79,72 @@ FFGLHeat::FFGLHeat()
 //  Methods
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+DWORD FFGLHeat::InitGL(const FFGLViewportStruct *vp)
+{
+  //initialize gl extensions and
+  //make sure required features are supported
+  m_extensions.Initialize();
+  if (m_extensions.multitexture==0 || m_extensions.ARB_shader_objects==0)
+    return FF_FAIL;
+    
+  //initialize gl shader
+  m_shader.SetExtensions(&m_extensions);
+  m_shader.Compile(vertexShaderCode,fragmentShaderCode);
+ 
+  //activate our shader
+  m_shader.BindShader();
+    
+  //to assign values to parameters in the shader, we have to lookup
+  //the "location" of each value.. then call one of the glUniform* methods
+  //to assign a value
+  m_inputTextureLocation = m_shader.FindUniform("inputTexture");
+  m_heatTextureLocation = m_shader.FindUniform("heatTexture");
+  m_maxCoordsLocation = m_shader.FindUniform("maxCoords");
+  m_heatAmountLocation = m_shader.FindUniform("heatAmount");
 
+  //the 0 means that the 'heatTexture' in
+  //the shader will use the texture bound to GL texture unit 0
+  m_extensions.glUniform1iARB(m_heatTextureLocation, 0);
+    
+  //the 1 means that the 'inputTexture' in
+  //the shader will use the texture bound to GL texture unit 1
+  m_extensions.glUniform1iARB(m_inputTextureLocation, 1);
+    
+  m_shader.UnbindShader();
+
+  //create/upload the heat texture on texture unit 0
+  //(which should already be the active unit)
+  glGenTextures( 1, &m_heatTextureId );
+  glBindTexture(GL_TEXTURE_1D, m_heatTextureId);
+    
+  glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    
+  glTexImage1D(
+    GL_TEXTURE_1D,
+    0, //0 means the base mipmap level
+    3, //# of color components in the texture
+    g_heatTextureWidth, //width
+    0, //no border,
+    GL_RGB,
+    GL_UNSIGNED_BYTE,
+    g_heatTextureData);  
+
+  return FF_SUCCESS;
+}
+
+DWORD FFGLHeat::DeInitGL()
+{
+  m_shader.FreeGLResources();
+
+  if (m_heatTextureId)
+  {
+    glDeleteTextures(1, &m_heatTextureId);
+    m_heatTextureId = 0;
+  }
+
+  return FF_SUCCESS;
+}
 
 DWORD FFGLHeat::ProcessOpenGL(ProcessOpenGLStruct *pGL)
 {
@@ -91,67 +152,11 @@ DWORD FFGLHeat::ProcessOpenGL(ProcessOpenGLStruct *pGL)
 
   if (pGL->inputTextures[0]==NULL) return FF_FAIL;
   
-  //initialize GL extensions and compile our shader in the first
-  //call to processOpenGL  
-  if (m_initResources==1)
-  {
-    m_initResources = 0;
-	
-    //initialize gl extensions and
-    //make sure required features are supported
-    m_extensions.Initialize();
-    if (m_extensions.multitexture==0 || m_extensions.ARB_shader_objects==0)
-      return FF_FAIL;
+  //activate our shader
+  m_shader.BindShader();
     
-    //initialize gl shader
-    m_shader.SetExtensions(&m_extensions);
-    m_shader.Compile(vertexShaderCode,fragmentShaderCode);
- 
-    //activate our shader
-    m_shader.BindShader();
-    
-    //to assign values to parameters in the shader, we have to lookup
-    //the "location" of each value.. then call one of the glUniform* methods
-    //to assign a value
-    m_inputTextureLocation = m_shader.FindUniform("inputTexture");
-    m_heatTextureLocation = m_shader.FindUniform("heatTexture");
-    m_maxCoordsLocation = m_shader.FindUniform("maxCoords");
-    m_heatAmountLocation = m_shader.FindUniform("heatAmount");
-
-    //the 0 means that the 'heatTexture' in
-    //the shader will use the texture bound to GL texture unit 0
-    m_extensions.glUniform1iARB(m_heatTextureLocation, 0);
-    
-    //the 1 means that the 'inputTexture' in
-    //the shader will use the texture bound to GL texture unit 1
-    m_extensions.glUniform1iARB(m_inputTextureLocation, 1);
-    
-    //create/upload the heat texture on texture unit 0
-    //(which should already be the active unit)
-    glGenTextures( 1, &m_heatTextureId );
-    glBindTexture(GL_TEXTURE_1D, m_heatTextureId);
-    
-    glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    
-    glTexImage1D(
-      GL_TEXTURE_1D,
-      0, //0 means the base mipmap level
-      3, //# of color components in the texture
-      g_heatTextureWidth, //width
-      0, //no border,
-      GL_RGB,
-      GL_UNSIGNED_BYTE,
-      g_heatTextureData);
-  }
-  else
-  {
-    //activate our shader
-    m_shader.BindShader();
-    
-    //bind the heat texture to texture unit 0
-    glBindTexture(GL_TEXTURE_1D, m_heatTextureId);
-  }
+  //bind the heat texture to texture unit 0
+  glBindTexture(GL_TEXTURE_1D, m_heatTextureId);
 
 	FFGLTextureStruct &Texture = *(pGL->inputTextures[0]);
 

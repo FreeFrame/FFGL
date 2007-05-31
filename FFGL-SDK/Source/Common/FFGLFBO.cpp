@@ -174,7 +174,21 @@ FFGLTextureStruct FFGLFBO::GetTextureInfo()
 
 void FFGLFBO::FreeResources(FFGLExtensions &e)
 {
-  e.glDeleteFramebuffersEXT(1, &m_fboHandle);
-  e.glDeleteRenderBuffersEXT(1, &m_depthBufferHandle);
-  glDeleteTextures(1, &m_glTextureHandle);
+  if (m_fboHandle)
+  {
+    e.glDeleteFramebuffersEXT(1, &m_fboHandle);
+    m_fboHandle = 0;
+  }
+
+  if (m_depthBufferHandle)
+  {
+    e.glDeleteRenderBuffersEXT(1, &m_depthBufferHandle);
+    m_depthBufferHandle = 0;
+  }
+
+  if (m_glTextureHandle)
+  {
+    glDeleteTextures(1, &m_glTextureHandle);
+    m_glTextureHandle = 0;
+  }
 }

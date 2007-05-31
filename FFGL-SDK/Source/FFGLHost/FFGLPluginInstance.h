@@ -21,6 +21,13 @@ public:
     return FF_FAIL;
   }
   
+  //calls plugMain(FF_INSTANTIATE) and assigns
+  //each parameter its default value
+  DWORD CreatePluginInstance();
+  
+  //calls plugMain(FF_DEINSTANTIATE)
+  DWORD DeletePluginInstance();
+
   virtual DWORD Unload()
   {
     return FF_FAIL;
@@ -48,8 +55,7 @@ protected:
   int m_numParameters;  
   char *m_paramNames[MAX_PARAMETERS];
   
-  //helper methods
-  
+  //helper methods  
   //calls plugMain(FF_INITIALISE) and gets the
   //parameter names
   DWORD InitPluginLibrary();
@@ -57,13 +63,6 @@ protected:
   //calls DeletePluginInstance if needed, calls
   //ReleaseParamNames, then calls plugMain(FF_DEINITIALISE)
   DWORD DeinitPluginLibrary();
-  
-  //calls plugMain(FF_INSTANTIATE) and assigns
-  //each parameter its default value
-  DWORD CreatePluginInstance();
-  
-  //calls plugMain(FF_DEINSTANTIATE)
-  DWORD DeletePluginInstance();
   
   void SetParameterName(int paramNum, const char *srcString);
   void ReleaseParamNames();

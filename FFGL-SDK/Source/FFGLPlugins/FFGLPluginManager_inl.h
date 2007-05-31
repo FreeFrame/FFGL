@@ -22,26 +22,6 @@
 // CFFGLPluginManager inline methods
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-inline bool CFFGLPluginManager::IsProcessFrameCopySupported() const
-{
-	return m_bIsProcessFrameCopySupported;
-}
-
-inline bool CFFGLPluginManager::IsProcessOpenGLSupported() const
-{
-	return m_bIsProcessOpenGLSupported;
-}
-
-inline DWORD CFFGLPluginManager::GetSupportedFormat() const
-{
-	return m_dwSupportedFormats;
-}
-
-inline DWORD CFFGLPluginManager::GetSupportedOptimization() const
-{
-	return m_dwSupportedOptimizations;
-}
-
 inline int CFFGLPluginManager::GetMinInputs() const
 {
 	return m_iMinInputs;
@@ -55,24 +35,4 @@ inline int CFFGLPluginManager::GetMaxInputs() const
 inline int CFFGLPluginManager::GetNumParams() const
 {
 	return m_NParams;
-}
-
-inline int CFFGLPluginManager::GetFrameWidth() const
-{
-	return int(m_VideoInfo.FrameWidth);
-}
-
-inline int CFFGLPluginManager::GetFrameHeight() const
-{
-	return int(m_VideoInfo.FrameHeight);
-}
-
-inline DWORD CFFGLPluginManager::GetFrameDepth() const
-{
-	return m_VideoInfo.BitDepth;
-}
-
-inline DWORD CFFGLPluginManager::GetFrameOrientation() const
-{
-	return m_VideoInfo.Orientation;
 }

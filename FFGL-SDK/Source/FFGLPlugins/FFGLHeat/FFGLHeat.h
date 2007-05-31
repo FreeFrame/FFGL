@@ -9,24 +9,27 @@ public CFreeFrameGLPlugin
 {
 public:
 	FFGLHeat();
-  ~FFGLHeat() {}
+  virtual ~FFGLHeat() {}
 
 	///////////////////////////////////////////////////
-	// FreeFrame plugin methods
+	// FreeFrameGL plugin methods
 	///////////////////////////////////////////////////
 	
 	DWORD	SetParameter(const SetParameterStruct* pParam);		
 	DWORD	GetParameter(DWORD dwIndex);					
 	DWORD	ProcessOpenGL(ProcessOpenGLStruct* pGL);
+  DWORD InitGL(const FFGLViewportStruct *vp);
+  DWORD DeInitGL();
 
 	///////////////////////////////////////////////////
 	// Factory method
 	///////////////////////////////////////////////////
 
-	static DWORD __stdcall CreateInstance(void** ppInstance)
+	static DWORD __stdcall CreateInstance(CFreeFrameGLPlugin **ppOutInstance)
   {
-  	*ppInstance = new FFGLHeat();
-	  if (*ppInstance != NULL) return FF_SUCCESS;
+  	*ppOutInstance = new FFGLHeat();
+	  if (*ppOutInstance != NULL)
+      return FF_SUCCESS;
 	  return FF_FAIL;
   }
 
