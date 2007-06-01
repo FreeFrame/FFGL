@@ -192,7 +192,7 @@ DWORD FFGLPluginInstance::InitPluginLibrary()
   return FF_SUCCESS;
 }
 
-DWORD FFGLPluginInstance::CreatePluginInstance()
+DWORD FFGLPluginInstance::InstantiateGL(const FFGLViewportStruct *viewport)
 {
   if (m_ffInstanceID!=INVALIDINSTANCE)
   {
@@ -200,17 +200,8 @@ DWORD FFGLPluginInstance::CreatePluginInstance()
     return FF_SUCCESS;
   }
 
-  GLint glvp[4];
-  glGetIntegerv(GL_VIEWPORT, glvp);
-  
-  FFGLViewportStruct viewport;
-  viewport.x = glvp[0];
-  viewport.y = glvp[1];
-  viewport.width = glvp[2];
-  viewport.height = glvp[3];
-
   //instantiate 1 of the plugins
-  m_ffInstanceID = m_ffPluginMain(FF_INSTANTIATEGL, (DWORD)&viewport, 0).ivalue;
+  m_ffInstanceID = m_ffPluginMain(FF_INSTANTIATEGL, (DWORD)viewport, 0).ivalue;
 
   //if it instantiated ok, return success
   if (m_ffInstanceID==INVALIDINSTANCE)
@@ -230,7 +221,7 @@ DWORD FFGLPluginInstance::CreatePluginInstance()
   return FF_SUCCESS;
 }
 
-DWORD FFGLPluginInstance::DeletePluginInstance()
+DWORD FFGLPluginInstance::DeInstantiateGL()
 {
   if (m_ffInstanceID==INVALIDINSTANCE)
   {
@@ -264,7 +255,10 @@ DWORD FFGLPluginInstance::DeinitPluginLibrary()
 {
   if (m_ffInstanceID!=INVALIDINSTANCE)
   {
-    DeletePluginInstance();
+    //we can't call DeInstantiate because we must
+    //guarantee an active OpenGL context
+    FFDebugMessage("Failed to call DeInstantiateGL() before calling DeinitPluginLibrary()");
+    return FF_FAIL;
   }
   
   ReleaseParamNames();

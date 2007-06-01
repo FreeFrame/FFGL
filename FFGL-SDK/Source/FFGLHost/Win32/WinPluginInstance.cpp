@@ -58,7 +58,15 @@ DWORD WinPluginInstance::Load(const char *fname)
 
 DWORD WinPluginInstance::Unload()
 {
-  DeletePluginInstance();
+  if (m_ffInstanceID!=INVALIDINSTANCE)
+  {
+    //we can't call DeInstantiate because we must
+    //guarantee an active OpenGL context
+    //DeInstantiateGL();
+    FFDebugMessage("Failed to call DeInstantiateGL() before calling Unload()");
+    return FF_FAIL;
+  }
+  
   DeinitPluginLibrary();
   
   if (m_ffModule!=NULL)

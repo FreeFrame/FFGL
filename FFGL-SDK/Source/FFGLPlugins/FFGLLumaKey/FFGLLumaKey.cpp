@@ -1,4 +1,5 @@
 #include <FFGL.h>
+#include <FFGLLib.h>
 #include "FFGLLumaKey.h"
 
 #define FFPARAM_Luma (0)
@@ -60,12 +61,6 @@ FFGLLumaKey::FFGLLumaKey()
  m_LumaLocation(-1),
  m_initResources(1)
 {
-	// Plugin properties
-	SetProcessFrameCopySupported(false);
-    SetProcessOpenGLSupported(true);
-	SetSupportedFormats(FF_RGB_24);
-	SetSupportedOptimizations(FF_OPT_NONE);
-	
 	// Input properties
 	SetMinInputs(2);
 	SetMaxInputs(2);
@@ -73,13 +68,45 @@ FFGLLumaKey::FFGLLumaKey()
 	// Parameters
 	SetParamInfo(FFPARAM_Luma, "Luma", FF_TYPE_STANDARD, 0.5f);
 	m_Luma = 0.5f;
-
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //  Methods
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+DWORD FFGLLumaKey::InitGL(const FFGLViewportStruct *vp)
+{
+  m_extensions.Initialize();
+    
+  if (m_extensions.ARB_shader_objects==0)
+    return FF_FAIL;
+      
+  m_shader.SetExtensions(&m_extensions);
+  m_shader.Compile(vertexShaderCode,fragmentShaderCode);
+ 
+  //activate our shader
+  m_shader.BindShader();
+    
+  //to assign values to parameters in the shader, we have to lookup
+  //the "location" of each value.. then call one of the glUniform* methods
+  //to assign a value
+  m_inputTextureLocation1 = m_shader.FindUniform("textureDest");
+  m_inputTextureLocation2 = m_shader.FindUniform("textureSrc");
+  m_LumaLocation = m_shader.FindUniform("luma");
+
+  //the 0 means that the 'inputTexture' in
+  //the shader will use the texture bound to GL texture unit 0
+  m_extensions.glUniform1iARB(m_inputTextureLocation1, 0);
+  m_extensions.glUniform1iARB(m_inputTextureLocation2, 1);
+
+  m_shader.UnbindShader();
+  return FF_SUCCESS;
+}
+
+DWORD FFGLLumaKey::DeInitGL()
+{
+  m_shader.FreeGLResources();
+  return FF_SUCCESS;
+}
 
 DWORD FFGLLumaKey::ProcessOpenGL(ProcessOpenGLStruct *pGL)
 {
@@ -92,57 +119,19 @@ DWORD FFGLLumaKey::ProcessOpenGL(ProcessOpenGLStruct *pGL)
   if (pGL->inputTextures[1]==NULL)
     return FF_FAIL;
 
-  //initialize GL extensions and compile our shader in the first
-  //call to processOpenGL  
-  if (m_initResources==1)
-  {
-    m_initResources = 0;
-    m_extensions.Initialize();
-    
-    if (m_extensions.ARB_shader_objects==0)
-      return FF_FAIL;
-      
-    m_shader.SetExtensions(&m_extensions);
-    m_shader.Compile(vertexShaderCode,fragmentShaderCode);
- 
-    //activate our shader
-    m_shader.BindShader();
-    
-    //to assign values to parameters in the shader, we have to lookup
-    //the "location" of each value.. then call one of the glUniform* methods
-    //to assign a value
-    m_inputTextureLocation1 = m_shader.FindUniform("textureDest");
-	m_inputTextureLocation2 = m_shader.FindUniform("textureSrc");
-    m_LumaLocation = m_shader.FindUniform("luma");
-
-    //the 0 means that the 'inputTexture' in
-    //the shader will use the texture bound to GL texture unit 0
-    m_extensions.glUniform1iARB(m_inputTextureLocation1, 0);
-    m_extensions.glUniform1iARB(m_inputTextureLocation2, 1);
-
-  }
-  else
-  {
-    //activate our shader
-    m_shader.BindShader();
-  }
+  //activate our shader
+  m_shader.BindShader();
   
   FFGLTextureStruct &TextureDest = *(pGL->inputTextures[0]);
   FFGLTextureStruct &TextureSrc  = *(pGL->inputTextures[1]);
   
   //activate rendering with the input texture
   //note that when using shaders, no glEnable(Texture.Target) is required
-  glDisable(GL_TEXTURE_2D);
-  glBindTexture( GL_TEXTURE_2D, 0);
-
   m_extensions.glActiveTexture(GL_TEXTURE0);
-  glEnable(GL_TEXTURE_2D);
   glBindTexture(TextureDest.Target, TextureDest.Handle);
 
   m_extensions.glActiveTexture(GL_TEXTURE1);
-  glEnable(GL_TEXTURE_2D);
   glBindTexture(TextureSrc.Target, TextureSrc.Handle);
-
  
   //get the max s,t that correspond to the 
   //width,height of the used portion of the allocated texture space
@@ -176,21 +165,13 @@ DWORD FFGLLumaKey::ProcessOpenGL(ProcessOpenGLStruct *pGL)
 
   m_shader.UnbindShader();
 
-  glDisable(GL_TEXTURE_2D);
-  glBindTexture( GL_TEXTURE_2D, 0);
-
-  m_extensions.glActiveTexture(GL_TEXTURE1);
-  glDisable(GL_TEXTURE_2D);
-  glBindTexture( GL_TEXTURE_2D, 0 );
+  //GL_TEXTURE1 is still active
+  //m_extensions.glActiveTexture(GL_TEXTURE1);
+  glBindTexture(GL_TEXTURE_2D, 0);
 
   m_extensions.glActiveTexture(GL_TEXTURE0);	
-  glDisable(GL_TEXTURE_2D);
-  glBindTexture( GL_TEXTURE_2D, 0);
+  glBindTexture(GL_TEXTURE_2D, 0);
 
-
-
-
-  
   return FF_SUCCESS;
 }
 

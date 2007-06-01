@@ -29,6 +29,7 @@ public:
   
   GLuint GetWidth() { return m_width; }
   GLuint GetHeight() { return m_height; }
+  GLuint GetFBOHandle() { return m_fboHandle; }
 
 protected:
   GLuint m_width;

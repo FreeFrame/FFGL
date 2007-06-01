@@ -81,17 +81,24 @@ int FFGLFBO::BindAsRenderTarget(FFGLExtensions &e)
       ptype, //pixel type
       NULL); //null texture image data pointer
 
-    //we need to define some texture parameters before attaching to the FBO.
-    //in particular, we need to make sure MIN_FILTER is not configured to use
-    //mipmapping because it (as of may 4 2006) is unstable and causes crashes
-    //on some ATI cards
-  	glTexParameteri(m_glTextureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  	glTexParameteri(m_glTextureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    //for now, do not do mipmapping.
+    //to do mipmapping, set this to 1, and after we've bound the texture,
+    //we would need to call glGenerateMipmapEXT(m_textureTarget) to make sure
+    //the mipmaps have been updated
+    int do_mipmaps = 0;
+
+    if (do_mipmaps)
+      e.glGenerateMipmapEXT(m_glTextureTarget);
+
+    glTexParameteri(m_glTextureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    
+    if (do_mipmaps)
+  	  glTexParameteri(m_glTextureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    else
+      glTexParameteri(m_glTextureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    
     glTexParameteri(m_glTextureTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(m_glTextureTarget, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-    //as stated above.. this is not stable yet.
-    //e.glGenerateMipmapEXT(m_textureTarget);
 
     //unbind the texture
     glBindTexture(m_glTextureTarget, 0);

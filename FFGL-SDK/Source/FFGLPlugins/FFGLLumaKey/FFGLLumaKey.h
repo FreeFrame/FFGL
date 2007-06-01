@@ -9,7 +9,7 @@ public CFreeFrameGLPlugin
 {
 public:
   FFGLLumaKey();
-  ~FFGLLumaKey() {}
+  virtual ~FFGLLumaKey() {}
 
 	///////////////////////////////////////////////////
 	// FreeFrame plugin methods
@@ -18,17 +18,21 @@ public:
 	DWORD	SetParameter(const SetParameterStruct* pParam);		
 	DWORD	GetParameter(DWORD dwIndex);					
 	DWORD	ProcessOpenGL(ProcessOpenGLStruct *pGL);
+  DWORD InitGL(const FFGLViewportStruct *vp);
+  DWORD DeInitGL();
+
 
 	///////////////////////////////////////////////////
 	// Factory method
 	///////////////////////////////////////////////////
 
-	static DWORD __stdcall CreateInstance(void** ppInstance)
-    {
-  	  *ppInstance = new FFGLLumaKey();
-	  if (*ppInstance != NULL) return FF_SUCCESS;
+	static DWORD __stdcall CreateInstance(CFreeFrameGLPlugin **ppOutInstance)
+  {
+    *ppOutInstance = new FFGLLumaKey();
+	  if (*ppOutInstance != NULL)
+      return FF_SUCCESS;
 	  return FF_FAIL;
-    }
+  }
 
 protected:	
 	// Parameters

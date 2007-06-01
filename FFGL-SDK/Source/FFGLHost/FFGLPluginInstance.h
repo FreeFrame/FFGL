@@ -21,12 +21,12 @@ public:
     return FF_FAIL;
   }
   
-  //calls plugMain(FF_INSTANTIATE) and assigns
+  //calls plugMain(FF_INSTANTIATEGL) and assigns
   //each parameter its default value
-  DWORD CreatePluginInstance();
+  DWORD InstantiateGL(const FFGLViewportStruct *vp);
   
-  //calls plugMain(FF_DEINSTANTIATE)
-  DWORD DeletePluginInstance();
+  //calls plugMain(FF_DEINSTANTIATEGL)
+  DWORD DeInstantiateGL();
 
   virtual DWORD Unload()
   {

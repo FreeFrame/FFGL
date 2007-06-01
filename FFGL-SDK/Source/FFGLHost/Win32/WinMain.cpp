@@ -38,11 +38,13 @@ FFGLTextureStruct CreateOpenGLTexture(int textureWidth, int textureHeight);
   const char *FFGLMirrorFile     = "FFGLMirror_debug.dll";
   const char *FFGLTileFile       = "FFGLTile_debug.dll";
   const char *FFGLHeatFile       = "FFGLHeat_debug.dll";
+  const char *FFGLLumaKeyFile    = "FFGLLumaKey_debug.dll";
 #else
   const char *FFGLBrightnessFile = "FFGLBrightness.dll";
   const char *FFGLMirrorFile     = "FFGLMirror.dll";
   const char *FFGLTileFile       = "FFGLTile.dll";
   const char *FFGLHeatFile       = "FFGLHeat.dll";
+  const char *FFGLLumaKeyFile    = "FFGLLumaKey.dll";
 #endif
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
@@ -130,20 +132,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
   //instantiation can be done
   wglMakeCurrent(hdc, g_glrc);
 
-  //instantiate the first plugin
-  if (plugin1->CreatePluginInstance()!=FF_SUCCESS)
-  {
-    FFDebugMessage("Plugin1 instantiate failed");
-    return 0;
-  }
-
-  //instantiate the second plugin
-  if (plugin2->CreatePluginInstance()!=FF_SUCCESS)
-  {
-    FFDebugMessage("Plugin2 instantiate failed");
-    return 0;
-  }
-
   //the host needs to initialize the glExtensions structure
   //(without the extensions we can't do swap control or
   //use EXT_framebuffer_objects)
@@ -173,6 +161,33 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
   if (!fbo.Create(fboWidth, fboHeight, glExtensions))
   {
     FFDebugMessage("Framebuffer Object Init Failed");
+    return 0;
+  }
+
+  //instantiate the first plugin with the FBO viewport
+  FFGLViewportStruct fboViewport;
+  fboViewport.x = 0;
+  fboViewport.y = 0;
+  fboViewport.width = fboWidth;
+  fboViewport.height = fboHeight;
+
+  if (plugin1->InstantiateGL(&fboViewport)!=FF_SUCCESS)
+  {
+    FFDebugMessage("Plugin1 instantiate failed");
+    return 0;
+  }
+
+  //instantiate the second plugin with the output window
+  //viewport
+  FFGLViewportStruct windowViewport;
+  windowViewport.x = 0;
+  windowViewport.y = 0;
+  windowViewport.width = clientRect.right - clientRect.left;
+  windowViewport.height = clientRect.bottom - clientRect.top;
+      
+  if (plugin2->InstantiateGL(&windowViewport)!=FF_SUCCESS)
+  {
+    FFDebugMessage("Plugin2 instantiate failed");
     return 0;
   }
 
@@ -247,7 +262,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
       }
 
       //set the gl viewport to equal the size of the FBO
-      glViewport(0,0, fbo.GetWidth(), fbo.GetHeight());
+      glViewport(
+        fboViewport.x,
+        fboViewport.y,
+        fboViewport.width,
+        fboViewport.height);
 
       //prepare gl state for rendering the first plugin (brightness)
       
@@ -271,16 +290,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
       //the plugin's ProcessOpenGL method
       ProcessOpenGLStructTag processStruct;
     
-      //provide the 1 input texture we allocated above
-      processStruct.numInputTextures = 1;
-      
       //create the array of OpenGLTextureStruct * to be passed
       //to the plugin
       FFGLTextureStruct *inputTextures[1];
-      inputTextures[0] = &aviTexture;
+      inputTextures[0] = &aviTexture;      
       
+      //provide our 1 input texture
+      processStruct.numInputTextures = 1;
       processStruct.inputTextures = inputTextures;
 
+      //we must let the plugin know that it is rendering into a FBO
+      //by sharing with it the handle to the currently bound FBO
+      processStruct.HostFBO = fbo.GetFBOHandle();
+      
       //call the plugin's ProcessOpenGL
       if (plugin1->CallProcessOpenGL(processStruct)==FF_SUCCESS)
       {
@@ -298,12 +320,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
       fbo.UnbindAsRenderTarget(glExtensions);
 
       //set the gl viewport to equal the size of our output window
-      RECT clientRect;
-      GetClientRect(g_hwnd, &clientRect);
-      int viewportWidth = clientRect.right - clientRect.left;
-      int viewportHeight = clientRect.bottom - clientRect.top;
-
-      glViewport(0, 0, viewportWidth, viewportHeight);
+      glViewport(
+        windowViewport.x,
+        windowViewport.y,
+        windowViewport.width,
+        windowViewport.height);
 
       //prepare to render the 2nd plugin (the mirror effect or the custom plugin)
 
@@ -323,14 +344,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
       //now pass the contents of the FBO as a texture to the mirror plugin
       FFGLTextureStruct fboTexture = fbo.GetTextureInfo();
 
-      //all we need to change in our processStruct
-      //is where texture #0 points to (now it points to the FBO texture)
+      //change our processStruct so that the input texture refers to
+      //the FBO texture
       inputTextures[0] = &fboTexture;
 
-      //plugin 2 parameter #0 is mouse Y
+      //change the processOpenGLStruct so that the HostFBO is 0
+      //(we are rendering the plugin into the output window)
+      processStruct.HostFBO = 0;
+
+      //set plugin 2 parameter #0 to the last mouse Y position
       plugin2->SetFloatParameter(0, mouseY);
 
-      //call the mirror plugin's ProcessOpenGL
+      //call plugin #2's ProcessOpenGL
       if (plugin2->CallProcessOpenGL(processStruct)==FF_SUCCESS)
       {
         //if the plugin call succeeds, the drawning is complete
@@ -353,8 +378,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
         //while the gl context is still active      
 
         //release plugin resources
-        plugin1->DeletePluginInstance();
-        plugin2->DeletePluginInstance();
+        plugin1->DeInstantiateGL();
+        plugin2->DeInstantiateGL();
 
         //release the fbo
         fbo.FreeResources(glExtensions);
@@ -502,7 +527,11 @@ BOOL CreateOpenGLWindow()
   //window with the OS
   RegisterOpenGLWindowClass();
 
-  g_hwnd = CreateWindow("FFGLHostWindowClass", "FFGL Host Sample", WS_OVERLAPPEDWINDOW,
+  //we do not create a resizable window because that would require that we
+  //re-instantiate plugins every time the window size changes
+  DWORD winFlags = WS_CAPTION | WS_SYSMENU | WS_DLGFRAME;
+
+  g_hwnd = CreateWindow("FFGLHostWindowClass", "FFGL Host Sample", winFlags,
      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, g_hinst, NULL);
 
   if (!g_hwnd)
