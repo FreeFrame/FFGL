@@ -9,6 +9,13 @@
 //this defines the size of the window when it is first opened
 int WINDOWWIDTH = 640;
 int WINDOWHEIGHT = 480;
+int WindowClosed = 0; //set to 1 when the window closes, detected by the glutVisibilityFunc
+
+FFGLViewportStruct fboViewport; //the viewport used when rendering into the FBO
+FFGLViewportStruct windowViewport; //the viewport used when rendering into the output window
+//they are the same, but seperated to emphasize the FFGL spec that requires maintaining
+//the same viewport during the lifetime of a plugin. plugin1 always renders into the fboViewport,
+//plugin2 always renders into the windowViewport
 
 //these classes assist with handling the loading/unloading, and calling of plugins
 FFGLPluginInstance *plugin1 = NULL;
@@ -63,7 +70,12 @@ Timer *timer = NULL;
 //and handle when the window is resized
 void FFGLHostDisplay();
 void FFGLHostReshape(int width, int height);
+
+//GLUT calls this function so that we can respond to mouse movement
 void FFGLHostMouseMove(int x, int y);
+
+//GLUT calls this function so that we can respond to changes of the window's visibility
+void FFGLHostVisibilityChange(int visible);
 
 //when the mouse moves, these values are updated according to the
 //x/y position of the mosue. (0,0) corresponds to the lower left
@@ -76,7 +88,7 @@ float mouseY = 0.5;
 
 int main(int argc, char **argv)
 {
-  //init first plugin
+  //load first plugin (does not instantiate!)
   plugin1 = FFGLPluginInstance::New();
   if (plugin1->Load(FFGLBrightnessFile)==FF_FAIL)
   {
@@ -84,7 +96,7 @@ int main(int argc, char **argv)
     return 0;
   }
 
-  //init second plugin
+  //init second plugin (does not instantiate!)
   plugin2 = FFGLPluginInstance::New();
   if (plugin2->Load(FFGLTileFile)==FF_FAIL)
   {
@@ -99,6 +111,7 @@ int main(int argc, char **argv)
   glutCreateWindow("FFGLHost");
   glutReshapeFunc(FFGLHostReshape);
   glutPassiveMotionFunc(FFGLHostMouseMove);
+  glutVisibilityFunc(FFGLHostVisibilityChange);
   
   //this allocates the CPU inputImage and GPU inputTexture
   //(they must be the same size)
@@ -125,14 +138,41 @@ int main(int argc, char **argv)
     return 0;
   }
   
+  //instantiate the first plugin passing a viewport that matches
+  //the FBO (plugin1 is rendered into our FBO)
+  fboViewport.x = 0;
+  fboViewport.y = 0;
+  fboViewport.width = WINDOWWIDTH;
+  fboViewport.height = WINDOWHEIGHT;
+  if (plugin1->InstantiateGL(&fboViewport)!=FF_SUCCESS)
+  {
+    FFDebugMessage("plugin1->InstantiateGL failed");
+    return 0;
+  }
+  
+  //plugin2 renders into the window viewport, which is the
+  //same as the FBO viewport, but the viewport structures are seperated
+  //here to emphasize the FFGL spec requirement of maintaining a consistent
+  //output viewport for the lifetime of a plugin
+  windowViewport = fboViewport;
+  if (plugin2->InstantiateGL(&windowViewport)!=FF_SUCCESS)
+  {
+    FFDebugMessage("plugin2->InstantiateGL failed");
+    return 0;
+  }
+  
   //tell GLUT about our display functions
   glutDisplayFunc(FFGLHostDisplay);
   
   //start the timer and the glut main loop
   timer = Timer::New();
-  glutMainLoop();
 
-  //when the main loop exits, free up what we allocated
+  //loop as long as the window is open  
+  while (WindowClosed==0)
+  {
+    glutCheckLoop();
+  }
+  
   plugin1->Unload();
   delete plugin1;
 
@@ -147,8 +187,30 @@ int main(int argc, char **argv)
   return 0;
 }
 
+//glut is not clear in its specification about whether or not
+//an opengl context is active during this call. GLUT doesn't seem to
+//be designed to gracefully exit the application freeing opengl resources
+//appropriately. since the FFGL spec requires an active opengl context
+//during the call to DeInstantiateGL (so that plugins can release their OpenGL
+//resources) this is the best place I can think to put it.
+void FFGLHostVisibilityChange(int visible)
+{
+  if (visible==0)
+  {
+    //free all of the gl resources we've allocated and mark our WindowClosed variable
+    WindowClosed = 1;
+    fbo.FreeResources(glExtensions);
+    plugin1->DeInstantiateGL();
+    plugin2->DeInstantiateGL();
+    glDeleteTextures(1,&inputTexture.Handle);
+  }
+}
+
 void FFGLHostDisplay()
-{  
+{
+  if (WindowClosed)
+    return;
+    
 	//whats the current time on the timer?
 	double curFrameTime = timer->GetElapsedTime();
 
@@ -162,8 +224,12 @@ void FFGLHostDisplay()
 	}
 
 	//set the gl viewport to equal the size of the FBO
-	glViewport(0,0, fbo.GetWidth(), fbo.GetHeight());
-
+	glViewport(
+    fboViewport.x,
+    fboViewport.y,
+    fboViewport.width,
+    fboViewport.height);
+  
 	//prepare gl state for rendering the first plugin (brightness)
 
 	//make sure all the matrices are reset
@@ -186,16 +252,18 @@ void FFGLHostDisplay()
 	//the plugin's ProcessOpenGL method
 	ProcessOpenGLStructTag processStruct;
 
-	//provide the 1 input texture we allocated above
-	processStruct.numInputTextures = 1;
-
 	//create the array of OpenGLTextureStruct * to be passed
 	//to the plugin
 	FFGLTextureStruct *inputTextures[1];
 	inputTextures[0] = &inputTexture;
 
+	//provide the 1 input texture we allocated above
+	processStruct.numInputTextures = 1;
 	processStruct.inputTextures = inputTextures;
 
+  //specify our FBO's handle in the processOpenGLStruct
+  processStruct.HostFBO = fbo.GetFBOHandle();
+  
 	//call the plugin's ProcessOpenGL
 	if (plugin1->CallProcessOpenGL(processStruct)==FF_SUCCESS)
 	{
@@ -213,8 +281,12 @@ void FFGLHostDisplay()
 	fbo.UnbindAsRenderTarget(glExtensions);
 
 	//set the gl viewport to equal the size of our output window
-	glViewport(0, 0, WINDOWWIDTH, WINDOWHEIGHT);
-
+	glViewport(
+    windowViewport.x,
+    windowViewport.y,
+    windowViewport.width,
+    windowViewport.height);
+ 
 	//prepare to render the 2nd plugin (the mirror effect or the custom plugin)
 
 	//reset all matrices
@@ -233,10 +305,12 @@ void FFGLHostDisplay()
 	//now pass the contents of the FBO as a texture to the mirror plugin
 	FFGLTextureStruct fboTexture = fbo.GetTextureInfo();
 
-	//all we need to change in our processStruct
-	//is where texture #0 points to (now it points to the FBO texture)
-	inputTextures[0] = &fboTexture;
+	//change processStruct to refer to the FBO texture
+  inputTextures[0] = &fboTexture;
 
+  //specify no FBO handle since we are rendering to the output window
+  processStruct.HostFBO = 0;
+  
   //set plugin 2 parameter 0
   plugin2->SetFloatParameter(0, mouseY);
   
@@ -271,9 +345,12 @@ void FFGLHostMouseMove(int x, int y)
 
 void FFGLHostReshape(int width, int height)
 {
-  WINDOWWIDTH = width;
-  WINDOWHEIGHT = height;
-  glViewport(0, 0, width, height);
+  //force GLUT to keep the window the same size as when we created it. this is
+  //to avoid having to re-instantiate plugins
+  if (width!=WINDOWWIDTH || height!=WINDOWHEIGHT)
+  {
+    glutReshapeWindow(WINDOWWIDTH,WINDOWHEIGHT);
+  }
 }
 
 void UpdateInputTexture(double timeInSeconds)

@@ -73,14 +73,17 @@ DWORD OSXPluginInstance::Load(const char *fname)
   if (rval!=FF_SUCCESS)
     return rval;
   
-  rval = CreatePluginInstance();
-
-  return rval;
+  return FF_SUCCESS;
 }
 
 DWORD OSXPluginInstance::Unload()
 {
-  DeletePluginInstance();
+  if (m_ffInstanceID!=INVALIDINSTANCE)
+  {
+    FFDebugMessage("Failed to call DeInstantiateGL before Unload()");
+    return FF_FAIL;
+  }
+  
   DeinitPluginLibrary();
   
 	if (m_ffModule != NULL)
