@@ -38,7 +38,6 @@
 		);
 		breakpoints = (
 			2DFDB3C00AF6850200367FE2 /* FFGLHeat.cpp:98 */,
-			2DFDB41D0AF689D600367FE2 /* FFGLShader.cpp:104 */,
 		);
 		breakpointsGroup = 2DA285AF0AEE60590030A4DD /* XCBreakpointsBucket */;
 		codeSenseManager = 2DA285980AEE5D640030A4DD /* Code sense */;
@@ -89,15 +88,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 183936819;
-			PBXWorkspaceStateSaveDate = 183936819;
-		};
-		perUserProjectItems = {
-			2DFDB3570AF6800100367FE2 /* PBXTextBookmark */ = 2DFDB3570AF6800100367FE2 /* PBXTextBookmark */;
-			2DFDB3580AF6800100367FE2 /* PBXTextBookmark */ = 2DFDB3580AF6800100367FE2 /* PBXTextBookmark */;
-			2DFDB35A0AF6800100367FE2 /* PBXTextBookmark */ = 2DFDB35A0AF6800100367FE2 /* PBXTextBookmark */;
-			2DFDB35C0AF6800100367FE2 /* PBXTextBookmark */ = 2DFDB35C0AF6800100367FE2 /* PBXTextBookmark */;
-			2DFDB35D0AF6800100367FE2 /* PBXTextBookmark */ = 2DFDB35D0AF6800100367FE2 /* PBXTextBookmark */;
+			PBXPerProjectTemplateStateSaveDate = 202409039;
+			PBXWorkspaceStateSaveDate = 202409039;
 		};
 		sourceControlManager = 2DA285970AEE5D640030A4DD /* Source Control */;
 		userBuildSettings = {
@@ -223,74 +215,6 @@
 			sepNavWindowFrame = "{{345, 251}, {750, 558}}";
 		};
 	};
-	2DFDB3570AF6800100367FE2 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 2DC889ED0AF405C700199EB1 /* FFGLTile.cpp */;
-		name = "FFGLTile.cpp: 85";
-		rLen = 1021;
-		rLoc = 2478;
-		rType = 0;
-		vrLen = 1559;
-		vrLoc = 2310;
-	};
-	2DFDB3580AF6800100367FE2 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 2DFDB3590AF6800100367FE2 /* FFGLHeat.h */;
-		name = "(null): 40";
-		rLen = 176;
-		rLoc = 873;
-		rType = 0;
-		vrLen = 995;
-		vrLoc = 70;
-	};
-	2DFDB3590AF6800100367FE2 /* FFGLHeat.h */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = sourcecode.c.h;
-		name = FFGLHeat.h;
-		path = /Users/trey/Desktop/FFGLSDK/Projects/FFGLPlugins/XCode/../../../Source/FFGLPlugins/FFGLHeat/FFGLHeat.h;
-		sourceTree = "<absolute>";
-	};
-	2DFDB35A0AF6800100367FE2 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 2DFDB35B0AF6800100367FE2 /* FFGL.h */;
-		rLen = 0;
-		rLoc = 2147483647;
-		rType = 0;
-	};
-	2DFDB35B0AF6800100367FE2 /* FFGL.h */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = sourcecode.c.h;
-		name = FFGL.h;
-		path = /Users/trey/Desktop/FFGLSDK/Include/FFGL.h;
-		sourceTree = "<absolute>";
-	};
-	2DFDB35C0AF6800100367FE2 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 2DC889ED0AF405C700199EB1 /* FFGLTile.cpp */;
-		name = "FFGLTile.cpp: 85";
-		rLen = 1021;
-		rLoc = 2478;
-		rType = 0;
-		vrLen = 1559;
-		vrLoc = 2310;
-	};
-	2DFDB35D0AF6800100367FE2 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 2DFDB35E0AF6800100367FE2 /* FFGLHeat.h */;
-		name = "(null): 40";
-		rLen = 176;
-		rLoc = 873;
-		rType = 0;
-		vrLen = 995;
-		vrLoc = 70;
-	};
-	2DFDB35E0AF6800100367FE2 /* FFGLHeat.h */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = sourcecode.c.h;
-		name = FFGLHeat.h;
-		path = /Users/trey/Desktop/FFGLSDK/Projects/FFGLPlugins/XCode/../../../Source/FFGLPlugins/FFGLHeat/FFGLHeat.h;
-		sourceTree = "<absolute>";
-	};
 	2DFDB3C00AF6850200367FE2 /* FFGLHeat.cpp:98 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
@@ -303,7 +227,7 @@
 		hitCount = 1;
 		lineNumber = 98;
 		location = FFGLHeat_debug;
-		modificationTime = 183932186.315149;
+		modificationTime = 202410716.4553;
 		state = 1;
 	};
 	2DFDB41D0AF689D600367FE2 /* FFGLShader.cpp:104 */ = {
@@ -318,7 +242,7 @@
 		hitCount = 1;
 		lineNumber = 104;
 		location = FFGLTile_debug;
-		modificationTime = 183932158.530607;
+		modificationTime = 202410586.923948;
 		state = 1;
 	};
 }

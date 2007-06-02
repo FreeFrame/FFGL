@@ -1,7 +1,7 @@
 // !$*UTF8*$!
 {
 	2DA283F60AE9EA060030A4DD /* Project object */ = {
-		activeBuildConfigurationName = Release;
+		activeBuildConfigurationName = Debug;
 		activeExecutable = 2DA286020AEE63D00030A4DD /* FFGLHost */;
 		activeTarget = 2DA286000AEE63D00030A4DD /* FFGLHost */;
 		addToTargets = (
@@ -97,8 +97,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 183936910;
-			PBXWorkspaceStateSaveDate = 183936910;
+			PBXPerProjectTemplateStateSaveDate = 202408122;
+			PBXWorkspaceStateSaveDate = 202408122;
 		};
 		sourceControlManager = 2DA283FA0AE9EA060030A4DD /* Source Control */;
 		userBuildSettings = {
@@ -118,9 +118,9 @@
 	};
 	2DA284030AE9EA770030A4DD /* FFGLFBO.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {931, 2548}}";
-			sepNavSelRange = "{4553, 0}";
-			sepNavVisRect = "{{0, 0}, {931, 699}}";
+			sepNavIntBoundsRect = "{{0, 0}, {888, 2828}}";
+			sepNavSelRange = "{4677, 0}";
+			sepNavVisRect = "{{0, 2527}, {888, 301}}";
 			sepNavWindowFrame = "{{15, 4}, {970, 828}}";
 		};
 	};
@@ -134,10 +134,10 @@
 	};
 	2DA284F30AEA03FA0030A4DD /* OSXMain.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1107, 5432}}";
-			sepNavSelRange = "{7934, 0}";
-			sepNavVisRect = "{{0, 3525}, {1107, 441}}";
-			sepNavWindowFrame = "{{184, 66}, {954, 646}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1107, 6510}}";
+			sepNavSelRange = "{6981, 0}";
+			sepNavVisRect = "{{0, 2629}, {1107, 441}}";
+			sepNavWindowFrame = "{{135, 137}, {954, 646}}";
 		};
 	};
 	2DA286000AEE63D00030A4DD /* FFGLHost */ = {
@@ -176,17 +176,17 @@
 	};
 	2DA286D60AEEA3A80030A4DD /* FFGLPluginInstance.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {672, 3948}}";
-			sepNavSelRange = "{2747, 0}";
-			sepNavVisRect = "{{0, 1315}, {672, 296}}";
+			sepNavIntBoundsRect = "{{0, 0}, {888, 3920}}";
+			sepNavSelRange = "{5795, 0}";
+			sepNavVisRect = "{{0, 3459}, {888, 461}}";
 			sepNavWindowFrame = "{{15, 107}, {926, 720}}";
 		};
 	};
 	2DA287260AEEA5D90030A4DD /* OSXPluginInstance.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1107, 1680}}";
-			sepNavSelRange = "{62, 0}";
-			sepNavVisRect = "{{0, 0}, {1107, 441}}";
+			sepNavIntBoundsRect = "{{0, 0}, {888, 1722}}";
+			sepNavSelRange = "{1898, 0}";
+			sepNavVisRect = "{{0, 1205}, {888, 461}}";
 			sepNavWindowFrame = "{{38, 86}, {926, 720}}";
 		};
 	};
