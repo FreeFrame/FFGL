@@ -224,7 +224,7 @@ otherwise.
 <ul type=disc>
 	<li>
 		In functions that return error codes any value other than 0 is assumed to be an
-		error code. These are be defined in each function below.
+		error code. These are to be defined in each function below.
 	</li>
 	<li>
 		In functions that return a pointer, (hex) FFFFFFFF also represents a failure condition
@@ -908,7 +908,6 @@ FFGLTextureStruct {
   <b>HardwareWidth:</b> 32-bit unsigned integer
   <b>HardwareHeight:</b> 32-bit unsigned integer
   <b>HardwareDepth:</b> 32-bit unsigned integer
-  <b>Target:</b> 32-bit unsigned integer (GLuint)
   <b>Handle:</b> 32-bit unsigned integer (GLuint)
 }
 </pre>
@@ -939,11 +938,7 @@ FFGLTextureStruct {
 	<td valign=top><i>HardwareDepth:</i></td>
 	<td>Depth of texture storing the video frame in pixels</td>
 </tr>
-<tr>
-	<td valign=top><i>Target:</i></td>
-	<td>Texture target (GL_TEXTURE_1D, GL_TEXTURE_2D,
-	GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_3D, etc.)</td>
-</tr>
+
 <tr>
 	<td valign=top><i>Handle:</i></td>
 	<td>the actual texture handle, from glGenTextures</td>
@@ -953,9 +948,9 @@ FFGLTextureStruct {
 <hr>
 
 <!-- /****************** OpenGLViewportStruct ******************/ -->
-<a name="OpenGLViewportStruct">
+<a name="FFGLViewportStruct" id="FFGLViewportStruct">
 	<table border=0 bgcolor="#E8E8E8"><tr>
-		<td valign=top><h3>OpenGLViewportStruct</h3></td>
+		<td valign=top><h3>FFGLViewportStruct</h3></td>
 		<td valign=top>&nbsp;(size = 16 bytes)</td>
 	</tr></table>
 </a>
@@ -1003,7 +998,6 @@ OpenGLViewportStruct {
 ProcessOpenGLStruct {
    <b>numInputTextures:</b> 32-bit unsigned integer
    <b>ppInputTextures:</b> 32-bit pointer to array of pointers to <a href="#FFGLTextureStruct">FFGLTextureStruct</a>
-   <b>hostViewport:</b> <a href="#OpenGLViewportStruct">OpenGLViewportStruct</a>
 }
 </pre>
 
@@ -1016,10 +1010,6 @@ ProcessOpenGLStruct {
 <tr>
 	<td valign=top><i>ppInputTextures:</i></td>
 	<td>A pointer to an array of pointers to input textures</td>
-</tr>
-<tr>
-	<td valign=top><i>hostViewport:</i></td>
-	<td>Viewport of the host</td>
 </tr>
 </table>
 
@@ -1177,18 +1167,33 @@ that are the same for all instances, and so do not require a valid InstanceID.
 		<td><a href="#InputChannel">InputChannel</a></td>
 		<td><a href="#InputStatus">InputStatus</a></td>
 	</tr>
+	<tr>
+      <td>17</td>
+	  <td><a href="#ProcessOpengl">processOpengl</a></td>
+	  <td>pointer to <a href="#ProcessOpenGLStruct">ProcessOpenGLStruct</a></td>
+	  <td>Success/error code </td>
+  </tr>
 	
 	<tr>
-		<td>17</td>
-		<td><a href="#ProcessOpengl">processOpengl</a></td>
-		<td>pointer to <a href="#ProcessOpenGLStruct">ProcessOpenGLStruct</a></td>
-		<td>Success/fail</td>
-	</tr>
-
+	  <td>18</td>
+	  <td><a href="#instantiateGL">instantiateGL</a></td>
+	  <td>pointer to <a href="#FFGLViewportStruct">FFGLViewportStruct</a></td>
+	  <td>InstanceIdentifier</td>
+  </tr>
+	<tr>
+	  <td>19</td>
+	  <td><a href="#deInstantiateGL">deInstantiateGL</a></td>
+	  <td>none</td>
+	  <td>Success/error code</td>
+  </tr>
 </table>
 
-<p>&nbsp;</p>
-
+<p>#define FF_PROCESSOPENGL       17<br>
+#define FF_INSTANTIATEGL       18</p>
+<p>DWORD instantiateGL(const FFGLViewportStruct *pGLViewport)</p>
+<p><br>
+#define FF_DEINSTANTIATEGL     19</p>
+<p>DWORD deInstantiateGL(void *instanceID)</p>
 <a name="CHAPFunctionsGlobal">
 	<h2>5.1. Global functions</h2>
 </a>
@@ -1588,58 +1593,6 @@ failed. (32-bit unsigned integer)
 
 <hr>
 
-<!-- /****************** processOpengl ******************/  -->
-<a name="processOpengl"></a>
-	<table border=0 bgcolor="#E8E8E8"><tr>
-		<td valign=top><h3>processOpengl</h3></td>
-		<td valign=top>&nbsp;(function code = 4, needs valid instanceID!)</td>
-	</tr></table>
-
-<h4>Input value:</h4>
-<table border=0>
-<tr>
-	<td><i>pProcessOpenGLStruct:</i></td>
-	<td>
-		pointer to ProcessOpenGLStruct structure.
-	</td>
-</tr>
-</table>
-
-<h4>Return value:</h4>
-<a href="#FF_SUCCESS">FF_SUCCESS</a> if successful, <a href="#FF_FAIL">FF_FAIL</a> if
-failed. (32-bit unsigned integer)
-
-<h4>Remarks:</h4>
-
-<table border=0>
-<tr>
-	<td valign=top>CPU PLUGIN:</td>
-	<td>Plugins need not implement this function. They must return
-	FF_FAIL when called.</td>
-</tr>
-<tr>
-	<td valign=top>GPU PLUGIN:</td>
-	<td>PLUGINS MUST RESTORE ANY OPENGL STATES THEY CHANGE TO THE DEFAULT STATE DEFINED
-	BY THE OPENGL SPEC BEFORE THE PLUGIN'S PROCESSOPENGL FUNCTION RETURNS, WITH
-	THE FOLLOWING EXCEPTIONS
-	<ul>
-	<li>If a plugin creates its own framebuffer objects for internal rendering, the
-	plugin HAVE TO restore the host's fbo and it will HAVE TO restore the host's
-	viewport setting.
-	</li>
-	<li>more to come</li>
-	</ul>
-	</td>
-</tr>
-<tr>
-	<td valign=top>HOST:</td>
-	<td>
-	</td>
-</tr>
-</table>
-
-<hr>
-
 <!-- /****************** getParameterDisplay ******************/  -->
 <a name="getParameterDisplay"></a>
 	<table border=0 bgcolor="#E8E8E8"><tr>
@@ -1909,5 +1862,136 @@ it plans to render.
 </tr>
 </table>
 
+<hr>
+<!-- /****************** processOpengl ******************/  -->
+<a name="processOpengl"></a>
+<table border=0 bgcolor="#E8E8E8">
+  <tr>
+    <td valign=top><h3>processOpengl</h3></td>
+    <td valign=top>&nbsp;(function code = 17, needs valid instanceID!)</td>
+  </tr>
+</table>
+<h4>Input value:</h4>
+<table border=0>
+  <tr>
+    <td><i>pProcessOpenGLStruct:</i></td>
+    <td> pointer to ProcessOpenGLStruct structure. </td>
+  </tr>
+</table>
+<h4>Return value:</h4>
+<a href="#FF_SUCCESS">FF_SUCCESS</a> if successful, <a href="#FF_FAIL">FF_FAIL</a> if
+failed. (32-bit unsigned integer)
+<h4>Remarks:</h4>
+<table border=0>
+  <tr>
+    <td valign=top>CPU PLUGIN:</td>
+    <td>Plugins need not implement this function. They must return
+      FF_FAIL when called.</td>
+  </tr>
+  <tr>
+    <td valign=top>GPU PLUGIN:</td>
+    <td>PLUGINS MUST RESTORE ANY OPENGL STATES THEY CHANGE TO THE DEFAULT STATE DEFINED
+      BY THE OPENGL SPEC BEFORE THE PLUGIN'S PROCESSOPENGL FUNCTION RETURNS, WITH
+      THE FOLLOWING EXCEPTIONS
+      <ul>
+          <li>If a plugin creates its own framebuffer objects for internal rendering, the
+            plugin HAVE TO restore the host's fbo and it will HAVE TO restore the host's
+            viewport setting. </li>
+        <li>more to come</li>
+      </ul></td>
+  </tr>
+  <tr>
+    <td valign=top>HOST:</td>
+    <td></td>
+  </tr>
+</table>
+<hr>
+<!-- /****************** processOpengl ******************/  -->
+<a name="instantiateGL" id="instantiateGL"></a>
+<table border=0 bgcolor="#E8E8E8">
+  <tr>
+    <td valign=top><h3>instantiateGL</h3></td>
+    <td valign=top>&nbsp;(function code = 18, needs valid instanceID!)</td>
+  </tr>
+</table>
+<p>#define FF_INSTANTIATEGL       18</p>
+<p>DWORD instantiateGL(const FFGLViewportStruct *pGLViewport)</p>
+<h4>Input value:</h4>
+<table border=0>
+  <tr>
+    <td><i>pFFGLViewportStruct:</i></td>
+    <td> pointer to FFGLViewportStruct structure. </td>
+  </tr>
+</table>
+<h4>Return value:</h4>
+An <a href="#InstanceIdentifier">InstanceIdentifier</a> for the newly instantiated
+effect. Will be used as instanceID for future function calls.<br>
+Returns <a href="#FF_FAIL">FF_FAIL</a> on error.
+<h4>Remarks:</h4>
+<table border=0>
+  <tr>
+    <td valign=top>PLUGINS:</td>
+    <td> Prepare an instance of the Plug-in for processing.
+      Set default values, allocate memory
+      When the plug-in returns from this function it must be ready to process a frame. <br>
+      <br>
+      CPU: Return Failed. <br>
+      <br>
+      GPU: Allocate GPU resources, textures, shader programs, etc. VideoInfoStruct should be ignored, refer to
+      the viewport and texture sizes passed into the ProcessOpenGL call for correct size information. <br>
+      <br>
+    </td>
+  </tr>
+  <tr>
+    <td valign=top>HOST:</td>
+    <td> This function *must* return before a call to processOpengl. The <a href="#InstanceIdentifier">InstanceIdentifier</a> provided by the plugin is your handle to this
+      instance of the plugin. The host must keep this instance identifier,
+      and provide it in all calls to the plugin regarding that instance. <br>
+      <br>
+      CPU: N/A <br>
+      <br>
+      GPU: Host must ensure that a valid OpenGL context is active during this call so that plugins can allocate
+      GPU resources. <br>
+      <br>
+    </td>
+  </tr>
+</table>
+<hr>
+<!-- /****************** processOpengl ******************/  -->
+<a name="deInstantiateGL" id="deInstantiateGL"></a>
+<table border=0 bgcolor="#E8E8E8">
+  <tr>
+    <td valign=top><h3>deInstantiateGL</h3></td>
+    <td valign=top>&nbsp;(function code = 19, needs valid instanceID!)</td>
+  </tr>
+</table>
+<p>#define FF_DEINSTANTIATEGL     19</p>
+<p>DWORD deInstantiateGL(void *instanceID)</p>
+<h4>Input value:</h4>
+<table border=0>
+  <tr>
+    <td><i>pProcessOpenGLStruct:</i></td>
+    <td> pointer to ProcessOpenGLStruct structure. </td>
+  </tr>
+</table>
+<h4>Return value:</h4>
+Returns <a href="#FF_SUCCESS">FF_SUCCESS</a> if successful or <a href="#FF_FAIL">FF_FAIL</a> if failed.
+<h4>Remarks:</h4>
+<table border=0>
+  <tr>
+    <td valign=top>CPU PLUGIN:</td>
+    <td>Plugins need not implement this function. They must return
+      FF_FAIL when called.</td>
+  </tr>
+  <tr>
+    <td valign=top>GPU PLUGIN:</td>
+    <td>De Allocate GPU resources specific to this GL instance: textures, shader programs, etc.</td>
+  </tr>
+  <tr>
+    <td valign=top>HOST:</td>
+    <td></td>
+  </tr>
+</table>
+<p>&nbsp;</p>
 </body>
 </html>
