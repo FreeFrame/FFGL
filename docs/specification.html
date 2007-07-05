@@ -77,8 +77,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 <p>&nbsp;</p>
 
-<a name="CHAPLibrary">
-	<h2>1. OS integration</h2>
+<a name="CHAPLibrary"><hr><h2>1. OS integration</h2><hr>
 </a>
 <p>
 FreeFrame plugins are distributed and used as compiled shared objects (.so)
@@ -147,7 +146,7 @@ Depends on function code. See <a href="#functiontable">function table</a> for de
 <p>&nbsp;</p>
 
 <a name="CHAPConstants">
-	<h2>2. Basic types and constants</h2>
+	<hr><h2>2. Basic types and constants</h2><hr>
 </a>
 <p>
 All numbers in this document are ordinary decimal numbers, expect if specified
@@ -224,20 +223,14 @@ otherwise.
 <ul type=disc>
 	<li>
 		In functions that return error codes any value other than 0 is assumed to be an
-		error code. These are to be defined in each function below.
-	</li>
+		error code. These are to be defined in each function below.	</li>
 	<li>
-		In functions that return a pointer, (hex) FFFFFFFF also represents a failure condition
-	</li>
+		In functions that return a pointer, (hex) FFFFFFFF also represents a failure condition.</li>
 </ul>
-
-
-
 
 <p>&nbsp;</p>
 
-<a name="CHAPTypes">
-	<h2>3. Enumerated and derived types</h2>
+<a name="CHAPTypes"><hr><h2>3. Enumerated and derived types</h2><hr>
 </a>
 
 <!-- /****************** InstanceIdentifier ******************/  -->
@@ -601,12 +594,10 @@ of FrameWidth-1. See <a href="#VideoInfoStruct">VideoInfoStruct</a>).
 </table>
 
 
-
-
 <p>&nbsp;</p>
 
 <a name="CHAPStructures">
-	<h2>4. Structures</h2>
+<hr><h2>4. Structures</h2><hr>
 </a>
 
 <!-- /****************** PluginInfoStruct ******************/  -->
@@ -896,7 +887,7 @@ ProcessFrameCopyStruct{
 <a name="FFGLTextureStruct">
 	<table border=0 bgcolor="#E8E8E8"><tr>
 		<td valign=top><h3>FFGLTextureStruct</h3></td>
-		<td valign=top>&nbsp;(size = 32 bytes)</td>
+		<td valign=top>&nbsp;(size = 28 bytes)</td>
 	</tr></table>
 </a>
 
@@ -956,30 +947,30 @@ FFGLTextureStruct {
 </a>
 
 <pre>
-OpenGLViewportStruct {
-   <b>x:</b> 32-bit unsigned integer
-   <b>y:</b> 32-bit unsigned integer
-   <b>width:</b> 32-bit unsigned integer
-   <b>height:</b> 32-bit unsigned integer
+FFGLViewportStruct {
+   <b>X:</b> 32-bit unsigned integer
+   <b>Y:</b> 32-bit unsigned integer
+   <b>Width:</b> 32-bit unsigned integer
+   <b>Height:</b> 32-bit unsigned integer
 }
 </pre>
 
 <h4>Fields:</h4>
 <table border=0>
 <tr>
-	<td valign=top><i>x:</i></td>
+	<td valign=top><i>X:</i></td>
 	<td>X-coordinate of the viewport's bottom left corner</td>
 </tr>
 <tr>
-	<td valign=top><i>y:</i></td>
+	<td valign=top><i>Y:</i></td>
 	<td>Y-coordinate of the viewport's bottom left corner</td>
 </tr>
 <tr>
-	<td valign=top><i>width:</i></td>
+	<td valign=top><i>Width:</i></td>
 	<td>Width of viewport</td>
 </tr>
 <tr>
-	<td valign=top><i>height:</i></td>
+	<td valign=top><i>Height:</i></td>
 	<td>Height of viewport</td>
 </tr>
 </table>
@@ -990,7 +981,7 @@ OpenGLViewportStruct {
 <a name="ProcessOpenGLStruct">
 	<table border=0 bgcolor="#E8E8E8"><tr>
 		<td valign=top><h3>ProcessOpenGLStruct</h3></td>
-		<td valign=top>&nbsp;(size = 24 bytes)</td>
+		<td valign=top>&nbsp;(size = 12 bytes)</td>
 	</tr></table>
 </a>
 
@@ -998,6 +989,7 @@ OpenGLViewportStruct {
 ProcessOpenGLStruct {
    <b>numInputTextures:</b> 32-bit unsigned integer
    <b>ppInputTextures:</b> 32-bit pointer to array of pointers to <a href="#FFGLTextureStruct">FFGLTextureStruct</a>
+   <b>HostFBO:</b> 32-bit unsigned integer (GLuint)
 }
 </pre>
 
@@ -1008,20 +1000,26 @@ ProcessOpenGLStruct {
 	<td>Number of input textures contained in ppInputTextures</td>
 </tr>
 <tr>
-	<td valign=top><i>ppInputTextures:</i></td>
-	<td>A pointer to an array of pointers to input textures</td>
+  <td valign=top><i>ppInputTextures:</i></td>
+  <td>A pointer to an array of pointers to input textures</td>
+</tr>
+<tr>
+	<td valign=top><i>HostFBO:</i></td>
+	<td>32-bit unsigned integer (GLuint) see Remarks below </td>
 </tr>
 </table>
 
+<h4>Remarks:</h4>
+<p>If the host calls ProcessOpenGL with a framebuffer object actively bound (as is the case when the host is capturing the plugins output to an offscreen texture) the host must provide the GL handle to its EXT_framebuffer_object so that the plugin can restore that binding if the plugin makes use of its own FBO's for intermediate rendering.
 
 <p>&nbsp;</p>
 
 <a name="CHAPFunctions">
-	<h2>5. Functions</h2>
+	<hr><h2>5. Functions</h2><hr>
 </a>
-Some functions are specific to an instance of a plugin, and thus require a
+<p>Some functions are specific to an instance of a plugin, and thus require a
 valid InstanceID in the InstanceID field, others concern global parameters
-that are the same for all instances, and so do not require a valid InstanceID.
+that are the same for all instances, and so do not require a valid InstanceID.</p>
 
 <a name="functiontable">
 	<h3>Function Code Table</h3>
@@ -1188,14 +1186,10 @@ that are the same for all instances, and so do not require a valid InstanceID.
   </tr>
 </table>
 
-<p>#define FF_PROCESSOPENGL       17<br>
-#define FF_INSTANTIATEGL       18</p>
-<p>DWORD instantiateGL(const FFGLViewportStruct *pGLViewport)</p>
-<p><br>
-#define FF_DEINSTANTIATEGL     19</p>
-<p>DWORD deInstantiateGL(void *instanceID)</p>
+<p>&nbsp;</p>
+
 <a name="CHAPFunctionsGlobal">
-	<h2>5.1. Global functions</h2>
+<hr><h2>5.1. Global functions</h2><hr>
 </a>
 
 <!-- /****************** getInfo ******************/  -->
@@ -1542,11 +1536,10 @@ passed as 32-bit floats from 0-1, except text data.
 </p>
 
 
-
 <p>&nbsp;</p>
 
 <a name="CHAPFunctionsInstance">
-	<h2>5.2. Instance specific functions</h2>
+	<hr><h2>5.2. Instance specific functions</h2><hr>
 </a>
 
 <!-- /****************** processFrame ******************/  -->
@@ -1974,9 +1967,12 @@ Returns <a href="#FF_FAIL">FF_FAIL</a> on error.
     <td> pointer to ProcessOpenGLStruct structure. </td>
   </tr>
 </table>
+
 <h4>Return value:</h4>
 Returns <a href="#FF_SUCCESS">FF_SUCCESS</a> if successful or <a href="#FF_FAIL">FF_FAIL</a> if failed.
+
 <h4>Remarks:</h4>
+
 <table border=0>
   <tr>
     <td valign=top>CPU PLUGIN:</td>
@@ -1985,13 +1981,17 @@ Returns <a href="#FF_SUCCESS">FF_SUCCESS</a> if successful or <a href="#FF_FAIL"
   </tr>
   <tr>
     <td valign=top>GPU PLUGIN:</td>
-    <td>De Allocate GPU resources specific to this GL instance: textures, shader programs, etc.</td>
+    <td>Tidy up, deallocate memory, deallocate GPU resources specific to this GL instance: textures, shader programs, etc. All memory associated with the instance being deinited must be freed
+		here.	Plugins should release all GPU resources they've created for this instance.</td>
   </tr>
   <tr>
     <td valign=top>HOST:</td>
-    <td></td>
+    <td>This function must be called to close an instance of the plugin.
+		All instances should be closed before <a href="#deInitialise">deInitialising</a> the plugin!
+	GPU hosts must ensure a valid OpenGL context is active during this call so that plugins can free GPU resources. </td>
   </tr>
 </table>
-<p>&nbsp;</p>
+
+
 </body>
 </html>
