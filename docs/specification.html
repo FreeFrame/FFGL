@@ -249,11 +249,10 @@ otherwise.
 <tr>
 	<td valign=top><i>InstanceIdentifier:</i></td>
 	<td>
-		Unique identifier for the instance of a plugin. For some plugins, this value might represent
-		a pointer to a plugin-specific data structure containing the instance's
-        current state. Or it could be
-		an index to a table of all active instances of a plugin, or any other value that
-		uniquely identifies an instance.
+		Unique identifier for the instance of a plugin. For some plugins, this value
+		might represent a pointer to a plugin-specific data structure containing the
+		instance's current state. Or it could be an index to a table of all active
+		instances of a plugin, or any other value that uniquely identifies an instance.
 	</td>
 </tr>
 </table>
@@ -304,8 +303,7 @@ otherwise.
 <a name="ParameterName">
 	<table border=0 bgcolor="#E8E8E8"><tr>
 		<td valign=top><h3>ParameterName</h3></td>
-		<td valign=top>&nbsp;(array of 16 1-byte ASCII characters, *not null
-          terminated*)</td>
+		<td valign=top>&nbsp;(array of 16 1-byte ASCII characters, *not null terminated*)</td>
 	</tr></table>
 </a>
 
@@ -498,7 +496,7 @@ pixelformats.
 			<td>2</td>
 			<td>red</td>
 			<td rowspan=3>
-                The 3 colors e.g. for a colorpicker
+        The 3 colors e.g. for a colorpicker
 			</td>
 		</tr>
 		<tr>
@@ -649,10 +647,9 @@ PluginInfoStruct {
 
 <h4>Remarks:</h4>
 <p>
-Plugins of PluginType effect are passed frames of video, which they then modify.
-Source plugins are simply passed a pointer where they paint frames of video.
-One example of a source plugin would by a visual synthesizer which uses the
-parameters to synthesize video.
+Plugins of PluginType effect process one or more input frames to create an output frame.
+Source plugins create an output based only on the plugin parameters, and do
+not expect or use any input frames.
 </p>
 <p>
 FreeFrame APIMinorVersion numbers should always have 3 digits - so divide the
@@ -711,8 +708,14 @@ VideoInfoStruct {
 
 <h4>Remarks:</h4>
 <p>
-All video data in FreeFrame is pixel ordered, so the R, G, B values of a single pixel are located at consecutive memory
-locations. A video buffer consists of FrameWidth x FrameHeight pixels.
+This structure is provided by the host when a CPU plugin is instantiated.
+When a GPU plugin is instantiated, it is passed a <a href="#FFGLViewportStruct">FFGLViewportStruct</a>. The remarks below
+are not relevant to GPU plugins.
+</p>
+<p>
+Video frames are provided to CPU plugins as large buffers of pixels. The Red, Green, Blue,
+and sometimes Alpha values of a single pixel are located at consecutive memory locations.
+A video buffer consists of FrameWidth x FrameHeight pixels.
 </p>
 <p>
 Plugins using 32-bit as byte aligned 24-bit video should be careful not to
@@ -907,38 +910,38 @@ FFGLTextureStruct {
 <table border=0>
 <tr>
 	<td valign=top><i>Width:</i></td>
-	<td>Width of video frame in pixels</td>
+	<td>Width (in pixels) of video frame</td>
 </tr>
 <tr>
 	<td valign=top><i>Height:</i></td>
-	<td>Height of video frame in pixels</td>
+	<td>Height (in pixels) of video frame</td>
 </tr>
 <tr>
 	<td valign=top><i>Depth:</i></td>
-	<td>Depth of video frame in pixels reserved for 3D frames</td>
+	<td>Depth (in pixels) of video frame (currently unused but reserved for 3D frames in the future)</td>
 </tr>
 <tr>
 	<td valign=top><i>HardwareWidth:</i></td>
-	<td>Width of texture storing the video frame in pixels</td>
+	<td>Width (in pixels) of GPU texture storing the video frame</td>
 </tr>
 <tr>
 	<td valign=top><i>HardwareHeight:</i></td>
-	<td>Height of texture storing the video frame in pixels</td>
+	<td>Height (in pixels) of GPU texture storing the video frame</td>
 </tr>
 <tr>
 	<td valign=top><i>HardwareDepth:</i></td>
-	<td>Depth of texture storing the video frame in pixels</td>
+	<td>Depth (in pixels) of GPU texture storing the video frame</td>
 </tr>
 
 <tr>
 	<td valign=top><i>Handle:</i></td>
-	<td>the actual texture handle, from glGenTextures</td>
+	<td>The GPU texture handle, from glGenTextures</td>
 </tr>
 </table>
 
 <hr>
 
-<!-- /****************** OpenGLViewportStruct ******************/ -->
+<!-- /****************** FFGLViewportStruct ******************/ -->
 <a name="FFGLViewportStruct" id="FFGLViewportStruct">
 	<table border=0 bgcolor="#E8E8E8"><tr>
 		<td valign=top><h3>FFGLViewportStruct</h3></td>
@@ -1010,7 +1013,11 @@ ProcessOpenGLStruct {
 </table>
 
 <h4>Remarks:</h4>
-<p>If the host calls ProcessOpenGL with a framebuffer object actively bound (as is the case when the host is capturing the plugins output to an offscreen texture) the host must provide the GL handle to its EXT_framebuffer_object so that the plugin can restore that binding if the plugin makes use of its own FBO's for intermediate rendering.
+<p>Hosts will often wish to capture the output of a GPU plugin to an offscreen texture. Hosts and plugins *must* use the
+   the EXT_framebuffer_object ("FBO") extension to achieve this, and should not attempt to use any other methods such as 'PBuffers'.
+   When a host calls ProcessOpenGL with an FBO actively bound, the host must provide the handle to the FBO in the 'HostFBO' field.
+   Plugins that use their own FBOs internally must restore the host's FBO with a call to glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, HostFBO)
+   so that the host can successfully capture the output of the plugin.
 
 <p>&nbsp;</p>
 
@@ -1472,12 +1479,11 @@ represented as a 32-bit unsigned integer.
 
 <h4>Remarks:</h4>
 <p>
-Plugins should either support CPU or GPU processing but not both. This means
-that if a plugin supports FF_CAP_PROCESSOPENGL it is required that it returns
-FF_UNSUPPORTED to FF_CAP_16BITVIDEO, FF_CAP_24BITVIDEO, FF_CAP_32BITVIDEO and 
-FF_CAP_PROCESSFRAMECOPY queries. And vice versa, if the plugin supports either
-FF_CAP_16BITVIDEO, FF_CAP_24BITVIDEO or FF_CAP_32BITVIDEO, it must reply
-FF_UNSUPPORTED to the FF_CAP_PROCESSOPENGL query.
+Plugins should either support CPU or GPU processing but not both. If a plugin
+supports FF_CAP_PROCESSOPENGL it should return FF_UNSUPPORTED for FF_CAP_16BITVIDEO,
+FF_CAP_24BITVIDEO, FF_CAP_32BITVIDEO and FF_CAP_PROCESSFRAMECOPY queries.
+Similarly, if the plugin supports either FF_CAP_16BITVIDEO, FF_CAP_24BITVIDEO or FF_CAP_32BITVIDEO,
+it must return FF_UNSUPPORTED for FF_CAP_PROCESSOPENGL.
 </p>
 
 <p>
@@ -1567,14 +1573,13 @@ failed. (32-bit unsigned integer)
 
 <table border=0>
 <tr>
-	<td valign=top>CPU PLUGIN:</td>
+	<td valign=top>CPU PLUGINS:</td>
 	<td>Process a frame of video 'in place'. This is also the basic
 	frameport for source plugins.</td>
 </tr>
 <tr>
-	<td valign=top>GPU PLUGIN:</td>
-	<td>Plugins need not implement this function. They must return
-	FF_FAIL leaving the video frame data intact when called.</td>
+	<td valign=top>GPU PLUGINS:</td>
+	<td>Do not implement this function. Return FF_FAIL and leave the video frame data untouched.</td>
 </tr>
 <tr>
 	<td valign=top>HOST:</td>
@@ -1701,34 +1706,30 @@ Returns <a href="#FF_FAIL">FF_FAIL</a> on error.
 
 <table border=0>
 <tr>
-	<td valign=top>PLUGINS:</td>
+	<td valign=top>CPU PLUGINS:</td>
 	<td>
-		Prepare an instance of the Plug-in for processing.
-		Set default values, allocate memory
+		Prepare an instance of the Plug-in for processing. Set default values, allocate memory.
 		When the plug-in returns from this function it must be ready to process a frame.
 		<br><br>
-		CPU: Make a copy of the <a href="#VideoInfoStruct">VideoInfoStruct</a> locally as pointer may not be valid after
-		function returns. The instance identifier you provide to the host must
-		be the unique identifier of this instance until a call to deinitialise.
-		<br><br>
-		GPU: Allocate GPU resources, textures, shader programs, etc. VideoInfoStruct should be ignored, refer to
-		the viewport and texture sizes passed into the ProcessOpenGL call for correct size information. 
-		<br><br>
+		Make a local copy of the <a href="#VideoInfoStruct">VideoInfoStruct</a> if necessary, the
+		pointer may not be valid after the function returns. The instance identifier you provide to the host must
+		be the unique identifier of this instance until a call to deinitialise.<br><br>
+	</td>
+</tr>
+<tr>
+	<td valign=top>GPU PLUGINS:</td>
+	<td>
+		Do not implement this function, GPU plugins have their own <a href="#instantiateGL">instantiateGL</a> function.<br><br><br>
 	</td>
 </tr>
 <tr>
 	<td valign=top>HOST:</td>
 	<td>
-		This function *must* return before a call to processFrame. The <a href="#InstanceIdentifier">InstanceIdentifier</a> provided by the plugin is your handle to this
-		instance of the plugin. The host must keep this instance identifier,
+		This function *must* return before a call to processFrame. The <a href="#InstanceIdentifier">InstanceIdentifier</a>
+		provided by the plugin is your handle to this	instance of the plugin. The host must keep this instance identifier,
 		and provide it in all calls to the plugin regarding that instance.
 		<br><br>
-		CPU: Pointer to <a href="#VideoInfoStruct">VideoInfoStruct</a> *must* be valid until function returns.
-		<br><br>
-		GPU: Host must ensure that a valid OpenGL context is active during this call so that plugins can allocate
-		GPU resources.
-		<br><br>
-		
+		Ensure that the pointer to <a href="#VideoInfoStruct">VideoInfoStruct</a> remains valid until the function returns.
 	</td>
 </tr>
 </table>
@@ -1751,10 +1752,16 @@ Returns <a href="#FF_SUCCESS">FF_SUCCESS</a> if successful or <a href="#FF_FAIL"
 <h4>Remarks:</h4>
 <table border=0>
 <tr>
-	<td valign=top>PLUGINS:</td>
+	<td valign=top>CPU PLUGINS:</td>
 	<td>
-		Tidy up, deallocate memory. All memory associated with the instance being deinited must be freed
-		here.	GPU plugins should release all GPU resources they've created.
+		Tidy up, deallocate memory. All memory associated with the instance being deinstantiated must be freed
+		here.
+	</td>
+</tr>
+<tr>
+	<td valign=top>GPU PLUGINS:</td>
+	<td>
+		Do not implement this function, GPU plugins have their own <a href="#deInstantiateGL">deInstantiateGL</a> function.
 	</td>
 </tr>
 <tr>
@@ -1762,7 +1769,6 @@ Returns <a href="#FF_SUCCESS">FF_SUCCESS</a> if successful or <a href="#FF_FAIL"
 	<td>
 		This function must be called to close an instance of the plugin.
 		All instances should be closed before <a href="#deInitialise">deInitialising</a> the plugin!
-		GPU hosts must ensure a valid OpenGL context is active during this call so that plugins can free GPU resources.
 	</td>
 </tr>
 </table>
@@ -1806,7 +1812,7 @@ be used to see how many input frames the plugin would like.
 		processing. This method is optional. Plugins should specify if they
 		are capable of this kind of processing - and if they have optimized a particular
 		method - in the Plugin Caps system.
-	   <br>
+	  <br>
 	   Source Plugins should not use this function as they do not require
 	   input frames. Source plugins should just use <a href="#processFrame">processFrame</a>
 	</td>
@@ -1878,28 +1884,27 @@ failed. (32-bit unsigned integer)
 <table border=0>
   <tr>
     <td valign=top>CPU PLUGIN:</td>
-    <td>Plugins need not implement this function. They must return
-      FF_FAIL when called.</td>
+    <td>CPU plugins should not implement this function. Return FF_FAIL.<br><br><br></td>
   </tr>
   <tr>
     <td valign=top>GPU PLUGIN:</td>
-    <td>PLUGINS MUST RESTORE ANY OPENGL STATES THEY CHANGE TO THE DEFAULT STATE DEFINED
-      BY THE OPENGL SPEC BEFORE THE PLUGIN'S PROCESSOPENGL FUNCTION RETURNS, WITH
-      THE FOLLOWING EXCEPTIONS
+    <td>BEFORE RETURNING FROM PROCESSOPENGL, PLUGINS MUST RESTORE ANY OPENGL STATES THEY CHANGE
+      TO THE DEFAULT OPENGL STATE AS DEFINED BY THE OPENGL SPEC, WITH THE FOLLOWING EXCEPTIONS:
       <ul>
-          <li>If a plugin creates its own framebuffer objects for internal rendering, the
-            plugin HAVE TO restore the host's fbo and it will HAVE TO restore the host's
-            viewport setting. </li>
-        <li>more to come</li>
+        <li>
+          If a plugin creates its own EXT_framebuffer_object ("FBO") for internal rendering, the
+          plugin MUST restore the host's FBO and (if necessary) it MUST restore the host's viewport setting.
+         </li>
+        <li>More exceptions will be added in the future as necessary</li>
       </ul></td>
   </tr>
   <tr>
     <td valign=top>HOST:</td>
-    <td>Plugins should always be fed textures of type GL_TEXTURE_2D </td>
+    <td>Hosts must provide textures of type GL_TEXTURE_2D. GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_3D, etc, are NOT supported.</td>
   </tr>
 </table>
 <hr>
-<!-- /****************** processOpengl ******************/  -->
+<!-- /****************** instantiateGL ******************/  -->
 <a name="instantiateGL" id="instantiateGL"></a>
 <table border=0 bgcolor="#E8E8E8">
   <tr>
@@ -1928,11 +1933,9 @@ Returns <a href="#FF_FAIL">FF_FAIL</a> on error.
       Set default values, allocate memory
       When the plug-in returns from this function it must be ready to process a frame. <br>
       <br>
-      CPU: Return Failed. <br>
+      GPU: Allocate GPU resources, textures, shader programs, etc. <br>
       <br>
-      GPU: Allocate GPU resources, textures, shader programs, etc. VideoInfoStruct should be ignored, refer to
-      the viewport and texture sizes passed into the ProcessOpenGL call for correct size information. <br>
-      <br>
+      CPU: Ignore this call and return FF_FAIL. CPU plugins have their own <a href="#instantiate">instantiate</a> function.<br><br>
     </td>
   </tr>
   <tr>
@@ -1941,16 +1944,15 @@ Returns <a href="#FF_FAIL">FF_FAIL</a> on error.
       instance of the plugin. The host must keep this instance identifier,
       and provide it in all calls to the plugin regarding that instance. <br>
       <br>
-      CPU: N/A <br>
+      GPU: Host must ensure that a valid OpenGL context is active during this call so that plugins can allocate GPU resources. <br>
       <br>
-      GPU: Host must ensure that a valid OpenGL context is active during this call so that plugins can allocate
-      GPU resources. <br>
+      CPU: Hosts should not use this function to instantiate CPU plugins, instead use the <a href="#instantiate">instantiate</a> function. <br>
       <br>
     </td>
   </tr>
 </table>
 <hr>
-<!-- /****************** processOpengl ******************/  -->
+<!-- /****************** instantiateGL ******************/  -->
 <a name="deInstantiateGL" id="deInstantiateGL"></a>
 <table border=0 bgcolor="#E8E8E8">
   <tr>
@@ -1976,13 +1978,12 @@ Returns <a href="#FF_SUCCESS">FF_SUCCESS</a> if successful or <a href="#FF_FAIL"
 <table border=0>
   <tr>
     <td valign=top>CPU PLUGIN:</td>
-    <td>Plugins need not implement this function. They must return
-      FF_FAIL when called.</td>
+    <td>CPU plugins should not implement this function. Return FF_FAIL.<br><br><br></td>
   </tr>
   <tr>
     <td valign=top>GPU PLUGIN:</td>
-    <td>Tidy up, deallocate memory, deallocate GPU resources specific to this GL instance: textures, shader programs, etc. All memory associated with the instance being deinited must be freed
-		here.	Plugins should release all GPU resources they've created for this instance.</td>
+    <td>Tidy up, deallocate memory, deallocate GPU resources specific to this GL instance: textures, shader programs, etc. All memory associated with the instance being deinstantiated must be freed
+		here.	Plugins should release all GPU resources they've created for this instance.<br><br></td>
   </tr>
   <tr>
     <td valign=top>HOST:</td>
