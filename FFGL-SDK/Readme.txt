@@ -11,15 +11,15 @@ FFGLHeat and FFGLTile Plugins by Edwin De Konig - www.resolume.com
 
 Many .h and .cpp's were taken from the FreeFrame SDK by Gualtiero Volpe
 (Gualtiero.Volpe@unige.it) and extended / modified to support the new 
-processing function, ProcessOpenGL.
+functions for OpenGL effects processing
 --------------------------------------------------------------------------
 
 --------------------
 Windows Instructions
 --------------------
 
-The source code was written and compiled with MSVC++ 2003. The project files probably won't
-open with anything older than that.
+Projects for MSVC .NET 2003 are found in the 'MSVC' sub-folders. Projects for MSVC 2005
+are in the 'MSVC8' sub-folders. Old versions of MSVC aren't likely to work.
 
 To test the FFGL host and sample plugins, go to the Binaries folder and run FFGLHost.exe.
 
@@ -141,7 +141,10 @@ Projects/
       XCode project files for FFGLHost
 
     MSVC/
-      MSVC project files for FFGLHost
+      MSVC 2003 project files for FFGLHost
+
+    MSVC8/
+      MSVC 2005 project files for FFGLHost
 
     Linux/
       GCC makefile for FFGLHost
@@ -150,7 +153,10 @@ Projects/
   FFGLPlugins/
 
     MSVC/
-      MSVC project files for FFGLPlugins
+      MSVC 2003 project files for FFGLPlugins
+
+    MSVC8/
+      MSVC 2005 project files for FFGLPlugins
 
     XCode/
       XCode project files for FFGLPlugins
