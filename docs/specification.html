@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
 	<title>FreeFrame Open Video Plugin System Specification</title>
@@ -176,8 +176,17 @@ otherwise.
 
 <tr>
 	<td><b>32-bit IEEE float</b></td>
-	<td> -lots to +lots</td>
-	<td>1 sign bit, 8 bit exponent, 24 bit mantissa</td>
+	<td>1 sign bit, 8 bit exponent, 23 bit fraction</td>
+	<td>Smallest Non-Zero Values: + or - 1.4012985 × (10 ^ −45)</td>
+	<td>Largest Non-Infinite Values: + or - 3.4028235 × (10 ^ 38)</td>
+</tr>
+
+<tr>
+  <a name="Float64"></a>
+	<td><b>64-bit IEEE float</b></td>
+	<td>1 sign bit, 11 bit exponent, 52 bit fraction</td>
+	<td>Smallest Non-Zero Values: + or - 5.0 × (10 ^ −324)</td>
+	<td>Largest Non-Infinite Values: + or - 1.7976931348623157 × (10 ^ 308)</td>
 </tr>
 </table>
 &nbsp;
@@ -432,6 +441,8 @@ string.
 		3 = Plugin supports <a href="#processFrameCopy">processFrameCopy</a> function<br>
 		&nbsp;<br>
 		4 = Plugin supports <a href="#processOpengl">processOpengl</a> function<br>
+		&nbsp;<br>
+		5 = Plugin supports <a href="#setTime">setTime</a> function<br>
 		&nbsp;<br>
 		Calls to these caps indexes are only meaningful if the plugin has reported
 		that it supports <a href="#processFrameCopy">processFrameCopy</a> or
@@ -890,7 +901,7 @@ ProcessFrameCopyStruct{
 <a name="FFGLTextureStruct">
 	<table border=0 bgcolor="#E8E8E8"><tr>
 		<td valign=top><h3>FFGLTextureStruct</h3></td>
-		<td valign=top>&nbsp;(size = 28 bytes)</td>
+		<td valign=top>&nbsp;(size = 20 bytes)</td>
 	</tr></table>
 </a>
 
@@ -898,10 +909,8 @@ ProcessFrameCopyStruct{
 FFGLTextureStruct {
   <b>Width:</b> 32-bit unsigned integer
   <b>Height:</b> 32-bit unsigned integer
-  <b>Depth:</b> 32-bit unsigned integer
   <b>HardwareWidth:</b> 32-bit unsigned integer
   <b>HardwareHeight:</b> 32-bit unsigned integer
-  <b>HardwareDepth:</b> 32-bit unsigned integer
   <b>Handle:</b> 32-bit unsigned integer (GLuint)
 }
 </pre>
@@ -917,10 +926,6 @@ FFGLTextureStruct {
 	<td>Height (in pixels) of video frame</td>
 </tr>
 <tr>
-	<td valign=top><i>Depth:</i></td>
-	<td>Depth (in pixels) of video frame (currently unused but reserved for 3D frames in the future)</td>
-</tr>
-<tr>
 	<td valign=top><i>HardwareWidth:</i></td>
 	<td>Width (in pixels) of GPU texture storing the video frame</td>
 </tr>
@@ -929,15 +934,16 @@ FFGLTextureStruct {
 	<td>Height (in pixels) of GPU texture storing the video frame</td>
 </tr>
 <tr>
-	<td valign=top><i>HardwareDepth:</i></td>
-	<td>Depth (in pixels) of GPU texture storing the video frame</td>
-</tr>
-
-<tr>
 	<td valign=top><i>Handle:</i></td>
 	<td>The GPU texture handle, from glGenTextures</td>
 </tr>
 </table>
+
+<h4>Remarks:</h4>
+<p>
+All textures supplied by the host must be configured to use the GL_TEXTURE_2D target. Use of other targets like
+GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_1D, GL_TEXTURE_3D, or the cube map targets, are not supported.
+</p>
 
 <hr>
 
@@ -1014,8 +1020,8 @@ ProcessOpenGLStruct {
 
 <h4>Remarks:</h4>
 <p>Hosts will often wish to capture the output of a GPU plugin to an offscreen texture. Hosts and plugins *must* use the
-   the EXT_framebuffer_object ("FBO") extension to achieve this, and should not attempt to use any other methods such as 'PBuffers'.
-   When a host calls ProcessOpenGL with an FBO actively bound, the host must provide the handle to the FBO in the 'HostFBO' field.
+   the EXT_framebuffer_object ("FBO") extension to do this. Use of any other methods (such as 'PBuffers') is not supported.
+   When a host calls ProcessOpenGL with an FBO active, the host must provide the handle to the FBO in the 'HostFBO' field.
    Plugins that use their own FBOs internally must restore the host's FBO with a call to glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, HostFBO)
    so that the host can successfully capture the output of the plugin.
 
@@ -1189,6 +1195,12 @@ that are the same for all instances, and so do not require a valid InstanceID.</
 	  <td>19</td>
 	  <td><a href="#deInstantiateGL">deInstantiateGL</a></td>
 	  <td>none</td>
+	  <td>Success/error code</td>
+  </tr>
+  <tr>
+	  <td>20</td>
+	  <td><a href="#setTime">setTime</a></td>
+	  <td>Pointer to 64-bit float representing time in seconds</td>
 	  <td>Success/error code</td>
   </tr>
 </table>
@@ -1453,6 +1465,16 @@ represented as a 32-bit unsigned integer.
 			<a href="#FF_UNSUPPORTED">FF_UNSUPPORTED</a>: plugin doesn't support <a href="#processOpengl">processOpengl</a>
 		</td>
 	</tr>
+	
+	<tr>
+		<td valign=top>5 (FF_CAP_SETTIME)</td>
+		<td valign=top><a href="#setTime">setTime</a> support</td>
+		<td valign=top>
+			<a href="#FF_SUPPORTED">FF_SUPPORTED</a>: plugin supports <a href="#setTime">setTime</a><br>
+			<a href="#FF_UNSUPPORTED">FF_UNSUPPORTED</a>: plugin doesn't support <a href="#setTime">setTime</a>
+		</td>
+	</tr>
+	
 	<tr>
 		<td valign=top>10 (FF_CAP_MINIMUMINPUTFRAMES)</td>
 		<td>Minimum input frames</td>
@@ -1992,6 +2014,33 @@ Returns <a href="#FF_SUCCESS">FF_SUCCESS</a> if successful or <a href="#FF_FAIL"
 	GPU hosts must ensure a valid OpenGL context is active during this call so that plugins can free GPU resources. </td>
   </tr>
 </table>
+
+<hr>
+<!-- /****************** setTime ******************/  -->
+<a name="setTime"></a>
+	<table border=0 bgcolor="#E8E8E8"><tr>
+		<td valign=top><h3>setTime</h3></td>
+		<td valign=top>&nbsp;(function code = 20, needs valid instanceID!)</td>
+	</tr></table>
+
+<h4>Input value:</h4>
+<table border=0>
+<tr>
+	<td><i>Time:</i></td>
+	<td>
+		Pointer to <a href="#Float64">64-bit floating point value</a> representing time in seconds.
+	</td>
+</tr>
+</table>
+
+<h4>Return value:</h4>
+Returns <a href="#FF_SUCCESS">FF_SUCCESS</a> if successful or <a href="#FF_FAIL">FF_FAIL</a> if failed
+
+<h4>Remarks:</h4>
+<p>
+Plugins that support the setTime function should return FF_TRUE when queried for the FF_CAP_SETTIME capability.<br>
+Hosts must not call SetTime while any of the plugin's process functions are still executing. 
+</p>
 
 
 </body>
