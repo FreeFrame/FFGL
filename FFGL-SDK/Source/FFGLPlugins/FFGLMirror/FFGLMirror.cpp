@@ -49,10 +49,10 @@ DWORD FFGLMirror::ProcessOpenGL(ProcessOpenGLStruct *pGL)
   FFGLTextureStruct &Texture = *(pGL->inputTextures[0]);
 
   //bind the texture handle to its target
-  glBindTexture(Texture.Target, Texture.Handle);
+  glBindTexture(GL_TEXTURE_2D, Texture.Handle);
 
   //enable texturemapping
-  glEnable(Texture.Target);
+  glEnable(GL_TEXTURE_2D);
 
   //get the max s,t that correspond to the 
   //width,height of the used portion of the allocated texture space
@@ -104,10 +104,10 @@ DWORD FFGLMirror::ProcessOpenGL(ProcessOpenGLStruct *pGL)
   glEnd();
 
   //unbind the texture
-  glBindTexture(Texture.Target, 0);
+  glBindTexture(GL_TEXTURE_2D, 0);
 
   //disable texturemapping
-  glDisable(Texture.Target);
+  glDisable(GL_TEXTURE_2D);
 
   return FF_SUCCESS;
 }

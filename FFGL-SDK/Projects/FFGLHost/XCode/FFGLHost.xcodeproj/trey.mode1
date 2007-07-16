@@ -367,9 +367,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>2DF944FD0C10841C00368673</string>
+				<string>2D3E1E5C0C4C12EB008854A5</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>2DF944FE0C10841C00368673</string>
+				<string>2D3E1E5D0C4C12EB008854A5</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -503,14 +503,8 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>2DF9451D0C1084C300368673</string>
-		<string>2DF9451E0C1084C300368673</string>
-		<string>2DA285420AEA096A0030A4DD</string>
-		<string>1CD10A99069EF8BA00B06720</string>
-		<string>2DF9451B0C1084C300368673</string>
-		<string>1C0AD2B3069F1EA900FABCE6</string>
 		<string>2DA284180AE9EB290030A4DD</string>
-		<string>/Users/trey/FFGL/trunk/FFGL-SDK/Projects/FFGLHost/XCode/FFGLHost.xcodeproj</string>
+		<string>/Users/trey/ffglsdk/trunk/FFGL-SDK/Projects/FFGLHost/XCode/FFGLHost.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>-1 388 717 444 0 0 1280 832 </string>
@@ -592,7 +586,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>2DA284180AE9EB290030A4DD</string>
-				<string>2DF944E30C10812600368673</string>
+				<string>2D3E1E5E0C4C12EB008854A5</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -603,7 +597,7 @@
 			<key>WindowToolGUID</key>
 			<string>2DA284180AE9EB290030A4DD</string>
 			<key>WindowToolIsVisible</key>
-			<false/>
+			<true/>
 		</dict>
 		<dict>
 			<key>FirstTimeWindowDisplayed</key>

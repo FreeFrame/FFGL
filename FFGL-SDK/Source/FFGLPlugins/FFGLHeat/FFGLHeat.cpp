@@ -173,7 +173,7 @@ DWORD FFGLHeat::ProcessOpenGL(ProcessOpenGLStruct *pGL)
   
   //activate texture unit 1 and bind the input texture
   m_extensions.glActiveTexture(GL_TEXTURE1);
-  glBindTexture(Texture.Target, Texture.Handle);
+  glBindTexture(GL_TEXTURE_2D, Texture.Handle);
     
   //draw the quad that will be painted by the shader/textures
   //note that we are sending texture coordinates to texture unit 1..
@@ -199,11 +199,11 @@ DWORD FFGLHeat::ProcessOpenGL(ProcessOpenGLStruct *pGL)
 	glEnd();
 
   //unbind the input texture
-  glBindTexture(Texture.Target,0);
+  glBindTexture(GL_TEXTURE_2D, 0);
   
-  //switch to texture unit 0 and unbind the heat texture
+  //switch to texture unit 0 and unbind the 1D heat texture
   m_extensions.glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_1D,0);
+  glBindTexture(GL_TEXTURE_1D, 0);
   
   //unbind the shader
   m_shader.UnbindShader();

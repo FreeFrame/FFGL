@@ -377,13 +377,13 @@ void UpdateInputTexture(double timeInSeconds)
   }
   
   //bind the gl texture so we can upload the next video frame
-	glBindTexture(inputTexture.Target, inputTexture.Handle);
+	glBindTexture(GL_TEXTURE_2D, inputTexture.Handle);
 
 	//upload it to the gl texture. use subimage because
 	//the video frame size is probably smaller than the
 	//size of the texture on the gpu hardware
 	glTexSubImage2D(
-    inputTexture.Target,
+    GL_TEXTURE_2D,
     0,
     0, 0,
     inputTexture.Width,
@@ -393,7 +393,7 @@ void UpdateInputTexture(double timeInSeconds)
     inputImage);
 
 	//unbind the gl texture
-	glBindTexture(inputTexture.Target, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void AllocateInputTexture(int textureWidth, int textureHeight)
@@ -452,14 +452,10 @@ void AllocateInputTexture(int textureWidth, int textureHeight)
   FFGLTextureStruct &t = inputTexture;
 
   t.Handle = glTextureHandle;
-  t.Target = GL_TEXTURE_2D;
 
   t.Width = textureWidth;
   t.Height = textureHeight;
   
   t.HardwareWidth = glTextureWidth;
   t.HardwareHeight = glTextureHeight;
-
-  t.Depth = 1;
-  t.HardwareDepth = 1;
 }

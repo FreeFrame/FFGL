@@ -120,7 +120,7 @@ DWORD FFGLTile::ProcessOpenGL(ProcessOpenGLStruct *pGL)
   
   //activate rendering with the input texture
   //note that when using shaders, no glEnable(Texture.Target) is required
-  glBindTexture(Texture.Target, Texture.Handle);
+  glBindTexture(GL_TEXTURE_2D, Texture.Handle);
 
   //get the max s,t that correspond to the 
   //width,height of the used portion of the allocated texture space
@@ -154,7 +154,7 @@ DWORD FFGLTile::ProcessOpenGL(ProcessOpenGLStruct *pGL)
   glEnd();
 
   //unbind the shader and texture
-  glBindTexture(Texture.Target,0);
+  glBindTexture(GL_TEXTURE_2D, 0);
   m_shader.UnbindShader();
   
   return FF_SUCCESS;

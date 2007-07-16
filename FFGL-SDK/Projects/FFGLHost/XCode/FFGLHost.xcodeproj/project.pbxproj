@@ -23,7 +23,7 @@
 		2DA284040AE9EA770030A4DD /* FFGLExtensions.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; indentWidth = 2; name = FFGLExtensions.cpp; path = ../../../Source/Common/FFGLExtensions.cpp; sourceTree = SOURCE_ROOT; tabWidth = 2; usesTabs = 0; };
 		2DA2840D0AE9EAA70030A4DD /* FFGLHost-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "FFGLHost-Info.plist"; sourceTree = "<group>"; };
 		2DA284F30AEA03FA0030A4DD /* OSXMain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; name = OSXMain.cpp; path = ../../../Source/FFGLHost/OSX/OSXMain.cpp; sourceTree = SOURCE_ROOT; tabWidth = 2; usesTabs = 0; };
-		2DA286010AEE63D00030A4DD /* FFGLHost_debug */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = FFGLHost_debug; sourceTree = BUILT_PRODUCTS_DIR; };
+		2DA286010AEE63D00030A4DD /* FFGLHost */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = FFGLHost; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DA286D60AEEA3A80030A4DD /* FFGLPluginInstance.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; name = FFGLPluginInstance.cpp; path = ../../../Source/FFGLHost/FFGLPluginInstance.cpp; sourceTree = SOURCE_ROOT; tabWidth = 2; usesTabs = 0; };
 		2DA287260AEEA5D90030A4DD /* OSXPluginInstance.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; name = OSXPluginInstance.cpp; path = ../../../Source/FFGLHost/OSX/OSXPluginInstance.cpp; sourceTree = SOURCE_ROOT; tabWidth = 2; usesTabs = 0; };
 		2DA287290AEEA6050030A4DD /* OSXDebugMessage.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; indentWidth = 2; name = OSXDebugMessage.cpp; path = ../../../Source/FFGLHost/OSX/OSXDebugMessage.cpp; sourceTree = SOURCE_ROOT; tabWidth = 2; usesTabs = 0; };
@@ -65,7 +65,7 @@
 		2DA2840B0AE9EAA70030A4DD /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2DA286010AEE63D00030A4DD /* FFGLHost_debug */,
+				2DA286010AEE63D00030A4DD /* FFGLHost */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -86,7 +86,7 @@
 			);
 			name = FFGLHost;
 			productName = FFGLHost;
-			productReference = 2DA286010AEE63D00030A4DD /* FFGLHost_debug */;
+			productReference = 2DA286010AEE63D00030A4DD /* FFGLHost */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */

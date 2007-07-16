@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// FFGL.h
+// FFGLLib.h
 //
 // FreeFrame is an open-source cross-platform real-time video effects plugin system.
 // It provides a framework for developing video effects plugins and hosts on Windows, 
@@ -47,63 +47,26 @@
 #ifndef __FFGLLIB_H__
 #define __FFGLLIB_H__
 
+//FFGLTexCoords
+typedef struct FFGLTexCoordsTag
+{
+  GLdouble s,t;
+} FFGLTexCoords;
+
 //helper function to return the s,t,r coordinate
 //that cooresponds to the width,height,depth of the used
 //portion of the texture
 inline FFGLTexCoords GetMaxGLTexCoords(FFGLTextureStruct t)
 {
-  //these are some basic OpenGL extensions we need 
-  const GLuint _GL_TEXTURE_3D = 0x806F;
-  
-  //if other code uses RECTANGLE_ARB or RECTANGLE_NV in t.Target,
-  //it should be compatible because the numeric values for _NV and
-  //_ARB are the same as _EXT
-  const GLuint _GL_TEXTURE_RECTANGLE_EXT = 0x84F5;
-
   FFGLTexCoords texCoords;
 
   //the texture may only occupy a portion
-  //of the allocated hardware texture memory. and, depending
-  //on the texture target, the coordinate range may be
-  //(0..1), (0..1)  - or (0..width), (0..Height)
-  switch (t.Target)
-  {
-  case GL_TEXTURE_1D:
-    //normalized (0..1) coords
-    texCoords.s = ((GLdouble)t.Width) / (GLdouble)t.HardwareWidth;
-    texCoords.t = 0.0;
-    texCoords.r = 0.0;
-    break;
-
-  case GL_TEXTURE_2D:
-    //normalized (0..1) S and T coords
-    texCoords.s = ((GLdouble)t.Width) / (GLdouble)t.HardwareWidth;
-    texCoords.t = ((GLdouble)t.Height) / (GLdouble)t.HardwareHeight;
-    texCoords.r = 0.0;
-    break;
-    
-  case _GL_TEXTURE_RECTANGLE_EXT:
-    //non-normalized (0..width), (0..height) S and T coords
-    texCoords.s = (GLdouble)t.Width;
-    texCoords.t = (GLdouble)t.Height;
-    texCoords.r = 0.0;
-    break;
-
-  case _GL_TEXTURE_3D:
-    //normalized (0..1) coords
-    texCoords.s = ((GLdouble)t.Width) / (GLdouble)t.HardwareWidth;
-    texCoords.t = ((GLdouble)t.Height) / (GLdouble)t.HardwareHeight;
-    texCoords.r = ((GLdouble)t.Depth) / (GLdouble)t.HardwareDepth;
-    break;
-
-  default:
-    //unknown target
-    texCoords.s = 0.0;
-    texCoords.t = 0.0;
-    texCoords.r = 0.0;
-    break;
-  }
-
+  //of the allocated hardware texture memory
+  
+  //normalized (0..1) S and T coords
+  texCoords.s = ((GLdouble)t.Width) / (GLdouble)t.HardwareWidth;
+  texCoords.t = ((GLdouble)t.Height) / (GLdouble)t.HardwareHeight;
+  
   return texCoords;
 }
 

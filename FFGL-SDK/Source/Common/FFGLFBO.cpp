@@ -168,11 +168,10 @@ FFGLTextureStruct FFGLFBO::GetTextureInfo()
 
   t.Width = m_width;
   t.Height = m_height;
-  t.Depth = 1;
+  
   t.HardwareWidth = m_glWidth;
   t.HardwareHeight = m_glHeight;
-  t.HardwareDepth = 1;
-  t.Target = m_glTextureTarget;
+  
   t.Handle = m_glTextureHandle;
 
   return t;

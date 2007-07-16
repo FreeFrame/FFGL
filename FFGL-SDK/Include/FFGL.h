@@ -92,6 +92,7 @@
 
 // new plugin capabilities for FFGL
 #define FF_CAP_PROCESSOPENGL    4
+#define FF_CAP_SETTIME          5
 
 //FFGLViewportStruct (for InstantiateGL)
 typedef struct FFGLViewportStructTag
@@ -102,9 +103,8 @@ typedef struct FFGLViewportStructTag
 //FFGLTextureStruct (for ProcessOpenGLStruct)
 typedef struct FFGLTextureStructTag
 {
-  DWORD Width, Height, Depth;
-  DWORD HardwareWidth, HardwareHeight, HardwareDepth;
-  GLuint Target; //GL_TEXTURE_1D, GL_TEXTURE_2D, GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_3D, maybe more?
+  DWORD Width, Height;
+  DWORD HardwareWidth, HardwareHeight;
   GLuint Handle; //the actual texture handle, from glGenTextures()
 } FFGLTextureStruct;
 
@@ -120,12 +120,6 @@ typedef struct ProcessOpenGLStructTag {
   //makes use of its own FBO's for intermediate rendering
   GLuint HostFBO; 
 } ProcessOpenGLStruct;
-
-//FFGLTexCoords (for helper function below)
-typedef struct FFGLTexCoordsTag
-{
-  GLdouble s,t,r;
-} FFGLTexCoords;
 
 
 #endif

@@ -13,9 +13,9 @@
 	};
 	2D2190870AF02BC1007154B7 /* FFGLMirror.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {887, 1666}}";
-			sepNavSelRange = "{281, 0}";
-			sepNavVisRect = "{{0, 495}, {887, 591}}";
+			sepNavIntBoundsRect = "{{0, 0}, {678, 1596}}";
+			sepNavSelRange = "{2927, 0}";
+			sepNavVisRect = "{{0, 1172}, {678, 424}}";
 			sepNavWindowFrame = "{{84, 44}, {926, 720}}";
 		};
 	};
@@ -31,13 +31,14 @@
 		};
 	};
 	2DA285930AEE5D640030A4DD /* Project object */ = {
-		activeBuildConfigurationName = Debug;
+		activeBuildConfigurationName = Release;
 		activeTarget = 2D21905A0AF0270A007154B7 /* FFGLBrightness */;
 		addToTargets = (
 			2DFDB2BB0AF6739E00367FE2 /* FFGLHeat */,
 		);
 		breakpoints = (
 			2DFDB3C00AF6850200367FE2 /* FFGLHeat.cpp:98 */,
+			2DFDB41D0AF689D600367FE2 /* FFGLShader.cpp:104 */,
 		);
 		breakpointsGroup = 2DA285AF0AEE60590030A4DD /* XCBreakpointsBucket */;
 		codeSenseManager = 2DA285980AEE5D640030A4DD /* Code sense */;
@@ -88,8 +89,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 202409039;
-			PBXWorkspaceStateSaveDate = 202409039;
+			PBXPerProjectTemplateStateSaveDate = 206311435;
+			PBXWorkspaceStateSaveDate = 206311435;
 		};
 		sourceControlManager = 2DA285970AEE5D640030A4DD /* Source Control */;
 		userBuildSettings = {
@@ -109,9 +110,9 @@
 	};
 	2DA285A50AEE5F780030A4DD /* FFGLBrightness.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1064, 1946}}";
-			sepNavSelRange = "{748, 0}";
-			sepNavVisRect = "{{0, 0}, {1064, 351}}";
+			sepNavIntBoundsRect = "{{0, 0}, {678, 1932}}";
+			sepNavSelRange = "{2725, 0}";
+			sepNavVisRect = "{{0, 1083}, {678, 424}}";
 			sepNavWindowFrame = "{{130, 76}, {954, 646}}";
 		};
 	};
@@ -174,9 +175,9 @@
 	};
 	2DC889ED0AF405C700199EB1 /* FFGLTile.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {620, 2786}}";
-			sepNavSelRange = "{2478, 943}";
-			sepNavVisRect = "{{0, 1076}, {558, 652}}";
+			sepNavIntBoundsRect = "{{0, 0}, {678, 2856}}";
+			sepNavSelRange = "{4442, 0}";
+			sepNavVisRect = "{{0, 1923}, {678, 424}}";
 			sepNavWindowFrame = "{{531, 274}, {750, 558}}";
 		};
 	};
@@ -209,9 +210,9 @@
 	};
 	2DFDB2E90AF674AB00367FE2 /* FFGLHeat.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {14828, 3402}}";
-			sepNavSelRange = "{8337, 0}";
-			sepNavVisRect = "{{0, 1235}, {711, 429}}";
+			sepNavIntBoundsRect = "{{0, 0}, {14828, 3472}}";
+			sepNavSelRange = "{8614, 0}";
+			sepNavVisRect = "{{0, 2665}, {678, 424}}";
 			sepNavWindowFrame = "{{345, 251}, {750, 558}}";
 		};
 	};

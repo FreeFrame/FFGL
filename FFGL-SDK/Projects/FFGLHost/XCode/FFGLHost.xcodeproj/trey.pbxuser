@@ -1,7 +1,7 @@
 // !$*UTF8*$!
 {
 	2DA283F60AE9EA060030A4DD /* Project object */ = {
-		activeBuildConfigurationName = Debug;
+		activeBuildConfigurationName = Release;
 		activeExecutable = 2DA286020AEE63D00030A4DD /* FFGLHost */;
 		activeTarget = 2DA286000AEE63D00030A4DD /* FFGLHost */;
 		addToTargets = (
@@ -97,8 +97,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 202408122;
-			PBXWorkspaceStateSaveDate = 202408122;
+			PBXPerProjectTemplateStateSaveDate = 206312000;
+			PBXWorkspaceStateSaveDate = 206312000;
 		};
 		sourceControlManager = 2DA283FA0AE9EA060030A4DD /* Source Control */;
 		userBuildSettings = {
@@ -118,9 +118,9 @@
 	};
 	2DA284030AE9EA770030A4DD /* FFGLFBO.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {888, 2828}}";
-			sepNavSelRange = "{4677, 0}";
-			sepNavVisRect = "{{0, 2527}, {888, 301}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1107, 2814}}";
+			sepNavSelRange = "{4514, 0}";
+			sepNavVisRect = "{{0, 2350}, {1107, 441}}";
 			sepNavWindowFrame = "{{15, 4}, {970, 828}}";
 		};
 	};
