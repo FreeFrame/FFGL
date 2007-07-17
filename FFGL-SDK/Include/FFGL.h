@@ -89,6 +89,7 @@
 #define FF_PROCESSOPENGL       17
 #define FF_INSTANTIATEGL       18
 #define FF_DEINSTANTIATEGL     19
+#define FF_SETTIME             20
 
 // new plugin capabilities for FFGL
 #define FF_CAP_PROCESSOPENGL    4
