@@ -49,13 +49,6 @@ public:
 	/// The standard destructor of CFFGLPluginManager.
 	virtual ~CFFGLPluginManager();
 
-	/// This method is called to know if the plugin supports ProcessOpenGL working mode. 
-	/// It is usually called by the default implementations of the FreeFrame global functions.
-	///
-	/// \return		True if the plugin supports ProcessOpenGL mode, 
-	///				false if only in place working mode is supported. 
-	bool IsProcessOpenGLSupported() const;
-
 	/// This method returns the minimum number of inputs the host must provide. 
 	/// It is usually called by the default implementations of the FreeFrame global functions.
 	///
@@ -103,6 +96,9 @@ public:
 	///						The return value should be cast either to a char* in case of text parameters or to a float* 
 	///						in any other case. In case of error, NULL is returned.
 	void* GetParamDefault(DWORD dwIndex) const;
+
+	/// This method is called by a the host to determine whether the plugin supports the SetTime function
+	bool GetTimeSupported() const;
 
 protected:
 
@@ -173,6 +169,12 @@ protected:
 	/// \param	pchDefaultValue	A string to be used as the default value of the plugin parameter.
 	void SetParamInfo(DWORD dwIndex, const char* pchName, DWORD dwType, const char* pchDefaultValue);
 
+	/// This method is called by a plugin subclass, derived from this class, to indicate whether the
+  /// SetTime function is supported
+	///
+	/// \param	supported	The plugin indicates whether it supports the SetTime function by passing true or false (1 or 0)
+	void SetTimeSupported(bool supported);
+
 private:
 		
 	// Structure for keeping information about each plugin parameter
@@ -193,6 +195,9 @@ private:
 	// Inputs
 	int m_iMinInputs;
 	int m_iMaxInputs;
+
+  // Time capability
+  bool m_timeSupported;
 };
 
 

@@ -107,6 +107,14 @@ public:
 	///						A custom implementation must be provided by every specific plugin.
   virtual DWORD ProcessOpenGL(ProcessOpenGLStruct* pOpenGLData) { return FF_FAIL; }
 
+ 	/// Default implementation of the FFGL SetTime instance specific function
+	///
+	/// \param		pOpenGLData to a ProcessOpenGLStruct structure (see the definition in FFGL.h and 
+	///						the description in the FFGL specification).
+	/// \return		The default implementation always returns FF_FAIL. 
+	///						A custom implementation must be provided by every specific plugin.
+  virtual DWORD SetTime(double time) { return FF_FAIL; }
+
 	/// Default implementation of the FreeFrame getInputStatus instance specific function. This function is called 
 	/// to know whether a given input is currently in use. For the default implementation every input is always in use. 
 	/// A custom implementation may be provided by every specific plugin.

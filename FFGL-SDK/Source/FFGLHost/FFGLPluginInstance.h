@@ -38,7 +38,8 @@ public:
   const char *GetParameterName(int paramNum);
   float GetFloatParameter(int paramNum);
   void SetFloatParameter(int paramNum, float value);
-  
+  void SetTime(double curTime);
+
   DWORD CallProcessOpenGL(ProcessOpenGLStructTag &t);
   
   virtual ~FFGLPluginInstance();

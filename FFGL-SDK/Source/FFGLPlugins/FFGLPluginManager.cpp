@@ -28,6 +28,7 @@ CFFGLPluginManager::CFFGLPluginManager()
 {
 	m_iMinInputs = 0;
 	m_iMaxInputs = 0;
+  m_timeSupported = 0;
 
 	m_NParams = 0;
 	m_pFirst = NULL;
@@ -139,6 +140,11 @@ void CFFGLPluginManager::SetParamInfo(DWORD dwIndex, const char* pchName, DWORD 
 	m_NParams++;
 }
 
+void CFFGLPluginManager::SetTimeSupported(bool supported)
+{
+  m_timeSupported = supported;
+}
+
 char* CFFGLPluginManager::GetParamName(DWORD dwIndex) const
 {
 	ParamInfo* pCurr = m_pFirst;
@@ -187,4 +193,9 @@ void* CFFGLPluginManager::GetParamDefault(DWORD dwIndex) const
 			return (void*) &pCurr->DefaultValue;
 	}
 	return NULL;
+}
+
+bool CFFGLPluginManager::GetTimeSupported() const
+{
+  return m_timeSupported;
 }

@@ -73,6 +73,17 @@ void FFGLPluginInstance::SetFloatParameter(int paramNum, float value)
   }
 }
 
+void FFGLPluginInstance::SetTime(double curTime)
+{
+  if (m_ffInstanceID==INVALIDINSTANCE || m_ffPluginMain==NULL)
+  {
+    FFDebugMessage("Invalid SetTime call");
+    return;
+  }
+
+ 	m_ffPluginMain(FF_SETTIME, (DWORD)(&curTime), m_ffInstanceID);
+}
+
 float FFGLPluginInstance::GetFloatParameter(int paramNum)
 {
   if (paramNum<0 || paramNum>=m_numParameters ||

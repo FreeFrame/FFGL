@@ -181,6 +181,12 @@ DWORD getPluginCaps(DWORD index)
   case FF_CAP_PROCESSOPENGL:
 		return FF_TRUE;
 
+  case FF_CAP_SETTIME:
+    if (s_pPrototype->GetTimeSupported())
+      return FF_TRUE;
+    else
+      return FF_FALSE;
+
 	case FF_CAP_MINIMUMINPUTFRAMES:
 		MinInputs = s_pPrototype->GetMinInputs();
 		if (MinInputs < 0) return FF_FALSE;
@@ -401,6 +407,19 @@ DWORD deInstantiateGL(void *instanceID)
       ProcessOpenGLStruct *pogls = (ProcessOpenGLStruct *)inputValue;
       if (pogls!=NULL)
         retval.ivalue = pPlugObj->ProcessOpenGL(pogls);
+      else
+        retval.ivalue = FF_FAIL;
+    }
+		else
+			retval.ivalue = FF_FAIL;
+		break;
+
+  case FF_SETTIME:
+    if (pPlugObj != NULL)
+    {
+      double *inputTime = (double *)inputValue;
+      if (inputTime!=NULL)
+        retval.ivalue = pPlugObj->SetTime(*inputTime);
       else
         retval.ivalue = FF_FAIL;
     }

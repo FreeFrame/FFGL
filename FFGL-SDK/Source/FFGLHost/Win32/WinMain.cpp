@@ -283,6 +283,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
       glClearDepth(1.0);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+      //tell plugin 1 what time it is
+      plugin1->SetTime(curFrameTime);
+
       //plugin 1 parameter #0 is mouse X
       plugin1->SetFloatParameter(0, mouseX);
 
@@ -351,6 +354,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
       //change the processOpenGLStruct so that the HostFBO is 0
       //(we are rendering the plugin into the output window)
       processStruct.HostFBO = 0;
+
+      //tell plugin 2 what time it is
+      plugin2->SetTime(curFrameTime);
 
       //set plugin 2 parameter #0 to the last mouse Y position
       plugin2->SetFloatParameter(0, mouseY);

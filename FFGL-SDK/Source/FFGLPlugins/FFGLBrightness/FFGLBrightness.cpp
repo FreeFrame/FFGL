@@ -18,7 +18,7 @@ static CFFGLPluginInfo PluginInfo (
 	000,									// Plugin minor version number
 	FF_EFFECT,						// Plugin type
 	"Sample FFGL Brightness plugin",	// Plugin description
-	"by Trey Harrison - www.treyharrison.com" // About
+	"by Trey Harrison - www.harrisondigitalmedia.com" // About
 );
 
 
@@ -67,9 +67,16 @@ DWORD FFGLBrightness::ProcessOpenGL(ProcessOpenGLStruct *pGL)
   FFGLTexCoords maxCoords = GetMaxGLTexCoords(Texture);
 
   //set the gl rgb color to the brightness level
-  //(default texturemapping behavior of OpenGL is to
-  //multiply texture colors by the current gl color)
+  //The FFGL spec says we must restore any state changes to the
+  //default state as defined by OPENGL, this means we must restore
+  //the color to white (1,1,1,1) before returning
   glColor4f(m_brightness, m_brightness, m_brightness, 1.0);
+
+  //Default texturemapping behavior of OpenGL is to
+  //multiply texture colors by the current gl color, so the
+  //brightness effect is almost complete - all we need to do
+  //now is draw a quad with the input texture mapped onto it
+  
   glBegin(GL_QUADS);
 
   //lower left
@@ -94,6 +101,9 @@ DWORD FFGLBrightness::ProcessOpenGL(ProcessOpenGLStruct *pGL)
 
   //disable texturemapping
   glDisable(GL_TEXTURE_2D);
+
+  //restore default color to 1,1,1,1
+  glColor4f(1.f,1.f,1.f,1.f);
 
   return FF_SUCCESS;
 }

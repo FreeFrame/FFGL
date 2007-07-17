@@ -16,7 +16,7 @@ static CFFGLPluginInfo PluginInfo (
 	000,									// Plugin minor version number
 	FF_EFFECT,						// Plugin type
 	"Sample FFGL Mirror plugin",	// Plugin description
-	"by Trey Harrison - www.treyharrison.com" // About
+	"by Trey Harrison - www.harrisondigitalmedia.com" // About
 );
 
 
