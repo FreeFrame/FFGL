@@ -27,11 +27,13 @@ FFGLPluginInstance *plugin2 = NULL;
   const char *FFGLMirrorFile     = "FFGLMirror_debug.bundle/Contents/MacOS/FFGLMirror_debug";
   const char *FFGLTileFile       = "FFGLTile_debug.bundle/Contents/MacOS/FFGLTile_debug";
   const char *FFGLHeatFile       = "FFGLHeat_debug.bundle/Contents/MacOS/FFGLHeat_debug";
+  const char *FFGLTimeFile       = "FFGLTime_debug.bundle/Contents/MacOS/FFGLTime_debug";
 #else
   const char *FFGLBrightnessFile = "FFGLBrightness.bundle/Contents/MacOS/FFGLBrightness";
   const char *FFGLMirrorFile     = "FFGLMirror.bundle/Contents/MacOS/FFGLMirror";
   const char *FFGLTileFile       = "FFGLTile.bundle/Contents/MacOS/FFGLTile";
   const char *FFGLHeatFile       = "FFGLHeat.bundle/Contents/MacOS/FFGLHeat";
+  const char *FFGLTimeFile       = "FFGLTime.bundle/Contents/MacOS/FFGLTime";
 #endif
 
 //this represents the texture (in main system/CPU memory) that we feed to the plugins
@@ -245,6 +247,9 @@ void FFGLHostDisplay()
 	glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+  //tell plugin 1 about the current time
+  plugin1->SetTime(curFrameTime);
+  
 	//set plugin 1 parameter 0
   plugin1->SetFloatParameter(0, mouseX);
   
@@ -310,6 +315,9 @@ void FFGLHostDisplay()
 
   //specify no FBO handle since we are rendering to the output window
   processStruct.HostFBO = 0;
+  
+  //tell plugin 2 about the current frame time
+  plugin2->SetTime(curFrameTime);
   
   //set plugin 2 parameter 0
   plugin2->SetFloatParameter(0, mouseY);

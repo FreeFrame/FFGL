@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>FFGLBrightness</string>
+	<string>FFGLMirror</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.yourcompany.FFGLMirror</string>
 	<key>CFBundleInfoDictionaryVersion</key>

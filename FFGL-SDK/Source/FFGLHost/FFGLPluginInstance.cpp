@@ -54,7 +54,7 @@ void FFGLPluginInstance::SetFloatParameter(int paramNum, float value)
   if (paramNum<0 || paramNum>=m_numParameters ||
       m_ffInstanceID==INVALIDINSTANCE || m_ffPluginMain==NULL)
   {
-    FFDebugMessage("Invalid SetFloatParameter call");
+    //the parameter or the plugin doesn't exist
     return;
   }
 

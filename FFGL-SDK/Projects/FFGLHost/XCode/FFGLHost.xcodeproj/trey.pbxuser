@@ -97,8 +97,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 206312000;
-			PBXWorkspaceStateSaveDate = 206312000;
+			PBXPerProjectTemplateStateSaveDate = 206342201;
+			PBXWorkspaceStateSaveDate = 206342201;
 		};
 		sourceControlManager = 2DA283FA0AE9EA060030A4DD /* Source Control */;
 		userBuildSettings = {
@@ -134,9 +134,9 @@
 	};
 	2DA284F30AEA03FA0030A4DD /* OSXMain.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1107, 6510}}";
-			sepNavSelRange = "{6981, 0}";
-			sepNavVisRect = "{{0, 2629}, {1107, 441}}";
+			sepNavIntBoundsRect = "{{0, 0}, {915, 6566}}";
+			sepNavSelRange = "{4464, 0}";
+			sepNavVisRect = "{{0, 1023}, {915, 517}}";
 			sepNavWindowFrame = "{{135, 137}, {954, 646}}";
 		};
 	};
@@ -176,9 +176,9 @@
 	};
 	2DA286D60AEEA3A80030A4DD /* FFGLPluginInstance.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {888, 3920}}";
-			sepNavSelRange = "{5795, 0}";
-			sepNavVisRect = "{{0, 3459}, {888, 461}}";
+			sepNavIntBoundsRect = "{{0, 0}, {887, 4074}}";
+			sepNavSelRange = "{1349, 0}";
+			sepNavVisRect = "{{0, 570}, {887, 591}}";
 			sepNavWindowFrame = "{{15, 107}, {926, 720}}";
 		};
 	};

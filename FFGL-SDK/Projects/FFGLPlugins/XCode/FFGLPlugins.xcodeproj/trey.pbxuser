@@ -30,11 +30,28 @@
 			sepNavWindowFrame = "{{15, 107}, {926, 720}}";
 		};
 	};
+	2D7743D90C4C84B1008A80BD /* FFGLTime */ = {
+		activeExec = 0;
+	};
+	2D7A48A00C4C8CDA00B5186A /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 2DA285A50AEE5F780030A4DD /* FFGLBrightness.cpp */;
+	};
+	2D7A48A80C4C8D2800B5186A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2DA285A50AEE5F780030A4DD /* FFGLBrightness.cpp */;
+		name = "FFGLBrightness.cpp: 87";
+		rLen = 0;
+		rLoc = 2726;
+		rType = 0;
+		vrLen = 977;
+		vrLoc = 2141;
+	};
 	2DA285930AEE5D640030A4DD /* Project object */ = {
 		activeBuildConfigurationName = Release;
 		activeTarget = 2D21905A0AF0270A007154B7 /* FFGLBrightness */;
 		addToTargets = (
-			2DFDB2BB0AF6739E00367FE2 /* FFGLHeat */,
+			2D7743D90C4C84B1008A80BD /* FFGLTime */,
 		);
 		breakpoints = (
 			2DFDB3C00AF6850200367FE2 /* FFGLHeat.cpp:98 */,
@@ -89,8 +106,12 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 206311435;
-			PBXWorkspaceStateSaveDate = 206311435;
+			PBXPerProjectTemplateStateSaveDate = 206343357;
+			PBXWorkspaceStateSaveDate = 206343357;
+		};
+		perUserProjectItems = {
+			2D7A48A00C4C8CDA00B5186A /* PBXBookmark */ = 2D7A48A00C4C8CDA00B5186A /* PBXBookmark */;
+			2D7A48A80C4C8D2800B5186A /* PBXTextBookmark */ = 2D7A48A80C4C8D2800B5186A /* PBXTextBookmark */;
 		};
 		sourceControlManager = 2DA285970AEE5D640030A4DD /* Source Control */;
 		userBuildSettings = {
@@ -110,9 +131,9 @@
 	};
 	2DA285A50AEE5F780030A4DD /* FFGLBrightness.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {678, 1932}}";
-			sepNavSelRange = "{2725, 0}";
-			sepNavVisRect = "{{0, 1083}, {678, 424}}";
+			sepNavIntBoundsRect = "{{0, 0}, {915, 2072}}";
+			sepNavSelRange = "{2726, 0}";
+			sepNavVisRect = "{{0, 969}, {915, 517}}";
 			sepNavWindowFrame = "{{130, 76}, {954, 646}}";
 		};
 	};

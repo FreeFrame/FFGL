@@ -185,7 +185,48 @@
 	<key>Notifications</key>
 	<array/>
 	<key>OpenEditors</key>
-	<array/>
+	<array>
+		<dict>
+			<key>Content</key>
+			<dict>
+				<key>PBXProjectModuleGUID</key>
+				<string>2D7A48A10C4C8CDA00B5186A</string>
+				<key>PBXProjectModuleLabel</key>
+				<string>FFGLBrightness.cpp</string>
+				<key>PBXSplitModuleInNavigatorKey</key>
+				<dict>
+					<key>Split0</key>
+					<dict>
+						<key>PBXProjectModuleGUID</key>
+						<string>2D7A48A70C4C8D2800B5186A</string>
+						<key>PBXProjectModuleLabel</key>
+						<string>FFGLBrightness.cpp</string>
+						<key>_historyCapacity</key>
+						<integer>0</integer>
+						<key>bookmark</key>
+						<string>2D7A48A80C4C8D2800B5186A</string>
+						<key>history</key>
+						<array>
+							<string>2D7A48A00C4C8CDA00B5186A</string>
+						</array>
+					</dict>
+					<key>SplitCount</key>
+					<string>1</string>
+				</dict>
+				<key>StatusBarVisibility</key>
+				<true/>
+			</dict>
+			<key>Geometry</key>
+			<dict>
+				<key>Frame</key>
+				<string>{{0, 20}, {954, 549}}</string>
+				<key>PBXModuleWindowStatusBarHidden2</key>
+				<false/>
+				<key>RubberWindowFrame</key>
+				<string>130 132 954 590 0 0 1280 832 </string>
+			</dict>
+		</dict>
+	</array>
 	<key>PerspectiveWidths</key>
 	<array>
 		<integer>-1</integer>
@@ -218,8 +259,6 @@
 			<key>Layout</key>
 			<array>
 				<dict>
-					<key>BecomeActive</key>
-					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -261,7 +300,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>5</integer>
+									<integer>2</integer>
 									<integer>1</integer>
 								</array>
 							</array>
@@ -330,6 +369,8 @@
 							<string>0pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -366,9 +407,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>2D3E1E120C4C1089008854A5</string>
+				<string>2D7A48A50C4C8D2800B5186A</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>2D3E1E130C4C1089008854A5</string>
+				<string>2D7A48A60C4C8D2800B5186A</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -481,7 +522,7 @@
 	<key>PerspectivesBarVisible</key>
 	<false/>
 	<key>PinnedNavigatorIdentifier</key>
-	<string>2D3E1E430C4C11A9008854A5</string>
+	<string>2D7A48A10C4C8CDA00B5186A</string>
 	<key>ShelfIsVisible</key>
 	<false/>
 	<key>SourceDescription</key>
@@ -505,6 +546,7 @@
 	<key>WindowOrderList</key>
 	<array>
 		<string>2DA285AB0AEE5F9D0030A4DD</string>
+		<string>2D7A48A10C4C8CDA00B5186A</string>
 		<string>/Users/trey/ffglsdk/trunk/FFGL-SDK/Projects/FFGLPlugins/XCode/FFGLPlugins.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
@@ -524,14 +566,12 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>FFGLHeat.cpp</string>
+								<string></string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -587,7 +627,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>2DA285AB0AEE5F9D0030A4DD</string>
-				<string>2D3E1E160C4C1089008854A5</string>
+				<string>2D7A48A90C4C8D2800B5186A</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -598,7 +638,7 @@
 			<key>WindowToolGUID</key>
 			<string>2DA285AB0AEE5F9D0030A4DD</string>
 			<key>WindowToolIsVisible</key>
-			<true/>
+			<false/>
 		</dict>
 		<dict>
 			<key>FirstTimeWindowDisplayed</key>
