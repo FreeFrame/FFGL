@@ -128,10 +128,10 @@ DWORD FFGLLumaKey::ProcessOpenGL(ProcessOpenGLStruct *pGL)
   //activate rendering with the input texture
   //note that when using shaders, no glEnable(Texture.Target) is required
   m_extensions.glActiveTexture(GL_TEXTURE0);
-  glBindTexture(TextureDest.Target, TextureDest.Handle);
+  glBindTexture(GL_TEXTURE_2D, TextureDest.Handle);
 
   m_extensions.glActiveTexture(GL_TEXTURE1);
-  glBindTexture(TextureSrc.Target, TextureSrc.Handle);
+  glBindTexture(GL_TEXTURE_2D, TextureSrc.Handle);
  
   //get the max s,t that correspond to the 
   //width,height of the used portion of the allocated texture space

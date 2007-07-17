@@ -238,12 +238,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
       void *bitmapData = aviFile.GetFrameData(curFrame);
 
       //bind the gl texture so we can upload the next video frame
-      glBindTexture(aviTexture.Target, aviTexture.Handle);
+      glBindTexture(GL_TEXTURE_2D, aviTexture.Handle);
 
       //upload it to the gl texture. use subimage because
       //the video frame size is probably smaller than the
       //size of the texture on the gpu hardware
-      glTexSubImage2D(aviTexture.Target, 0,
+      glTexSubImage2D(GL_TEXTURE_2D, 0,
                       0, 0,
                       aviFile.GetWidth(),
                       aviFile.GetHeight(),
@@ -252,7 +252,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
                       bitmapData);
 
       //unbind the gl texture
-      glBindTexture(aviTexture.Target, 0);
+      glBindTexture(GL_TEXTURE_2D, 0);
 
       //activate the fbo as our render target
       if (!fbo.BindAsRenderTarget(glExtensions))
@@ -657,16 +657,12 @@ FFGLTextureStruct CreateOpenGLTexture(int textureWidth, int textureHeight)
   FFGLTextureStruct t;
 
   t.Handle = glTextureHandle;
-  t.Target = GL_TEXTURE_2D;
 
   t.Width = textureWidth;
   t.Height = textureHeight;
   
   t.HardwareWidth = glTextureWidth;
   t.HardwareHeight = glTextureHeight;
-
-  t.Depth = 1;
-  t.HardwareDepth = 1;
 
   return t;
 }
