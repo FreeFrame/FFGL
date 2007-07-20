@@ -515,6 +515,9 @@ begin
   result:=pointer(0);
 
   // reset gl to default state here (possible missing or incomplete at mo)
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity;
+
   glDisable(GL_BLEND);
   glDisable(GL_TEXTURE_2D);
   glBindTexture(GL_TEXTURE_2D,0);
