@@ -1313,6 +1313,10 @@ var
 begin
   wasplaying:=tplay.Enabled;
   if tplay.Enabled then tplay.Enabled:=false;
+
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity;
+  glOrtho(0,glpanel.Width,0,glpanel.Height,1.0,-1.0);  // default?
   
   glReadPixels(0,0,glpanel.Width,glpanel.Height,GL_RGBA,GL_UNSIGNED_BYTE,framedump.Memory);
   //framedump.SaveToFile(exepath+'framegrab'+inttostr(glpanel.Width)+'x'+inttostr(glpanel.Height)+'x4.raw');
