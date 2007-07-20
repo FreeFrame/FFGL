@@ -1155,7 +1155,7 @@ begin
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity;
-  glOrtho(0,glpanel.Width,0,glpanel.Height,1.0,-1.0);
+  //glOrtho(-1,-1,1,1,1.0,-1.0);  // default?
 
   // set gl to default states (hmm.. anymore to do? note: this is a simple host so maybe not)
   glMatrixMode(GL_MODELVIEW);
