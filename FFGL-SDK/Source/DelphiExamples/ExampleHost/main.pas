@@ -1178,10 +1178,10 @@ begin
     glBindTexture(GL_TEXTURE_2D,checks);
     glEnable(GL_TEXTURE_2D);
     glBegin(GL_QUADS);
-      glTexCoord2f(0,0); glVertex2f(0,0);
-      glTexCoord2f(1,0); glVertex2f(glpanel.Width,0);
-      glTexCoord2f(1,1); glVertex2f(glpanel.Width,glpanel.Height);
-      glTexCoord2f(0,1); glVertex2f(0,glpanel.Height);
+      glTexCoord2f(0,0); glVertex2f(-1,-1);
+      glTexCoord2f(1,0); glVertex2f(1,-1);
+      glTexCoord2f(1,1); glVertex2f(1,1);
+      glTexCoord2f(0,1); glVertex2f(-1,1);
     glEnd();
     glDisable(GL_TEXTURE_2D);
     glLoadIdentity;
