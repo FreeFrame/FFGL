@@ -2,8 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8,00"
-	Name="FFGLHost"
-	ProjectGUID="{69A3A2D2-1302-4D1F-AC87-B967C207B84D}"
+	Name="FFGLGradients"
+	ProjectGUID="{CCD6ED1C-5CCA-445A-A7C6-C70D4E6D43CF}"
+	RootNamespace="FFFGLGradients"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -18,7 +19,7 @@
 			Name="Debug|Win32"
 			OutputDirectory="Debug"
 			IntermediateDirectory="Debug"
-			ConfigurationType="1"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
 			>
@@ -41,14 +42,13 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\..\Include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;FFGLGRADIENTS_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderThrough=""
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="false"
+				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="4"
 			/>
 			<Tool
@@ -62,12 +62,14 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opengl32.lib vfw32.lib winmm.lib"
-				OutputFile="../../../Binaries/Win32/FFGLHost_debug.exe"
+				AdditionalDependencies="OpenGL32.lib"
+				OutputFile="../../../Binaries/Win32/FFGLGradients_debug.dll"
 				LinkIncremental="1"
+				ModuleDefinitionFile="FFGLPlugins.def"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)/FFGLHost.pdb"
+				ProgramDatabaseFile="$(OutDir)/FFGLHeat.pdb"
 				SubSystem="2"
+				ImportLibrary="$(OutDir)/FFGLHeat.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -99,7 +101,7 @@
 			Name="Release|Win32"
 			OutputDirectory="Release"
 			IntermediateDirectory="Release"
-			ConfigurationType="1"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
 			>
@@ -121,12 +123,11 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="..\..\..\Include"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;FFGLGRADIENTS_EXPORTS"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderThrough=""
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="false"
+				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -140,13 +141,15 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opengl32.lib vfw32.lib winmm.lib"
-				OutputFile="../../../Binaries/Win32/FFGLHost.exe"
+				AdditionalDependencies="OpenGL32.lib"
+				OutputFile="../../../Binaries/Win32/FFGLGradients.dll"
 				LinkIncremental="1"
+				ModuleDefinitionFile="FFGLPlugins.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				ImportLibrary="$(OutDir)/FFGLHeat.lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -184,31 +187,35 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath="..\..\..\Source\FFGLPlugins\FFGL.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\Source\Common\FFGLExtensions.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\Source\Common\FFGLFBO.cpp"
+				RelativePath="..\..\..\Source\FFGLPlugins\FFGLGradients\FFGLGradients.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\Source\FFGLHost\FFGLPluginInstance.cpp"
+				RelativePath="..\..\..\Source\FFGLPlugins\FFGLPluginInfo.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\Source\FFGLHost\Win32\WinDebugMessage.cpp"
+				RelativePath="..\..\..\Source\FFGLPlugins\FFGLPluginInfoData.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\Source\FFGLHost\Win32\WinMain.cpp"
+				RelativePath="..\..\..\Source\FFGLPlugins\FFGLPluginManager.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\Source\FFGLHost\Win32\WinPluginInstance.cpp"
+				RelativePath="..\..\..\Source\FFGLPlugins\FFGLPluginSDK.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\Source\FFGLHost\Win32\WinTimer.cpp"
+				RelativePath="..\..\..\Source\Common\FFGLShader.cpp"
 				>
 			</File>
 		</Filter>
@@ -217,22 +224,6 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath=".\AVIReader.h"
-				>
-			</File>
-			<File
-				RelativePath=".\FFGLHost.h"
-				>
-			</File>
-			<File
-				RelativePath=".\FFGLHostPlugin.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Timer.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
