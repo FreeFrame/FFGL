@@ -936,14 +936,12 @@ FFGLTextureStruct {
 </tr>
 <tr>
 	<td valign=top><i>Handle:</i></td>
-	<td>The GPU texture handle, from glGenTextures</td>
+	<td>The OpenGL texture handle, from glGenTextures, use with glBindTexture</td>
 </tr>
 </table>
 
 <h4>Remarks:</h4>
-<p>
-All textures supplied by the host must be configured to use the GL_TEXTURE_2D target. Use of other targets like
-GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_1D, GL_TEXTURE_3D, or the cube map targets, are not supported.
+<p>Hosts must provide textures of type GL_TEXTURE_2D. GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_3D, etc, are NOT supported.
 </p>
 
 <hr>
@@ -985,6 +983,17 @@ FFGLViewportStruct {
 </tr>
 </table>
 
+<h4>Remarks:</h4>
+<p>
+This structure is provided by the host when a GPU plugin is instantiated.
+When a CPU plugin is instantiated, it is passed a <a href="#VideoInfoStruct">VideoInfoStruct</a>. The remarks below
+are not relevant to CPU plugins.
+</p>
+<p>
+GPU plugins draw their output into the host's OpenGL viewport during calls to <a href="#processOpengl">processOpenGL</a>. Plugins can expect that this viewport will not change during the lifetime of the plugin.
+If the host's viewport changes (perhaps because the user changed their output window size or output resolution), any loaded plugins must be deinstantiated and reinstantiated and provided with the new viewport information.
+</p>
+
 <hr>
 
 <!-- /****************** ProcessOpenGLStruct ******************/ -->
@@ -1020,6 +1029,8 @@ ProcessOpenGLStruct {
 </table>
 
 <h4>Remarks:</h4>
+<p>Hosts must provide textures of type GL_TEXTURE_2D. GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_3D, etc, are NOT supported.
+
 <p>Hosts will often wish to capture the output of a GPU plugin to an offscreen texture. Hosts and plugins *must* use the
    the EXT_framebuffer_object ("FBO") extension to do this. Use of any other methods (such as 'PBuffers') is not supported.
 <p>When a host calls ProcessOpenGL with an FBO active, the host must provide the handle to the FBO in the 'HostFBO' field.
@@ -1896,7 +1907,7 @@ it plans to render.
 <table border=0>
   <tr>
     <td><i>pProcessOpenGLStruct:</i></td>
-    <td> pointer to ProcessOpenGLStruct structure. </td>
+    <td> pointer to <a href="#ProcessOpenGLStruct">ProcessOpenGLStruct</a> structure. </td>
   </tr>
 </table>
 <h4>Return value:</h4>
@@ -1914,8 +1925,12 @@ failed. (32-bit unsigned integer)
     (see <a href="http://www.opengl.org/documentation/specs">http://www.opengl.org/documentation/specs</a>) WITH THE FOLLOWING EXCEPTIONS:
       <ul>
         <li>
-          If a plugin creates its own EXT_framebuffer_object ("FBO") for internal rendering, the
-          plugin MUST restore the host's FBO and (if necessary) it must also restore the host's viewport setting defined in the call to <a href="#instantiateGL">instantiateGL</a>.
+          If a plugin uses its own EXT_framebuffer_object ("FBO") for internal rendering, the plugin must restore the host's FBO binding (using the HostFBO field from <a href="#ProcessOpenGLStruct">processOpenGLStruct</a>).
+           <br><br>
+         </li>
+         <li>
+           If a plugin changes the OpenGL viewport state for any reason, it must restore the host's viewport (provided in the call to <a href="#instantiateGL">instantiateGL</a>).
+           <br><br>
          </li>
         <li>More exceptions will be added in the future as necessary</li>
       </ul></td>
@@ -1935,12 +1950,12 @@ failed. (32-bit unsigned integer)
   </tr>
 </table>
 <p>#define FF_INSTANTIATEGL       18</p>
-<p>DWORD instantiateGL(const FFGLViewportStruct *pGLViewport)</p>
+<p>DWORD instantiateGL(const FFGLViewportStruct *pHostGLViewport)</p>
 <h4>Input value:</h4>
 <table border=0>
   <tr>
     <td><i>pFFGLViewportStruct:</i></td>
-    <td> pointer to FFGLViewportStruct structure. </td>
+    <td> pointer to FFGLViewportStruct structure that defines the host's OpenGL viewport. </td>
   </tr>
 </table>
 <h4>Return value:</h4>
@@ -1958,8 +1973,9 @@ Returns <a href="#FF_FAIL">FF_FAIL</a> on error.
 <tr>
   <td valign=top>GPU PLUGINS:</td>
   <td> Prepare an instance of the plugin for processing.
-    Set default values, allocate memory, GPU resources, textures, shader programs, etc. If necessary, store a copy of the
-    <a href="#FFGLViewportStruct">FFGLViewportStruct</a> for use in later calls to <a href="#processOpenGL">processOpenGL</a><br><br>
+    Set default values, allocate memory, GPU resources, textures, shader programs, etc. 
+    Plugins should expect the host's OpenGL viewport to remain valid for the lifetime of the plugin. The <a href="#FFGLViewportStruct">FFGLViewportStruct</a> pointer will become invalid after instantiateGL returns, so (if necessary) plugins should store a copy of the <a href="#FFGLViewportStruct">FFGLViewportStruct</a> for later use during calls to <a href="processOpengl">processOpenGL</a>.
+    <br><br>
     When the plugin returns from this function it must be ready to process a frame.
       </td>
   </tr>
@@ -1969,12 +1985,14 @@ Returns <a href="#FF_FAIL">FF_FAIL</a> on error.
   <tr>
     <td valign=top>GPU HOST:</td>
     <td>
-    Hosts *must* ensure that a valid OpenGL context is active during this call so that plugins can allocate GPU resources. <br>
-    This function *must* return before a call to processOpengl. The <a href="#InstanceIdentifier">InstanceIdentifier</a> provided by the plugin is your handle to this
+    Hosts must ensure that a valid OpenGL context is active during this call so that plugins can allocate GPU resources. <br><br>
+    This function must return before the host makes any calls to processOpengl. The <a href="#InstanceIdentifier">InstanceIdentifier</a> provided by the plugin is your handle to this
       instance of the plugin. The host must keep this instance identifier,
-      and provide it in all calls to the plugin regarding that instance. <br>
+      and provide it in all calls to the plugin regarding that instance.<br><br> 
+      If the host's viewport changes (perhaps because the user changed their output window size or output resolution), any loaded plugins affected by the change must be deinstantiated and reinstantiated and provided with the new viewport information.
    </td>
   </tr>
+
 </table>
 <hr>
 <!-- /****************** deInstantiateGL ******************/  -->
@@ -2015,7 +2033,7 @@ Returns <a href="#FF_SUCCESS">FF_SUCCESS</a> if successful or <a href="#FF_FAIL"
   <tr>
     <td valign=top>GPU HOST:</td>
     <td>This function is called to close an instance of the plugin.
-		Hosts *must* ensure a valid OpenGL context is active during this call so that plugins can free GPU resources.
+		Hosts must ensure a valid OpenGL context is active during this call so that plugins can free GPU resources.
     All instances should be closed before <a href="#deInitialise">deInitialising</a> the plugin!
    </td>
   </tr>
@@ -2044,7 +2062,8 @@ Returns <a href="#FF_SUCCESS">FF_SUCCESS</a> if successful or <a href="#FF_FAIL"
 
 <h4>Remarks:</h4>
 <p>
-Plugins that support the setTime function should return FF_TRUE when queried for the FF_CAP_SETTIME capability.<br>
+Plugins that support the setTime function should return FF_TRUE when asked for the FF_CAP_SETTIME capability in <a href="#getPluginCaps">getPluginCaps</a>.
+<br><br>
 Hosts must not call SetTime while any of the plugin's process functions are still executing. 
 </p>
 
