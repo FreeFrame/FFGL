@@ -1426,10 +1426,9 @@ Returns <a href="#FF_FAIL">FF_FAIL</a> on error.
 </table>
 
 <h4>Return value:</h4>
-Indicates capability of feature specified by capsIndex. See <a href="#PluginCapsIndex">PluginCapsIndex</a>
-for a more detailed description of the individual capabilities. In every case, the return value can be
-represented as a 32-bit unsigned integer.
-<br>
+32-bit unsigned integer<br><Br>
+Use the table below to determine what value to return for each capability (see <a href="#PluginCapsIndex">PluginCapsIndex</a>).
+<br><br>
 <table border=1>
 	<tr>
 		<td valign=top><b>capsIndex value</b></td>
@@ -1489,41 +1488,44 @@ represented as a 32-bit unsigned integer.
 	<tr>
 		<td valign=top>10 (FF_CAP_MINIMUMINPUTFRAMES)</td>
 		<td>Minimum input frames</td>
-		<td>Returns minimum number of input frames plugin requires or <a href="#FF_FALSE">FF_FALSE</a> if capability not supported.</td>
+		<td>Returns minimum number of input frames plugin requires or <a href="#FF_UNSUPPORTED">FF_UNSUPPORTED</a> if capability not supported.</td>
 	</tr>
 	<tr>
 		<td valign=top>11 (FF_CAP_MAXIMUMINPUTFRAMES)</td>
 		<td valign=top>Maximum input frames</td>
-		<td valign=top>Returns maximum number of input frames plugin can process or <a href="#FF_FALSE">FF_FALSE</a> if capability not supported.</td>
+		<td valign=top>Returns maximum number of input frames plugin can process or <a href="#FF_UNSUPPORTED">FF_UNSUPPORTED</a> if capability not supported.</td>
 	</tr>
 	<tr>
 		<td valign=top>15 (FF_CAP_COPYORINPLACE)</td>
 		<td valign=top>Plugin optimization</td>
 		<td valign=top>
 			Return value indicates whether plugin is optimized for Copy or InPlace processing.<br>
-			0 (FF_CAP_PREFER_NONE) = no preference<br>
+			0 (FF_UNSUPPORTED) = no preference<br>
 			1 (FF_CAP_PREFER_INPLACE) = InPlace processing is faster<br>
 			2 (FF_CAP_PREFER_COPY) = Copy processing is faster<br>
-			3 (FF_CAP_PREFER_BOTH) = Both are optimized<br><br>
-			FFGL plugins should return 0 (FF_CAP_PREFER_NONE).
+			3 (FF_CAP_PREFER_BOTH) = Both are optimized<br>
 		</td>
 	</tr>
 </table>
 
 <h4>Remarks:</h4>
 <p>
-Plugins should either support CPU or GPU processing but not both. If a plugin
-supports FF_CAP_PROCESSOPENGL it should return FF_UNSUPPORTED for FF_CAP_16BITVIDEO,
-FF_CAP_24BITVIDEO, FF_CAP_32BITVIDEO and FF_CAP_PROCESSFRAMECOPY queries.
-Similarly, if the plugin supports either FF_CAP_16BITVIDEO, FF_CAP_24BITVIDEO or FF_CAP_32BITVIDEO,
-it must return FF_UNSUPPORTED for FF_CAP_PROCESSOPENGL.
-</p>
-
-<p>CPU HOST/PLUGIN BIT DEPTH<br>
+Plugins must support either CPU or GPU processing, but not both. CPU processing involves repeated calls to <a href="#processFrame">processFrame</a> and/or
+<a href="#processFrameCopy">processFrameCopy</a>. GPU processing involves repeated calls to <a href="#processOpengl">processOpenGL</a>.
+<br><Br>
+CPU plugins should return FF_UNSUPPORTED (0) for FF_CAP_PROCESSOPENGL.
+<br><br>
+GPU plugins should return FF_SUPPORTED (1) for FF_CAP_PROCESSOPENGL.<br><br>
+GPU plugins should return FF_UNSUPPORTED (0) for FF_CAP_16BITVIDEO,
+FF_CAP_24BITVIDEO, FF_CAP_32BITVIDEO, FF_CAP_PROCESSFRAMECOPY, and FF_CAP_COPYORINPLACE.
+<br><br>
+FF_CAP_MINIMUMINPUTFRAMES, FF_CAP_MAXIMUMINPUTFRAMES, and FF_CAP_SETTIME apply to both CPU and GPU plugins, so all plugins should return appropriate values for these queries.
+<br><br>
+CPU PLUGIN/HOST BIT DEPTH<br>
 Typically a host program has a preferred bit depth that it uses to perform its operations, and it will ask the plugin if it supports that bit depth.
 If the plugin does not support it, the host may decide not to use the plugin and deinitialize it. If the host supports a 2nd or 3rd format, it may
 check with the plugin to see if those are supported, and use one of them instead.
-</p>
+
 
 <hr>
 
