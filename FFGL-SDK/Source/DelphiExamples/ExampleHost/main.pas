@@ -103,6 +103,12 @@ type
     Memo2: TMemo;
     lbAviStatus: TLabel;
     Label7: TLabel;
+    sbTime: TScrollBar;
+    lbTime: TLabel;
+    sbATime: TScrollBar;
+    Label8: TLabel;
+    Label9: TLabel;
+    cbATime: TCheckBox;
 
     procedure ebAVIFilenameChange(Sender: TObject);
 
@@ -123,6 +129,7 @@ type
     procedure btnGrabFrameClick(Sender: TObject);
     procedure btnReloadClick(Sender: TObject);
     procedure bDeInitPluginClick(Sender: TObject);
+    procedure sbTimeChange(Sender: TObject);
 
   private
     exepath:string;
@@ -143,6 +150,7 @@ type
     NumParams: dword;
     PluginLoaded: boolean;
     glplugin:boolean;
+    supportstime:boolean;
 
     // gl vars
     glinit:boolean;
@@ -160,6 +168,9 @@ type
     test32bit:boolean;
 
     framedump:TMemoryStream;
+
+    absoluteTime:double;  // in secs
+    timeAccel:single;
 
     procedure GetPlugins;
     procedure LoadAVI;
@@ -191,7 +202,7 @@ type
   end;
 
 const
-  AppVersion: string='2.00';
+  AppVersion: string='2.01';
   APIversion: string='1.5a';
 
 var
@@ -498,6 +509,27 @@ begin
     if ((pc16=0) and (pc24=0) and (pc32=0)) then memo1.lines.add('* ERROR: Plugin IS NOT reporting 16/24/32bit caps *');
   end;
 
+  supportstime:=false;
+  result:=integer(PluginHost.GetPluginCaps(5));
+  if result=FF_FAIL then memo1.lines.add('Supports SetTime: Error')
+  else if result=0 then begin
+    memo1.lines.add('Supports SetTime: No');
+    lbTime.Visible:=false;
+    sbTime.Visible:=false;
+    cbATime.Visible:=false;
+    sbATime.Visible:=false;
+  end else begin
+    memo1.lines.add('Supports SetTime: Yes');
+    supportstime:=true;
+    timeAccel:=1.0;
+    lbTime.Visible:=true;
+    sbTime.Visible:=true;
+    sbTime.Position:=0;
+    cbATime.Checked:=false;
+    cbATime.Visible:=true;
+    sbATime.Visible:=true;
+  end;
+
   result:=integer(PluginHost.GetPluginCaps(10));
   if result=FF_FAIL then memo1.lines.add('Min InputFrames: Error')
   else memo1.lines.add('Min InputFrames: '+inttostr(result));
@@ -653,6 +685,8 @@ begin
   5: result:='XPos';
   6: result:='YPos';
   10: result:='Stanard';
+  11: result:='Alpha';
+  100: result:='Text';
   FF_FAIL: result:='ERROR';
   end;
 end;
@@ -960,8 +994,28 @@ end;
 procedure TfmMain.Process;
 var
   pFrameToProcess, pBits: pointer;
+  now:double;
+  result:dword;
 begin
   if InstanceReady then begin
+
+    // if uses setTime then - progress time and tell plugin
+    if supportstime then begin
+      if cbATime.Checked then begin
+        now:=sbATime.Position/1000;
+      end else begin
+        absoluteTime:=absoluteTime+(40*timeAccel);  // 40msecs= 1frame of 25fps
+        now:=absoluteTime/1000;
+      end;
+      try
+        result:=PluginHost.SetTime(now, PluginInstance);
+      except
+        memo1.Lines.Add('Exception during SetTime');
+        bStop.Click;
+        exit;
+      end;
+    end;
+
     // Get frame from AVI if effect - if source just pass on pointer to framebuffer ...
     inc(currentFrame[0]);
     if currentFrame[0]>(numFrames[0]-1) then currentFrame[0]:=1;
@@ -1226,6 +1280,7 @@ begin
   if not InstanceReady then exit;
 
   currentFrame[0]:=0;
+  absoluteTime:=0;
   tPlay.Enabled:=true;
 end;
 
@@ -1351,6 +1406,17 @@ procedure TfmMain.bDeInitPluginClick(Sender: TObject);
 begin
   deinitplugin;
   PluginLoaded:=false;
+end;
+
+procedure TfmMain.sbTimeChange(Sender: TObject);
+begin
+  if sbTime.Position>=0 then begin
+    timeAccel:=1+(sbTime.Position*0.1);
+    lbTime.Caption:='Time Acceleration ('+FloatToStrF(timeAccel,ffFixed,7,2)+')';
+  end else begin
+    timeAccel:=1+(sbTime.Position*0.01);
+    lbTime.Caption:='Time Acceleration ('+FloatToStrF(timeAccel,ffFixed,7,2)+')';
+  end;
 end;
 
 end.

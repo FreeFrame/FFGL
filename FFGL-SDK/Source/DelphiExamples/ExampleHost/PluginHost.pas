@@ -43,7 +43,12 @@ interface
 uses windows, sysutils, ffstructs;
 
 const
+  FF_SUCCESS=$0;
   FF_FAIL=$FFFFFFFF;
+  FF_TRUE=$1;
+  FF_FALSE=$0;
+  FF_SUPPORTED=$1;
+  FF_UNSUPPORTED=$0;
 
 type
   tPlugMainFunction = function(functionCode: dword; pParam: pointer; InstanceID: dword): pointer; stdcall;
@@ -80,6 +85,8 @@ type
 
   function InstantiateGLPlugin(GLViewportStruct:TPLuginGLViewportStruct):dword;
   function DeInstantiateGLPlugin(Instance: dword): dword;
+
+  function SetTime(Value:double;Instance:dword):dword;
 
 var
   PluginInfoStruct: TPluginInfoStruct;
@@ -297,7 +304,12 @@ begin
 end;
 //------------------------------------------------------------------------------
 
-
+//------------------------------------------------------------------------------
+function SetTime(Value:double;Instance: dword): dword;
+begin
+  result:=dword(plugMain(20,@value,Instance));
+end;
+//------------------------------------------------------------------------------
 
 end.
 

@@ -126,14 +126,14 @@ object fmMain: TfmMain
     TabOrder = 1
     object lProfile: TLabel
       Left = 124
-      Top = 480
+      Top = 488
       Width = 29
       Height = 13
       Caption = 'Profile'
     end
     object Label3: TLabel
       Left = 13
-      Top = 480
+      Top = 488
       Width = 108
       Height = 13
       Caption = 'Plugin processing time:'
@@ -161,6 +161,27 @@ object fmMain: TfmMain
         'Plugins must be in a plugins subdirectory of the  directory wher' +
         'e this .exe is'
     end
+    object lbTime: TLabel
+      Left = 200
+      Top = 416
+      Width = 115
+      Height = 13
+      Caption = 'Time Acceleration (1.00)'
+    end
+    object Label8: TLabel
+      Left = 223
+      Top = 376
+      Width = 113
+      Height = 13
+      Caption = '(Time Controls: Do NOT'
+    end
+    object Label9: TLabel
+      Left = 215
+      Top = 392
+      Width = 128
+      Height = 13
+      Caption = 'effect Video in this testbed)'
+    end
     object cbPlugins: TComboBox
       Left = 16
       Top = 28
@@ -173,8 +194,8 @@ object fmMain: TfmMain
       OnChange = cbPluginsChange
     end
     object bProcessFrame: TButton
-      Left = 224
-      Top = 416
+      Left = 8
+      Top = 426
       Width = 137
       Height = 25
       Caption = 'Step Frame Process'
@@ -183,7 +204,7 @@ object fmMain: TfmMain
     end
     object bPlayAndProcess: TButton
       Left = 8
-      Top = 416
+      Top = 368
       Width = 137
       Height = 25
       Caption = 'Play and Process'
@@ -192,7 +213,7 @@ object fmMain: TfmMain
     end
     object cbPluginProcessFrames: TCheckBox
       Left = 8
-      Top = 389
+      Top = 349
       Width = 129
       Height = 17
       Caption = 'Plugin Process Frames'
@@ -201,8 +222,8 @@ object fmMain: TfmMain
       TabOrder = 3
     end
     object bDeInitPlugin: TButton
-      Left = 224
-      Top = 449
+      Left = 8
+      Top = 455
       Width = 137
       Height = 25
       Caption = 'Shutdown Plugin'
@@ -211,7 +232,7 @@ object fmMain: TfmMain
     end
     object bStop: TButton
       Left = 8
-      Top = 449
+      Top = 397
       Width = 139
       Height = 25
       Caption = 'Stop'
@@ -222,7 +243,7 @@ object fmMain: TfmMain
       Left = 16
       Top = 104
       Width = 337
-      Height = 273
+      Height = 241
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -11
@@ -275,12 +296,39 @@ object fmMain: TfmMain
     end
     object cbTest32Bit: TCheckBox
       Left = 224
-      Top = 389
+      Top = 349
       Width = 121
       Height = 17
       Caption = 'Test 32bit'
       TabOrder = 11
       OnClick = cbTest32BitClick
+    end
+    object sbTime: TScrollBar
+      Left = 200
+      Top = 432
+      Width = 161
+      Height = 16
+      Min = -100
+      PageSize = 0
+      TabOrder = 12
+      OnChange = sbTimeChange
+    end
+    object sbATime: TScrollBar
+      Left = 200
+      Top = 480
+      Width = 161
+      Height = 16
+      Max = 10000
+      PageSize = 0
+      TabOrder = 13
+    end
+    object cbATime: TCheckBox
+      Left = 200
+      Top = 456
+      Width = 161
+      Height = 17
+      Caption = 'Enable Abs Time (0>10 secs)'
+      TabOrder = 14
     end
   end
   object Panel1: TPanel
