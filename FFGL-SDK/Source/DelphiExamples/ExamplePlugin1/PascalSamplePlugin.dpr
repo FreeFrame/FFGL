@@ -235,6 +235,13 @@ begin
         result:=pointer($FFFFFFFF);
       end;
     end;
+    20: begin
+      // setTime
+      // IN: time (in seconds - 64bit float)
+      // OUT: Success/error code
+      if assigned(PluginInstance) then result:=PluginInstance.SetTime(pParam)
+      else result:=pointer($FFFFFFFF);
+    end;
   else
     result:=pointer($FFFFFFFF);
 

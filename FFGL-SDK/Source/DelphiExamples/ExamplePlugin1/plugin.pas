@@ -48,13 +48,6 @@ const
 
 type
 
-  TAccurateTimerData = Record
-    Frequency:   TLargeInteger;
-    StartTime:   TLargeInteger;
-    LastTime:    TLargeInteger;
-    CurrentTime: TLargeInteger;
-  end;
-
   pdw = ^Dword;
   pw = ^word;
   pb = ^byte;
@@ -89,10 +82,9 @@ type
     totalblocks:integer;
     alphaorder:array of integer;
 
-    AccurateTimeData: TAccurateTimerData;
-    cs:tcriticalsection;
     prevtime:double;
-    function AccurateTimer_TimeNow: double;
+    absoluteTime:double;
+
     procedure NewBlock(id:integer);
   protected
   public
@@ -112,7 +104,8 @@ type
 
     function ProcessFrame(pParam: pointer): pointer;
     function ProcessOpenGl(pParam:pointer):pointer;
-    
+
+    function SetTime(pParam:pointer):pointer;
   end;
 
 // Global functions that are not instance specific ...
@@ -158,8 +151,8 @@ begin
   ParameterTypes[4]:=10;
 
   ParameterDefaults[0]:=0.3;
-  ParameterDefaults[1]:=0.5;
-  ParameterDefaults[2]:=0.5;
+  ParameterDefaults[1]:=0.05;
+  ParameterDefaults[2]:=0.0;
   ParameterDefaults[3]:=0.5;
   ParameterDefaults[4]:=0.5;
 
@@ -205,6 +198,7 @@ begin
     2: result:=pointer(0);   // 2=32bit
     3: result:=pointer(0);   // this plugin dosen't support copy yet
     4: result:=pointer(1);   // is an opengl plugin
+    5: result:=pointer(1);   // this plugin supports setTime
     10: result:=pointer(1);  // minimum number of inputs
     11: result:=pointer(1);  // maximum number of inputs
     15: result:=pointer(0);  // optimization
@@ -248,39 +242,18 @@ end;
 //------------------------------------------------------------------------------
 constructor TFreeFramePlugin.Create;
 begin
-  // requireds a time based fade
-  // all movement parameters in any plugin should be time based!
-
-  cs:=tcriticalsection.create;
-
-  // create an accuratetime object
-  cs.enter;
-  QueryPerformanceFrequency(AccurateTimeData.Frequency);
-  QueryPerformanceCounter(AccurateTimeData.StartTime);
-  AccurateTimeData.LastTime    := AccurateTimeData.StartTime;
-  AccurateTimeData.CurrentTime := AccurateTimeData.StartTime;
-  cs.leave;
-
   setlength(blocks,10);
   setlength(alphaorder,10);
   totalblocks:=0;
 
+  absoluteTime:=0;
 end;
 
 destructor TFreeFramePlugin.Destroy;
 begin
-  cs.free;
+  //
 end;
 
-function TFreeFramePlugin.AccurateTimer_TimeNow: double;
-var
-  dT: double;
-begin
-  cs.enter;
-  QueryPerformanceCounter(AccurateTimeData.CurrentTime);
-  Result:= AccurateTimeData.CurrentTime / AccurateTimeData.Frequency;
-  cs.leave;
-end;
 
 //------------------------------------------------------------------------------
 function TFreeFramePlugin.InitialiseInstance(pParam: pointer):pointer;
@@ -319,7 +292,7 @@ begin
   ParameterDisplayValue[3]:='Block Max Size ';   // MUST be 15 chars
   ParameterDisplayValue[4]:='Block Min Size ';   // MUST be 15 chars
 
-  prevtime:=AccurateTimer_TimeNow;
+  prevtime:=0;
 
   totalblocks:=3;
   for i:=0 to totalblocks-1 do begin
@@ -424,21 +397,17 @@ begin
     inc(pInTex);
     InputTexture.Height:=pInTex^;
     inc(pInTex);
-    //InputTexture.Depth:=pInTex^;
-    //inc(pInTex);
     InputTexture.HardwareWidth:=pInTex^;
     inc(pInTex);
     InputTexture.HardwareHeight:=pInTex^;
     inc(pInTex);
-    //InputTexture.HardwareDepth:=pInTex^; // hmm... 3d textures
-    //inc(pInTex);
     InputTexture.Handle:=pInTex^; // (GLuint)
   //
 
   // use timebased controls, allows effect to stay in time even if host slow frames
-  now:=AccurateTimer_TimeNow*1000; // convert from secs to msecs
+  now:=absoluteTime*1000;// convert from secs to msecs
   delta:=(now-prevtime);
-  prevtime:=now;
+  prevtime:=now;                   // store time for use in next call
 
   // progress blocks states
   for i:=0 to totalblocks-1 do begin
@@ -550,6 +519,13 @@ begin
   blocks[id].fadestate:=0;
 end;
 
+//------------------------------------------------------------------------------
+function TFreeFramePlugin.SetTime(pParam:pointer):pointer;
+begin
+  absoluteTime:=double(pParam^);
+  if absoluteTime=0 then prevtime:=0;
+  result:=pointer(0);
+end;
 //------------------------------------------------------------------------------
 
 end.
