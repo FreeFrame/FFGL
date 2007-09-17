@@ -202,7 +202,7 @@ type
   end;
 
 const
-  AppVersion: string='2.01';
+  AppVersion: string='2.02';
   APIversion: string='1.5a';
 
 var
@@ -964,6 +964,11 @@ begin
   ProcessOpenGLStruct.numInputTextures:=1;
   ProcessOpenGLStruct.ppInputTextures:=dword(@inputTexs);
   ProcessOpenGLStruct.HostFBO:=0;
+
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
 
   // Profile Process the Frame ...
   before:=gettickcount;
