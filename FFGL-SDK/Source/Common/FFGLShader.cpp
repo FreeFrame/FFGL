@@ -70,7 +70,7 @@ int FFGLShader::UnbindShader()
   if (m_extensions->ARB_shader_objects==0)
     return 0;
 
-  m_extensions->glUseProgramObjectARB(NULL);
+  m_extensions->glUseProgramObjectARB(0);
 
   return 1;
 }
