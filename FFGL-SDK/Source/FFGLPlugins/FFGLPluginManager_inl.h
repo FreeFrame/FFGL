@@ -2,7 +2,7 @@
 // Copyright (c) 2004 - InfoMus Lab - DIST - University of Genova
 //
 // InfoMus Lab (Laboratorio di Informatica Musicale)
-// DIST - University of Genova 
+// DIST - University of Genova
 //
 // http://www.infomus.dist.unige.it
 // news://infomus.dist.unige.it
@@ -36,3 +36,4 @@ inline int CFFGLPluginManager::GetNumParams() const
 {
 	return m_NParams;
 }
+

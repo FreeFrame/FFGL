@@ -13,7 +13,7 @@ public:
 	///////////////////////////////////////////////////
 	// FreeFrame plugin methods
 	///////////////////////////////////////////////////
-				
+
 	DWORD	ProcessOpenGL(ProcessOpenGLStruct* pGL);
   DWORD SetTime(double time);
 
@@ -23,12 +23,12 @@ public:
 
 	static DWORD __stdcall CreateInstance(CFreeFrameGLPlugin **ppInstance)
   {
-  	*ppInstance = new FFGLTime();
+	*ppInstance = new FFGLTime();
 	  if (*ppInstance != NULL) return FF_SUCCESS;
 	  return FF_FAIL;
   }
 
-protected:	
+protected:
 
   void Draw0();
   void Draw1();
@@ -48,3 +48,4 @@ protected:
 
 
 #endif
+

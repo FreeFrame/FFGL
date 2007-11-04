@@ -8,12 +8,12 @@
 //  Plugin information
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static CFFGLPluginInfo PluginInfo ( 
+static CFFGLPluginInfo PluginInfo (
 	FFGLLumaKey::CreateInstance,	// Create method
-	"GLTL",								// Plugin unique ID											
-	"FFGLLumaKey",					// Plugin name											
-	1,						   			// API major version number 													
-	000,								  // API minor version number	
+	"GLTL",								// Plugin unique ID
+	"FFGLLumaKey",					// Plugin name
+	1,									// API major version number
+	000,								  // API minor version number
 	1,										// Plugin major version number
 	000,									// Plugin minor version number
 	FF_EFFECT,						// Plugin type
@@ -36,12 +36,12 @@ char *fragmentShaderCode =
 "uniform float luma;"
 "const vec4 grayScaleWeights = vec4(0.30, 0.59, 0.11, 0.0);"
 "void main( void )"
-"{"	
-"    vec4 colorDest = texture2D(textureDest,gl_TexCoord[0].st);" 
-"    vec4 colorSrc = texture2D(textureSrc,gl_TexCoord[0].st);" 
+"{"
+"    vec4 colorDest = texture2D(textureDest,gl_TexCoord[0].st);"
+"    vec4 colorSrc = texture2D(textureSrc,gl_TexCoord[0].st);"
 "    vec4 scaledColor = colorSrc * grayScaleWeights;"
 "    float luminance = scaledColor.r + scaledColor.g + scaledColor.b;"
-"    if (luminance  >= (1.0-luma)) {"  
+"    if (luminance  >= (1.0-luma)) {"
 "	 gl_FragColor  =  colorSrc;"
 "    } else {"
 "	 gl_FragColor  =  colorDest;"
@@ -55,11 +55,11 @@ char *fragmentShaderCode =
 
 FFGLLumaKey::FFGLLumaKey()
 :CFreeFrameGLPlugin(),
+ m_initResources(1),
  m_inputTextureLocation1(-1),
  m_inputTextureLocation2(-1),
  m_maxCoordsLocation(-1),
- m_LumaLocation(-1),
- m_initResources(1)
+ m_LumaLocation(-1)
 {
 	// Input properties
 	SetMinInputs(2);
@@ -76,16 +76,16 @@ FFGLLumaKey::FFGLLumaKey()
 DWORD FFGLLumaKey::InitGL(const FFGLViewportStruct *vp)
 {
   m_extensions.Initialize();
-    
+
   if (m_extensions.ARB_shader_objects==0)
     return FF_FAIL;
-      
+
   m_shader.SetExtensions(&m_extensions);
   m_shader.Compile(vertexShaderCode,fragmentShaderCode);
- 
+
   //activate our shader
   m_shader.BindShader();
-    
+
   //to assign values to parameters in the shader, we have to lookup
   //the "location" of each value.. then call one of the glUniform* methods
   //to assign a value
@@ -121,10 +121,10 @@ DWORD FFGLLumaKey::ProcessOpenGL(ProcessOpenGLStruct *pGL)
 
   //activate our shader
   m_shader.BindShader();
-  
+
   FFGLTextureStruct &TextureDest = *(pGL->inputTextures[0]);
   FFGLTextureStruct &TextureSrc  = *(pGL->inputTextures[1]);
-  
+
   //activate rendering with the input texture
   //note that when using shaders, no glEnable(Texture.Target) is required
   m_extensions.glActiveTexture(GL_TEXTURE0);
@@ -132,15 +132,15 @@ DWORD FFGLLumaKey::ProcessOpenGL(ProcessOpenGLStruct *pGL)
 
   m_extensions.glActiveTexture(GL_TEXTURE1);
   glBindTexture(GL_TEXTURE_2D, TextureSrc.Handle);
- 
-  //get the max s,t that correspond to the 
+
+  //get the max s,t that correspond to the
   //width,height of the used portion of the allocated texture space
   FFGLTexCoords maxCoords = GetMaxGLTexCoords(TextureDest);
 
 
   //assign the LumaKeyAmount
   m_extensions.glUniform1fARB(m_LumaLocation, m_Luma);
-  
+
   //draw the quad that will be painted by the shader/texture
   glBegin(GL_QUADS);
 
@@ -169,7 +169,7 @@ DWORD FFGLLumaKey::ProcessOpenGL(ProcessOpenGLStruct *pGL)
   //m_extensions.glActiveTexture(GL_TEXTURE1);
   glBindTexture(GL_TEXTURE_2D, 0);
 
-  m_extensions.glActiveTexture(GL_TEXTURE0);	
+  m_extensions.glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, 0);
 
   return FF_SUCCESS;
@@ -193,7 +193,7 @@ DWORD FFGLLumaKey::GetParameter(DWORD dwIndex)
 DWORD FFGLLumaKey::SetParameter(const SetParameterStruct* pParam)
 {
 	if (pParam != NULL) {
-		
+
 		switch (pParam->ParameterNumber) {
 
 		case FFPARAM_Luma:
@@ -205,7 +205,7 @@ DWORD FFGLLumaKey::SetParameter(const SetParameterStruct* pParam)
 		}
 
 		return FF_SUCCESS;
-	
+
 	}
 
 	return FF_FAIL;

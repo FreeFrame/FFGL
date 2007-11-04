@@ -1,7 +1,7 @@
 #include <FFGL.h>
 #include <FFGLLib.h>
 #include "FFGLGradients.h"
-#include <Math.h>
+#include <math.h>
 
 #define FFPARAM_Hue1  (0)
 #define FFPARAM_Hue2  (1)
@@ -13,12 +13,12 @@
 //  Plugin information
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static CFFGLPluginInfo PluginInfo ( 
+static CFFGLPluginInfo PluginInfo (
 	FFGLGradients::CreateInstance,	// Create method
-	"GRAD",								// Plugin unique ID											
-	"Gradients",						// Plugin name											
-	1,						   			// API major version number 													
-	000,								// API minor version number	
+	"GRAD",								// Plugin unique ID
+	"Gradients",						// Plugin name
+	1,									// API major version number
+	000,								// API minor version number
 	1,									// Plugin major version number
 	000,								// Plugin minor version number
 	FF_SOURCE,							// Plugin type
@@ -34,7 +34,7 @@ static CFFGLPluginInfo PluginInfo (
 FFGLGradients::FFGLGradients()
 :CFreeFrameGLPlugin()
 {
-	
+
 	// Input properties
 	SetMinInputs(0);
 	SetMaxInputs(0);
@@ -42,7 +42,7 @@ FFGLGradients::FFGLGradients()
 	// Parameters
 	SetParamInfo(FFPARAM_Hue1, "Hue 1", FF_TYPE_STANDARD, 0.0f);
 	m_Hue1 = 0.0f;
-	
+
 	SetParamInfo(FFPARAM_Hue2, "Hue 2", FF_TYPE_STANDARD, 0.5f);
 	m_Hue2 = 0.5f;
 
@@ -80,7 +80,7 @@ DWORD FFGLGradients::ProcessOpenGL(ProcessOpenGLStruct *pGL)
 {
 
 	double rgb1[3];
-	
+
 	//we need to make sure the hue doesn't reach 1.0f, otherwise the result will be pink and not red how it should be
 	double hue1 = (m_Hue1 > 0.99) ? 0.99 : m_Hue1;
 	HSVtoRGB( hue1, m_Saturation, m_Brightness, &rgb1[0], &rgb1[1], &rgb1[2]);
@@ -116,16 +116,16 @@ DWORD FFGLGradients::GetParameter(DWORD dwIndex)
 	switch (dwIndex) {
 
 		case FFPARAM_Hue1:
-			*((float *)&dwRet) = m_Hue1;
+			*((float *)(unsigned)&dwRet) = m_Hue1;
 				return dwRet;
 		case FFPARAM_Hue2:
-			*((float *)&dwRet) = m_Hue2;
+			*((float *)(unsigned)&dwRet) = m_Hue2;
 				return dwRet;
 		case FFPARAM_Saturation:
-			*((float *)&dwRet) = m_Saturation;
+			*((float *)(unsigned)&dwRet) = m_Saturation;
 				return dwRet;
 		case FFPARAM_Brightness:
-			*((float *)&dwRet) = m_Brightness;
+			*((float *)(unsigned)&dwRet) = m_Brightness;
 				return dwRet;
 		default:
 			return FF_FAIL;
@@ -135,27 +135,27 @@ DWORD FFGLGradients::GetParameter(DWORD dwIndex)
 DWORD FFGLGradients::SetParameter(const SetParameterStruct* pParam)
 {
 	if (pParam != NULL) {
-		
+
 		switch (pParam->ParameterNumber) {
 
 			case FFPARAM_Hue1:
-				m_Hue1 = *((float *)&(pParam->NewParameterValue));
+				m_Hue1 = *((float *)(unsigned)&(pParam->NewParameterValue));
 				break;
 			case FFPARAM_Hue2:
-				m_Hue2 = *((float *)&(pParam->NewParameterValue));
+				m_Hue2 = *((float *)(unsigned)&(pParam->NewParameterValue));
 				break;
 			case FFPARAM_Saturation:
-				m_Saturation = *((float *)&(pParam->NewParameterValue));
+				m_Saturation = *((float *)(unsigned)&(pParam->NewParameterValue));
 				break;
 			case FFPARAM_Brightness:
-				m_Brightness = *((float *)&(pParam->NewParameterValue));
+				m_Brightness = *((float *)(unsigned)&(pParam->NewParameterValue));
 				break;
 			default:
 				return FF_FAIL;
 		}
 
 		return FF_SUCCESS;
-	
+
 	}
 
 	return FF_FAIL;
@@ -182,13 +182,13 @@ void HSVtoRGB(double h, double s, double v, double* r, double* g, double* b)
      double var_h = h * 6;
 
      double var_i = floor( var_h );
-     
+
 	 double var_1 = v * ( 1 - s );
-     
+
 	 double var_2 = v * ( 1 - s * ( var_h - var_i ) );
-     
+
 	 double var_3 = v * ( 1 - s * ( 1 - ( var_h - var_i ) ) );
- 
+
 
      if      ( var_i == 0 ) { *r = v     ; *g = var_3 ; *b = var_1; }
 
@@ -202,7 +202,7 @@ void HSVtoRGB(double h, double s, double v, double* r, double* g, double* b)
 
      else                   { *r = v     ; *g = var_1 ; *b = var_2; }
 
- 
+
 
   }
 

@@ -14,9 +14,9 @@ public:
 	///////////////////////////////////////////////////
 	// FreeFrame plugin methods
 	///////////////////////////////////////////////////
-	
-	DWORD	SetParameter(const SetParameterStruct* pParam);		
-	DWORD	GetParameter(DWORD dwIndex);					
+
+	DWORD	SetParameter(const SetParameterStruct* pParam);
+	DWORD	GetParameter(DWORD dwIndex);
 	DWORD	ProcessOpenGL(ProcessOpenGLStruct *pGL);
   DWORD InitGL(const FFGLViewportStruct *vp);
   DWORD DeInitGL();
@@ -34,10 +34,10 @@ public:
 	  return FF_FAIL;
   }
 
-protected:	
+protected:
 	// Parameters
 	float m_Luma;
-	
+
 	int m_initResources;
 	FFGLExtensions m_extensions;
 	FFGLShader m_shader;

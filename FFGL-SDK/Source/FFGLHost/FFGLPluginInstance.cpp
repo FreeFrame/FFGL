@@ -4,13 +4,9 @@
 
 FFGLPluginInstance:: FFGLPluginInstance()
 :m_ffPluginMain(NULL),
- m_ffInstanceID(0),
+ m_ffInstanceID(INVALIDINSTANCE),
  m_numParameters(0)
 {
-  //for some reason, gcc doesnt like m_ffInstanceID(INVALIDINSTANCE) in the
-  //constructor initializer list
-  m_ffInstanceID = INVALIDINSTANCE;
-  
   int i;
   for (i=0; i<MAX_PARAMETERS; i++)
     m_paramNames[i] = NULL;
@@ -42,7 +38,7 @@ const char *FFGLPluginInstance::GetParameterName(int paramNum)
 {
   if (paramNum<0 || paramNum>=MAX_PARAMETERS)
     return "";
-	
+
   if (m_paramNames[paramNum]!=NULL)
     return m_paramNames[paramNum];
 
@@ -69,7 +65,7 @@ void FFGLPluginInstance::SetFloatParameter(int paramNum, float value)
     //for this to compile correctly, sizeof(DWORD) must == sizeof(float)
 	  *((float *)(unsigned)&ArgStruct.NewParameterValue) = value;
 
-  	m_ffPluginMain(FF_SETPARAMETER,(DWORD)(&ArgStruct), m_ffInstanceID);
+	m_ffPluginMain(FF_SETPARAMETER,(DWORD)(&ArgStruct), m_ffInstanceID);
   }
 }
 
@@ -81,7 +77,7 @@ void FFGLPluginInstance::SetTime(double curTime)
     return;
   }
 
- 	m_ffPluginMain(FF_SETTIME, (DWORD)(&curTime), m_ffInstanceID);
+	m_ffPluginMain(FF_SETTIME, (DWORD)(&curTime), m_ffInstanceID);
 }
 
 float FFGLPluginInstance::GetFloatParameter(int paramNum)
@@ -97,10 +93,10 @@ float FFGLPluginInstance::GetFloatParameter(int paramNum)
   DWORD ffParameterType = m_ffPluginMain(FF_GETPARAMETERTYPE,(DWORD)paramNum,0).ivalue;
   if (ffParameterType!=FF_TYPE_TEXT)
   {
-  	plugMainUnion result = m_ffPluginMain(FF_GETPARAMETER,(DWORD)paramNum, m_ffInstanceID);
+	plugMainUnion result = m_ffPluginMain(FF_GETPARAMETER,(DWORD)paramNum, m_ffInstanceID);
 
     //make sure the call to get the parameter succeeded before
-    //reading the float value 
+    //reading the float value
     if (result.ivalue!=FF_FAIL)
     {
       return result.fvalue;
@@ -120,14 +116,14 @@ DWORD FFGLPluginInstance::CallProcessOpenGL(ProcessOpenGLStructTag &t)
   }
 
   DWORD retVal = FF_FAIL;
-  
+
   try
   {
-  	retVal = m_ffPluginMain(FF_PROCESSOPENGL, (DWORD)&t, m_ffInstanceID).ivalue;
+	retVal = m_ffPluginMain(FF_PROCESSOPENGL, (DWORD)&t, m_ffInstanceID).ivalue;
 	}
   catch (...)
   {
-    FFDebugMessage("Error on call to FreeFrame::ProcessFrame");    
+    FFDebugMessage("Error on call to FreeFrame::ProcessFrame");
     retVal = FF_FAIL;
   }
 
@@ -152,17 +148,17 @@ void FFGLPluginInstance::ReleaseParamNames()
 DWORD FFGLPluginInstance::InitPluginLibrary()
 {
   DWORD rval = FF_FAIL;
-  
+
   if (m_ffPluginMain==NULL)
     return rval;
-  
+
   //initialize the plugin
   rval = m_ffPluginMain(FF_INITIALISE,0,0).ivalue;
   if (rval!=FF_SUCCESS)
     return rval;
 
   //get the parameter names
-  m_numParameters = (int)m_ffPluginMain(FF_GETNUMPARAMETERS, 0, 0).ivalue;		
+  m_numParameters = (int)m_ffPluginMain(FF_GETNUMPARAMETERS, 0, 0).ivalue;
 
 	int i;
 	for (i=0; i<m_numParameters; i++)
@@ -176,7 +172,7 @@ DWORD FFGLPluginInstance::InitPluginLibrary()
 
       const char *c = result.svalue;
       char *t = newParamName;
-      
+
       //FreeFrame spec defines parameter names to be 16 characters long MAX
       int numChars = 0;
       while (*c && numChars<16)
@@ -199,7 +195,7 @@ DWORD FFGLPluginInstance::InitPluginLibrary()
       SetParameterName(i, "Untitled");
 	  }
   }
-  
+
   return FF_SUCCESS;
 }
 
@@ -228,7 +224,7 @@ DWORD FFGLPluginInstance::InstantiateGL(const FFGLViewportStruct *viewport)
       SetFloatParameter(i,result.fvalue);
     }
   }
-  
+
   return FF_SUCCESS;
 }
 
@@ -239,7 +235,7 @@ DWORD FFGLPluginInstance::DeInstantiateGL()
     //already deleted
     return FF_SUCCESS;
   }
-  
+
   if (m_ffPluginMain==NULL)
   {
     //no main function available to call deinstantiate.. failure
@@ -248,7 +244,7 @@ DWORD FFGLPluginInstance::DeInstantiateGL()
   }
 
   DWORD rval = FF_FAIL;
-  
+
   try
   {
     rval = m_ffPluginMain(FF_DEINSTANTIATEGL, 0, (DWORD)m_ffInstanceID).ivalue;
@@ -257,7 +253,7 @@ DWORD FFGLPluginInstance::DeInstantiateGL()
   {
     FFDebugMessage("FreeFrame Exception on DEINSTANTIATE");
   }
-  
+
   m_ffInstanceID = INVALIDINSTANCE;
   return rval;
 }
@@ -271,11 +267,11 @@ DWORD FFGLPluginInstance::DeinitPluginLibrary()
     FFDebugMessage("Failed to call DeInstantiateGL() before calling DeinitPluginLibrary()");
     return FF_FAIL;
   }
-  
+
   ReleaseParamNames();
-  
+
   DWORD rval = FF_FAIL;
-  
+
   if (m_ffPluginMain!=NULL)
   {
     rval = m_ffPluginMain(FF_DEINITIALISE,0,0).ivalue;
@@ -285,6 +281,6 @@ DWORD FFGLPluginInstance::DeinitPluginLibrary()
     }
 		m_ffPluginMain=NULL;
   }
-  
+
   return rval;
 }

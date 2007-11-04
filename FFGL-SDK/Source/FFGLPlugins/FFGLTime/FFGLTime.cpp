@@ -7,12 +7,12 @@
 //  Plugin information
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static CFFGLPluginInfo PluginInfo ( 
+static CFFGLPluginInfo PluginInfo (
 	FFGLTime::CreateInstance,	// Create method
 	"GTME",	// Plugin unique ID
-	"FFGLTime", // Plugin name											
-	1,						   			// API major version number 													
-	000,								  // API minor version number	
+	"FFGLTime", // Plugin name
+	1,									// API major version number
+	000,								  // API minor version number
 	1,										// Plugin major version number
 	000,									// Plugin minor version number
 	FF_EFFECT,						// Plugin type
@@ -35,7 +35,7 @@ FFGLTime::FFGLTime()
 }
 
 FFGLTime::~FFGLTime()
-{  
+{ 
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -283,3 +283,4 @@ void FFGLTime::DrawDecimal()
   glVertex2f(0.5, 0);
   glEnd();
 }
+

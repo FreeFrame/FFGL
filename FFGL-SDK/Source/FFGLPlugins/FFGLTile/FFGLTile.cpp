@@ -10,12 +10,12 @@
 //  Plugin information
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static CFFGLPluginInfo PluginInfo ( 
+static CFFGLPluginInfo PluginInfo (
 	FFGLTile::CreateInstance,	// Create method
-	"GLTL",								// Plugin unique ID											
-	"FFGLTile",					// Plugin name											
-	1,						   			// API major version number 													
-	000,								  // API minor version number	
+	"GLTL",								// Plugin unique ID
+	"FFGLTile",					// Plugin name
+	1,									// API major version number
+	000,								  // API minor version number
 	1,										// Plugin major version number
 	000,									// Plugin minor version number
 	FF_EFFECT,						// Plugin type
@@ -49,10 +49,10 @@ char *fragmentShaderCode =
 
 FFGLTile::FFGLTile()
 :CFreeFrameGLPlugin(),
+ m_initResources(1),
  m_inputTextureLocation(-1),
  m_maxCoordsLocation(-1),
- m_tileAmountLocation(-1),
- m_initResources(1)
+ m_tileAmountLocation(-1)
 {
 	// Input properties
 	SetMinInputs(1);
@@ -73,16 +73,16 @@ FFGLTile::FFGLTile()
 DWORD FFGLTile::InitGL(const FFGLViewportStruct *vp)
 {
   m_extensions.Initialize();
-    
+
   if (m_extensions.ARB_shader_objects==0)
     return FF_FAIL;
-      
+
   m_shader.SetExtensions(&m_extensions);
   m_shader.Compile(vertexShaderCode,fragmentShaderCode);
- 
+
   //activate our shader
   m_shader.BindShader();
-    
+
   //to assign values to parameters in the shader, we have to lookup
   //the "location" of each value.. then call one of the glUniform* methods
   //to assign a value
@@ -115,14 +115,14 @@ DWORD FFGLTile::ProcessOpenGL(ProcessOpenGLStruct *pGL)
 
   //activate our shader
   m_shader.BindShader();
-  
+
   FFGLTextureStruct &Texture = *(pGL->inputTextures[0]);
-  
+
   //activate rendering with the input texture
   //note that when using shaders, no glEnable(Texture.Target) is required
   glBindTexture(GL_TEXTURE_2D, Texture.Handle);
 
-  //get the max s,t that correspond to the 
+  //get the max s,t that correspond to the
   //width,height of the used portion of the allocated texture space
   FFGLTexCoords maxCoords = GetMaxGLTexCoords(Texture);
 
@@ -167,10 +167,10 @@ DWORD FFGLTile::GetParameter(DWORD dwIndex)
 	switch (dwIndex) {
 
 	case FFPARAM_TileX:
-    *((float *)&dwRet) = m_TileX;
+    *((float *)(unsigned)&dwRet) = m_TileX;
 		return dwRet;
 	case FFPARAM_TileY:
-    *((float *)&dwRet) = m_TileY;
+    *((float *)(unsigned)&dwRet) = m_TileY;
 		return dwRet;
 
 	default:
@@ -185,10 +185,10 @@ DWORD FFGLTile::SetParameter(const SetParameterStruct* pParam)
 		switch (pParam->ParameterNumber) {
 
 		case FFPARAM_TileX:
-			m_TileX = *((float *)&(pParam->NewParameterValue));
+			m_TileX = *((float *)(unsigned)&(pParam->NewParameterValue));
 			break;
 		case FFPARAM_TileY:
-			m_TileY = *((float *)&(pParam->NewParameterValue));
+			m_TileY = *((float *)(unsigned)&(pParam->NewParameterValue));
 			break;
 
 		default:
