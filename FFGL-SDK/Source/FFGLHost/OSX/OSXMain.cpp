@@ -92,7 +92,7 @@ int main(int argc, char **argv)
 {
   //load first plugin (does not instantiate!)
   plugin1 = FFGLPluginInstance::New();
-  if (plugin1->Load(FFGLBrightnessFile)==FF_FAIL)
+  if (plugin1->Load(FFGLHeatFile)==FF_FAIL)
   {
     FFDebugMessage("Couldn't open plugin 1");
     return 0;
@@ -100,7 +100,7 @@ int main(int argc, char **argv)
 
   //init second plugin (does not instantiate!)
   plugin2 = FFGLPluginInstance::New();
-  if (plugin2->Load(FFGLTileFile)==FF_FAIL)
+  if (plugin2->Load(FFGLTimeFile)==FF_FAIL)
   {
     FFDebugMessage("Couldn't open plugin 2");
     return 0;
