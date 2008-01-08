@@ -1,25 +1,34 @@
 ---------------
 FreeFrameGL SDK
+---------------
 
-Host and Plugin Samples (w/source code) for Windows and OSX
-by Trey Harrison - www.harrisondigitalmedia.com
+Host and Plugin Samples for Windows and OSX by
+  Trey Harrison - www.harrisondigitalmedia.com
 
-Host and Plugin Samples converted for Linux, based on Trey's OSX code
-by Gabor Papp - www.mndl.hu
+Host and Plugin Samples converted for Linux, based on Trey's OSX code by
+  Gabor Papp - www.mndl.hu
 
-FFGLHeat and FFGLTile Plugins by Edwin De Konig - www.resolume.com
+FFGLHeat and FFGLTile Plugins by
+  Edwin De Konig - www.resolume.com
 
-Many .h and .cpp's were taken from the FreeFrame SDK by Gualtiero Volpe
-(Gualtiero.Volpe@unige.it) and extended / modified to support the new 
-functions for OpenGL effects processing
---------------------------------------------------------------------------
+Delphi Host and Plugins by
+  John Day - www.vjamm.com
 
---------------------
-Windows Instructions
---------------------
+Many .h and .cpp's were taken from the FreeFrame SDK by Gualtiero Volpe (Gualtiero.Volpe@unige.it) and extended / modified to support the new functions for OpenGL effects processing.
 
-Projects for MSVC .NET 2003 are found in the 'MSVC' sub-folders. Projects for MSVC 2005
-are in the 'MSVC8' sub-folders. Old versions of MSVC aren't likely to work.
+-------------
+Specification
+-------------
+
+The Specification.html file documents the functions, values, and structures used by FreeFrameGL hosts and plugins. 
+
+--------------------------
+Windows C/C++ Instructions
+--------------------------
+
+Projects for MSVC .NET 2003 are found in the 'MSVC' sub-folders.
+
+Projects for MSVC 2005 are in the 'MSVC8' sub-folders.
 
 To test the FFGL host and sample plugins, go to the Binaries folder and run FFGLHost.exe.
 
@@ -27,16 +36,18 @@ You can also drag-and-drop a FFGL .dll onto FFGLHost.exe for testing your own DL
 
 Mouse movement is used to assign values to plugin #1 parameter #0 and plugin #2 parameter #0.
 
+---------------------------
+Windows Delphi Instructions
+---------------------------
+??
+
 ----------------
 OSX Instructions
 ----------------
 
-The source code was written and compiled with XCode 2.4. The project files probably won't
-open with anything older than that.
+The source code was written and compiled with XCode 2.4. Older versions of XCode probably won't work.
 
-To test the FFGL host and sample plugins, open a terminal window, navigate to the Binaries/OSX
-folder, and run ./FFGLHost (for some reason, running FFGLHost from the finder does not work
-because the finder doesnt start the application in its own directory)
+To test the FFGL host and sample plugins, open a terminal window, navigate to the Binaries/OSX folder, and run ./FFGLHost (for some reason, running FFGLHost from the finder does not work because the finder doesnt start the application in its own directory)
 
 Mouse movement is used to assign values to plugin #1 parameter #0 and plugin #2 parameter #0.
 
@@ -46,9 +57,9 @@ Linux Instructions
 
 The code is based on the OSX source files and it was compiled with gcc 4.1.1.
 
-To compile the sample plugins, open a terminal window, navigate to the
-Projects/FFGLPlugins/Linux folder and type make. To test the FFGL host go to the
-Projects/FFGLHost/Linux folder, type make and run ./FFGLHost.
+To compile the sample plugins, open a terminal window, navigate to the Projects/FFGLPlugins/Linux folder and type make. 
+
+To test the FFGL host go to the Projects/FFGLHost/Linux folder, type make and run ./FFGLHost.
 
 Mouse movement is used to assign values to plugin #1 parameter #0 and plugin #2 parameter #0.
 
@@ -56,15 +67,23 @@ Mouse movement is used to assign values to plugin #1 parameter #0 and plugin #2 
 SDK Contents
 ------------
 
+Specification.html
+  Official FreeFrameGL specification document
+
 Binaries/
+
   OSX/
     Sample host and plugin files ready to run on OSX
 
   Win32/
-    Sample host and plugin files ready to run on Windows
+    Sample host and plugin files (from C/C++ source) ready to run on Windows
+
+  Win32/DelphiHost
+    Sample host and plugin files (from Delphi source) ready to run on Windows
 
 
 Include/
+
   FreeFrame.h
     Slightly modified FreeFrame.h to compile nicely on Win & Mac (no FFGL info in here)
 
@@ -132,6 +151,9 @@ Source/
     FFGLHeat/
       Source code for sample plugins
 
+  DelphiExamples/
+    Delphi source code and project files for sample host and plugins
+
 
 Projects/
 
@@ -164,3 +186,5 @@ Projects/
     Linux/
       GCC makefile for FFGLPlugins
 
+Readme.txt
+  This file (did you really read this far?)
