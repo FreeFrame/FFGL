@@ -39,7 +39,21 @@ Mouse movement is used to assign values to plugin #1 parameter #0 and plugin #2 
 ---------------------------
 Windows Delphi Instructions
 ---------------------------
-??
+
+Developed in Delphi 6.
+
+To test the FFGL host and sample plugins, navigate to the trunk/binaries/win32/delphihost folder, and run the FreeFrameDelphiHost.exe  .
+
+Plugins need to be within the 'plugins' folder.
+
+0. Select an avi file to use as source material
+1. Select a plugin from the dropdown list
+2. Press the 'Play and Process' button
+
+It is possible to leave the application running and hotswap the current plugin as you work on it, by using the 'Reload Plugin' button.
+
+Parameter control is via the lower right panel, select a parameter from the list of available and use the slider below.
+
 
 ----------------
 OSX Instructions
