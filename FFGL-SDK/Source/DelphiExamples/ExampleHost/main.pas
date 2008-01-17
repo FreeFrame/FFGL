@@ -203,8 +203,8 @@ type
   end;
 
 const
-  AppVersion: string='2.02';
-  APIversion: string='1.5a';
+  AppVersion: string='2.03';
+  APIversion: string='1.5';
 
 var
   fmMain: TfmMain;
