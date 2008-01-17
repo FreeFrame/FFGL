@@ -109,6 +109,7 @@ type
     Label8: TLabel;
     Label9: TLabel;
     cbATime: TCheckBox;
+    Memo3: TMemo;
 
     procedure ebAVIFilenameChange(Sender: TObject);
 

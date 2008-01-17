@@ -1,6 +1,6 @@
 object fmMain: TfmMain
-  Left = 208
-  Top = 115
+  Left = 558
+  Top = 202
   Width = 865
   Height = 709
   Caption = 'FreeFrame Delphi Host Test Container'
@@ -357,7 +357,7 @@ object fmMain: TfmMain
     object btnGrabFrame: TButton
       Left = 240
       Top = 64
-      Width = 113
+      Width = 89
       Height = 25
       Caption = 'Grab Frame'
       TabOrder = 1
@@ -392,6 +392,20 @@ object fmMain: TfmMain
         'This is not currently available here.')
       ReadOnly = True
       TabOrder = 3
+    end
+    object Memo3: TMemo
+      Left = 336
+      Top = 8
+      Width = 113
+      Height = 81
+      Lines.Strings = (
+        'GL Output renders a '
+        'square section from '
+        'the bottom left of your '
+        'AVI. eg. 128x128'
+        'or 256x256')
+      ReadOnly = True
+      TabOrder = 4
     end
   end
   object Panel2: TPanel
