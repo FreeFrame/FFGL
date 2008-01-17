@@ -163,6 +163,7 @@ Source/
     FFGLMirror/
     FFGLTile/
     FFGLHeat/
+    FFGLGradients/
       Source code for sample plugins
 
   DelphiExamples/
