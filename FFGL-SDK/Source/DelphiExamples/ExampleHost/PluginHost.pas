@@ -203,8 +203,11 @@ begin
 end;
 //------------------------------------------------------------------------------
 function GetParameterDefault(Param: dword): single;
+var
+  p:pointer;
 begin
-  result:=single(plugMain(6,pointer(Param),0)^);
+  p:=plugMain(6,pointer(Param),0);
+  result:=psingle(@p)^;
 end;
 //------------------------------------------------------------------------------
 function GetParameterDisplay(Param: dword; Instance: dword): string;

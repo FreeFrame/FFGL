@@ -39,12 +39,12 @@ interface
 
 uses
   sysutils,syncobjs,classes,
-  gl,glu, ffstructs,
+  gl,glu, ffstructs,math,
 {$IFDEF LINUX} Types;{$ENDIF}
 {$IFDEF WIN32} windows;{$ENDIF}
 
 const
-  NumberOfParameters=5;
+  NumberOfParameters=10;
 
 type
 
@@ -53,13 +53,19 @@ type
   pb = ^byte;
 
 type
+  TBlockPoint=record
+    x,y:integer;
+    u,v:single;
+  end;
 
   TBlock=record
-    x1,y1,x2,y2:integer;
-    u1,v1,u2,v2:single;
+    p1,p2,p3,p4:TBlockPoint;
+    //x1,y1,x2,y2:integer;
+    //u1,v1,u2,v2:single;
     fadestate:integer;
     fadetargettime:single;
     fadevalue,fadespeed:single;
+    r,g,b:single;
   end;
 
   TFreeFramePlugin = class(TObject)
@@ -85,7 +91,13 @@ type
     prevtime:double;
     absoluteTime:double;
 
+    hardwidth,hardheight:integer;
+
     procedure NewBlock(id:integer);
+    function  DisallowOverlap(id,x1,y1,x2,y2:integer):boolean;
+    procedure MakeFunky(id:integer);
+    procedure UpdateFilters;
+    procedure UpdateFilter(id:integer);
   protected
   public
     constructor Create;
@@ -143,18 +155,33 @@ begin
   ParameterNames[2]:='Fade TimeRandom';    // MUST be 15 chars
   ParameterNames[3]:='Block Max Size ';    // MUST be 15 chars
   ParameterNames[4]:='Block Min Size ';    // MUST be 15 chars
+  ParameterNames[5]:='Filter Mode    ';    // MUST be 15 chars
+  ParameterNames[6]:='Enable Overlap ';    // MUST be 15 chars
+  ParameterNames[7]:='Enable Borders ';    // MUST be 15 chars
+  ParameterNames[8]:='Border Size    ';    // MUST be 15 chars
+  ParameterNames[9]:='Funky          ';    // MUST be 15 chars
 
   ParameterTypes[0]:=10;
   ParameterTypes[1]:=10;
   ParameterTypes[2]:=10;
   ParameterTypes[3]:=10;
   ParameterTypes[4]:=10;
+  ParameterTypes[5]:=10;
+  ParameterTypes[6]:=10;
+  ParameterTypes[7]:=10;
+  ParameterTypes[8]:=10;
+  ParameterTypes[9]:=10;
 
-  ParameterDefaults[0]:=0.3;
+  ParameterDefaults[0]:=0.05;
   ParameterDefaults[1]:=0.05;
-  ParameterDefaults[2]:=0.0;
+  ParameterDefaults[2]:=0.5;
   ParameterDefaults[3]:=0.5;
-  ParameterDefaults[4]:=0.5;
+  ParameterDefaults[4]:=0.3;
+  ParameterDefaults[5]:=0.0;
+  ParameterDefaults[6]:=1.0;
+  ParameterDefaults[7]:=0.0;
+  ParameterDefaults[8]:=0.1;
+  ParameterDefaults[9]:=0.0;
 
   result:=pointer(0);
 end;
@@ -171,7 +198,7 @@ begin
     APIMajorVersion:=1;
     APIMinorVersion:=0;
     PluginUniqueID:='GLX1';
-    PluginName:='JD-BlocksFade';
+    PluginName:='JD-FilterBoards';
     PluginType:=0;   // 0 = effect - 1 = source
   end;
   result:=@PluginInfoStruct;
@@ -242,8 +269,8 @@ end;
 //------------------------------------------------------------------------------
 constructor TFreeFramePlugin.Create;
 begin
-  setlength(blocks,10);
-  setlength(alphaorder,10);
+  setlength(blocks,20);
+  setlength(alphaorder,20);
   totalblocks:=0;
 
   absoluteTime:=0;
@@ -291,16 +318,22 @@ begin
   ParameterDisplayValue[2]:='Fade TimeRandom';   // MUST be 15 chars
   ParameterDisplayValue[3]:='Block Max Size ';   // MUST be 15 chars
   ParameterDisplayValue[4]:='Block Min Size ';   // MUST be 15 chars
+  ParameterDisplayValue[5]:='Filter Mode    ';    // MUST be 15 chars
+  ParameterDisplayValue[6]:='Enable Overlap ';    // MUST be 15 chars
+  ParameterDisplayValue[7]:='Enable Borders ';    // MUST be 15 chars
+  ParameterDisplayValue[8]:='Border Size    ';    // MUST be 15 chars
+  ParameterDisplayValue[9]:='Funky          ';    // MUST be 15 chars
 
   prevtime:=0;
 
-  totalblocks:=3;
-  for i:=0 to totalblocks-1 do begin
-    blocks[i].fadestate:=0;
-    blocks[i].fadetargettime:=0;
-    blocks[i].fadevalue:=0;
+  totalblocks:=0;
+  //for i:=0 to 2 do begin  // default 3 blocks
     NewBlock(i);
-  end;
+    blocks[totalblocks].fadestate:=0;
+    blocks[totalblocks].fadetargettime:=0;
+    blocks[totalblocks].fadevalue:=0;
+    inc(totalblocks);
+  //end;
 
   result:=pointer(0);
 end;
@@ -336,12 +369,15 @@ begin
     // add blocks on fly
     if paramIndex=0 then begin
       prevblockcount:=totalblocks;
-      totalblocks:=round(ParameterArray[paramIndex]*10);
+      totalblocks:=round(ParameterArray[paramIndex]*20);
       while prevblockcount<totalblocks do begin
         NewBlock(prevblockcount);
         inc(prevblockcount);
       end;
     end;
+
+    // update filters on fly
+    if paramindex=5 then UpdateFilters;
 
     result:=pointer(0);
   end else
@@ -376,6 +412,8 @@ var
   xratio,yratio:single;
   i,b:integer;
   done:boolean;
+
+  bordersize:single;
 begin
   tempPointer:=pDw(pParam);
 
@@ -403,6 +441,8 @@ begin
     inc(pInTex);
     InputTexture.Handle:=pInTex^; // (GLuint)
   //
+  hardwidth:=InputTexture.HardwareWidth;
+  hardheight:=InputTexture.HardwareHeight;
 
   // use timebased controls, allows effect to stay in time even if host slow frames
   now:=absoluteTime*1000;// convert from secs to msecs
@@ -428,13 +468,6 @@ begin
     2: blocks[i].fadevalue:=blocks[i].fadevalue-blocks[i].fadespeed;
     end;
 
-    // update texture cords, since these may change frame to frame,
-    xratio:=1/InputTexture.HardwareWidth;
-    yratio:=1/InputTexture.HardwareHeight;
-    blocks[i].u1:=blocks[i].x1*xratio;
-    blocks[i].u2:=blocks[i].x2*xratio;
-    blocks[i].v1:=blocks[i].y1*yratio;
-    blocks[i].v2:=blocks[i].y2*yratio;
 
   end;
 
@@ -469,16 +502,67 @@ begin
   // shouldn't really blend (but for this testbed does)
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  
+
+  bordersize:=ParameterArray[8]*32;
   for i:=0 to totalblocks-1 do begin
     b:=alphaorder[i];
-    glColor4f(1.0,1.0,1.0,blocks[b].fadevalue);
-    glBegin(GL_QUADS);
-      glTexCoord2f(blocks[b].u1,blocks[b].v1); glVertex2f(blocks[b].x1,blocks[b].y1);
-      glTexCoord2f(blocks[b].u2,blocks[b].v1); glVertex2f(blocks[b].x2,blocks[b].y1);
-      glTexCoord2f(blocks[b].u2,blocks[b].v2); glVertex2f(blocks[b].x2,blocks[b].y2);
-      glTexCoord2f(blocks[b].u1,blocks[b].v2); glVertex2f(blocks[b].x1,blocks[b].y2);
+
+    glColor4f(blocks[b].r,blocks[b].g,blocks[b].b,blocks[b].fadevalue);
+
+    glBegin(GL_TRIANGLES);
+      glTexCoord2f(blocks[b].p1.u,blocks[b].p1.v); glVertex2f(blocks[b].p1.x,blocks[b].p1.y);
+      glTexCoord2f(blocks[b].p2.u,blocks[b].p2.v); glVertex2f(blocks[b].p2.x,blocks[b].p2.y);
+      glTexCoord2f(blocks[b].p4.u,blocks[b].p4.v); glVertex2f(blocks[b].p4.x,blocks[b].p4.y);
+      
+      glTexCoord2f(blocks[b].p2.u,blocks[b].p2.v); glVertex2f(blocks[b].p2.x,blocks[b].p2.y);
+      glTexCoord2f(blocks[b].p3.u,blocks[b].p3.v); glVertex2f(blocks[b].p3.x,blocks[b].p3.y);
+      glTexCoord2f(blocks[b].p4.u,blocks[b].p4.v); glVertex2f(blocks[b].p4.x,blocks[b].p4.y);
     glEnd();
+
+    if ParameterArray[7]=1.0 then begin
+      glDisable(GL_TEXTURE_2D);
+      glColor4f(0.0,0.0,0.0,blocks[b].fadevalue);
+      glBegin(GL_TRIANGLES);
+        // top
+        glVertex2f(blocks[b].p1.x-bordersize,blocks[b].p1.y-bordersize);
+        glVertex2f(blocks[b].p2.x+bordersize,blocks[b].p2.y-bordersize);
+        glVertex2f(blocks[b].p1.x,blocks[b].p1.y);
+
+        glVertex2f(blocks[b].p1.x,blocks[b].p1.y);
+        glVertex2f(blocks[b].p2.x+bordersize,blocks[b].p2.y-bordersize);
+        glVertex2f(blocks[b].p2.x,blocks[b].p2.y);
+
+        // bottom
+        glVertex2f(blocks[b].p4.x,blocks[b].p4.y);
+        glVertex2f(blocks[b].p3.x+bordersize,blocks[b].p3.y);
+        glVertex2f(blocks[b].p4.x-bordersize,blocks[b].p4.y+bordersize);
+
+        glVertex2f(blocks[b].p4.x-bordersize,blocks[b].p4.y+bordersize);
+        glVertex2f(blocks[b].p3.x,blocks[b].p3.y);
+        glVertex2f(blocks[b].p3.x+bordersize,blocks[b].p3.y++bordersize);
+
+        // left
+        glVertex2f(blocks[b].p1.x-bordersize,blocks[b].p1.y-bordersize);
+        glVertex2f(blocks[b].p1.x,blocks[b].p1.y);
+        glVertex2f(blocks[b].p4.x-bordersize,blocks[b].p4.y+bordersize);
+
+        glVertex2f(blocks[b].p4.x-bordersize,blocks[b].p4.y+bordersize);
+        glVertex2f(blocks[b].p1.x,blocks[b].p1.y);
+        glVertex2f(blocks[b].p4.x,blocks[b].p4.y);
+
+        // right
+        glVertex2f(blocks[b].p2.x,blocks[b].p2.y);
+        glVertex2f(blocks[b].p2.x+bordersize,blocks[b].p2.y-bordersize);
+        glVertex2f(blocks[b].p3.x,blocks[b].p3.y);
+
+        glVertex2f(blocks[b].p3.x,blocks[b].p3.y);
+        glVertex2f(blocks[b].p2.x+bordersize,blocks[b].p2.y-bordersize);
+        glVertex2f(blocks[b].p3.x+bordersize,blocks[b].p3.y+bordersize);
+
+      glEnd();
+      glEnable(GL_TEXTURE_2D);
+    end;
+    
   end;
 
   result:=pointer(0);
@@ -495,30 +579,192 @@ end;
 //------------------------------------------------------------------------------
 procedure TFreeFramePlugin.NewBlock(id:integer);
 var
-  maxsize,minsize,newsize:integer;
+  maxwidth,minwidth:integer;
+  maxheight,minheight:integer;
+  newwidth,newheight:integer;
+  xratio,yratio:single;
+  x1,y1,x2,y2:integer;
 begin
-  if ViewPortStruct.width>ViewPortStruct.height then
-    maxsize:=round(ViewPortStruct.height*ParameterArray[3])
-  else
-    maxsize:=round(ViewPortStruct.width*ParameterArray[3]);
-
-  if ParameterArray[4]<ParameterArray[3] then begin
-    if ViewPortStruct.width>ViewPortStruct.height then
-      minsize:=round(ViewPortStruct.height*ParameterArray[4])
-    else
-      minsize:=round(ViewPortStruct.width*ParameterArray[4]);
-  end else
-    minsize:=maxsize;
-
-  newsize:=minsize+random(maxsize-minsize);
-  blocks[id].x1:=random(ViewPortStruct.width-newsize);
-  blocks[id].y1:=random(ViewPortStruct.height-newsize);
-  blocks[id].x2:=blocks[id].x1+newsize;
-  blocks[id].y2:=blocks[id].y1+newsize;
+  Randomize;
 
   blocks[id].fadestate:=0;
-end;
 
+  maxwidth:=round(ViewPortStruct.width*ParameterArray[3]);
+  maxheight:=round(ViewPortStruct.height*ParameterArray[3]);
+
+  if ParameterArray[4]<ParameterArray[3] then begin
+    minwidth:=round(ViewPortStruct.width*ParameterArray[4]);
+    minheight:=round(ViewPortStruct.height*ParameterArray[4]);
+  end else begin
+    minwidth:=maxwidth;
+    minheight:=maxheight;
+  end;
+
+  newwidth:=minwidth+random(maxwidth-minwidth);
+  newheight:=minheight+random(maxheight-minheight);
+
+  x1:=random(ViewPortStruct.width-newwidth);
+  y1:=random(ViewPortStruct.height-newheight);
+  x2:=x1+newwidth;
+  y2:=y1+newheight;
+
+  blocks[id].p1.x:=x1;blocks[id].p1.y:=y1;
+  blocks[id].p2.x:=x2;blocks[id].p2.y:=y1;
+  blocks[id].p3.x:=x2;blocks[id].p3.y:=y2;
+  blocks[id].p4.x:=x1;blocks[id].p4.y:=y2;
+
+  if ParameterArray[6]=0.0 then begin
+    if DisallowOverlap(id,x1,y1,x2,y2) then begin
+      // else move off screen
+      blocks[id].p1.x:=-2;blocks[id].p1.y:=-2;
+      blocks[id].p2.x:=-1;blocks[id].p2.y:=-2;
+      blocks[id].p3.x:=-1;blocks[id].p3.y:=-1;
+      blocks[id].p4.x:=-2;blocks[id].p4.y:=-1;
+      exit;
+    end;
+  end;
+
+  // should update texture cords, since these may change frame to frame,
+  if ParameterArray[9]>0.0 then begin   // funky
+    MakeFunky(id);
+  end else begin
+    blocks[id].p1.u:=0;blocks[id].p1.v:=0;
+    blocks[id].p2.u:=1;blocks[id].p2.v:=0;
+    blocks[id].p3.u:=1;blocks[id].p3.v:=1;
+    blocks[id].p4.u:=0;blocks[id].p4.v:=1;
+  end;
+
+  UpdateFilter(id);
+end;
+//------------------------------------------------------------------------------
+// simple version for now
+function TFreeFramePlugin.DisallowOverlap(id,x1,y1,x2,y2:integer):boolean;
+var
+  i:integer;
+  oleft,oright,otop,obottom:integer;
+  overlapped:boolean;
+  dx1,dy1,dx2,dy2:integer;
+begin
+  overlapped:=false;
+  i:=0;
+  while ((i<totalblocks) and (not overlapped)) do begin
+    if i<>id then begin
+      if blocks[i].p1.x<blocks[i].p4.x then dx1:=blocks[i].p1.x else dx1:=blocks[i].p4.x;
+      if blocks[i].p2.x>blocks[i].p3.x then dx2:=blocks[i].p2.x else dx2:=blocks[i].p3.x;
+      if blocks[i].p1.y<blocks[i].p2.y then dy1:=blocks[i].p1.y else dy1:=blocks[i].p2.y;
+      if blocks[i].p4.y>blocks[i].p3.y then dy2:=blocks[i].p4.y else dy2:=blocks[i].p3.y;
+
+      if ((x1>=dx1) and (x1<=dx2)) then overlapped:=true
+      else if ((x2>=dx1) and (x2<=dx2)) then overlapped:=true
+      else if ((y1>=dy1) and (y1<=dy2)) then overlapped:=true
+      else if ((y2>=dy1) and (y2<=dy2)) then overlapped:=true;
+    end;
+    inc(i);
+  end;
+  result:=overlapped;
+end;
+//------------------------------------------------------------------------------
+// will be square comming in
+procedure TFreeFramePlugin.MakeFunky(id:integer);
+var
+  funky:integer;
+  funkypos:integer;
+  funkyamount:single;
+  u,v:single;
+  xratio,yratio:single;
+
+  p:array[0..3] of integer;
+  x1,y1,x2,y2:integer;
+  w,h:integer;
+begin
+  xratio:=1/HardWidth;
+  yratio:=1/HardHeight;
+
+  x1:=blocks[id].p1.x;
+  y1:=blocks[id].p1.y;
+  x2:=blocks[id].p3.x;
+  y2:=blocks[id].p3.y;
+  w:=x2-x1;
+  h:=y2-y1;
+  xratio:=1/w;
+  yratio:=1/h;
+  w:=w div 2;
+  h:=h div 2;
+
+  funkyamount:=0.1+ParameterArray[9];
+  w:=round(w*funkyamount);
+  h:=round(h*funkyamount);
+
+  if funkyamount>=1.0 then funky:=15 else funky:=Random(16);
+
+  if (funky and 1)=1 then begin
+    blocks[id].p1.x:=x1+random(w);
+    blocks[id].p1.y:=y1+random(h);
+    blocks[id].p1.u:=(blocks[id].p1.x-x1)*xratio;
+    blocks[id].p1.v:=(blocks[id].p1.y-y1)*yratio;
+  end;
+
+  if (funky and 2)=2 then begin
+    blocks[id].p2.x:=x2-random(w);
+    blocks[id].p2.y:=y1+random(h);
+    blocks[id].p2.u:=(blocks[id].p2.x-x1)*xratio;
+    blocks[id].p2.v:=(blocks[id].p2.y-y1)*yratio;
+  end;
+
+  if (funky and 4)=4 then begin
+    blocks[id].p3.x:=x2-random(w);
+    blocks[id].p3.y:=y2-random(h);
+    blocks[id].p3.u:=(blocks[id].p3.x-x1)*xratio;
+    blocks[id].p3.v:=(blocks[id].p3.y-y1)*yratio;
+  end;
+
+  if (funky and 8)=8 then begin
+    blocks[id].p4.x:=x1+random(w);
+    blocks[id].p4.y:=y2-random(h);
+    blocks[id].p4.u:=(blocks[id].p4.x-x1)*xratio;
+    blocks[id].p4.v:=(blocks[id].p4.y-y1)*yratio;
+  end;
+end;
+//------------------------------------------------------------------------------
+procedure TFreeFramePlugin.UpdateFilters;
+var
+  i:integer;
+begin
+  for i:=0 to totalblocks-1 do UpdateFilter(i);
+end;
+//------------------------------------------------------------------------------
+procedure TFreeFramePlugin.UpdateFilter(id:integer);
+begin
+  case floor(ParameterArray[5]*3) of
+  0: begin
+      blocks[id].r:=1;
+      blocks[id].g:=1;
+      blocks[id].b:=1;
+    end;
+  1: begin
+      blocks[id].r:=0.25+(random(100)*0.01);
+      blocks[id].g:=0.25+(random(100)*0.01);
+      blocks[id].b:=0.25+(random(100)*0.01);
+    end;
+  2: begin
+      case floor(random(6)) of
+      0: begin blocks[id].r:=1.0;blocks[id].g:=0.0;blocks[id].b:=0.0;end;
+      1: begin blocks[id].r:=1.0;blocks[id].g:=1.0;blocks[id].b:=0.0;end;
+      2: begin blocks[id].r:=1.0;blocks[id].g:=0.0;blocks[id].b:=1.0;end;
+      3: begin blocks[id].r:=0.0;blocks[id].g:=1.0;blocks[id].b:=0.0;end;
+      4: begin blocks[id].r:=0.0;blocks[id].g:=1.0;blocks[id].b:=1.0;end;
+      5: begin blocks[id].r:=0.0;blocks[id].g:=0.0;blocks[id].b:=1.0;end;
+      end;
+    end;
+  3: begin
+      case floor(random(3)) of
+      0: begin blocks[id].r:=1.0;blocks[id].g:=0.0;blocks[id].b:=0.0;end;
+      1: begin blocks[id].r:=0.0;blocks[id].g:=1.0;blocks[id].b:=0.0;end;
+      2: begin blocks[id].r:=0.0;blocks[id].g:=0.0;blocks[id].b:=1.0;end;
+      end;
+    end;
+  end;
+end;
 //------------------------------------------------------------------------------
 function TFreeFramePlugin.SetTime(pParam:pointer):pointer;
 begin
