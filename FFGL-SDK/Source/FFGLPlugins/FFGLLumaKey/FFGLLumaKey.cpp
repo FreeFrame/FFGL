@@ -10,7 +10,7 @@
 
 static CFFGLPluginInfo PluginInfo (
 	FFGLLumaKey::CreateInstance,	// Create method
-	"GLTL",								// Plugin unique ID
+	"GLLK",								// Plugin unique ID
 	"FFGLLumaKey",					// Plugin name
 	1,									// API major version number
 	000,								  // API minor version number
