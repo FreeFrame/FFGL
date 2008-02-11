@@ -1922,18 +1922,24 @@ failed. (32-bit unsigned integer)
   </tr>
   <tr>
     <td valign=top>GPU PLUGINS:</td>
-    <td>BEFORE RETURNING FROM PROCESSOPENGL, PLUGINS MUST RESTORE ANY CHANGED OPENGL STATES BACK TO THE DEFAULT OPENGL STATE AS DEFINED BY THE OPENGL SPEC
-    (see <a href="http://www.opengl.org/documentation/specs" target="_blank">http://www.opengl.org/documentation/specs</a>) WITH THE FOLLOWING EXCEPTIONS:
+    <td>BEFORE RETURNING FROM PROCESSOPENGL, PLUGINS MUST RESTORE ANY CHANGED OPENGL STATES BACK TO THE DEFAULT OPENGL STATE AS DEFINED BY THE OPENGL SPEC WITH THE FOLLOWING EXCEPTIONS:
       <ul>
         <li>
-          If a plugin uses its own EXT_framebuffer_object ("FBO") for internal rendering, the plugin must restore the host's FBO binding (using the HostFBO field from <a href="#ProcessOpenGLStruct">processOpenGLStruct</a>).
+          If a plugin uses its own EXT_framebuffer_object ("FBO") for internal rendering, the plugin must restore the host's FBO binding using the HostFBO field from <a href="#ProcessOpenGLStruct">processOpenGLStruct</a> by calling glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, HostFBO) .
            <br><br>
         </li>
          <li>
            If a plugin changes the OpenGL viewport state for any reason, it must restore the host's viewport (provided in the call to <a href="#instantiateGL">instantiateGL</a>).
            <br><br>
          </li>
-        <li>More exceptions will be added in the future as necessary</li>
+        <li>More exceptions may be added in the future as necessary<br><br></li>
+        <li>
+        Official documentation on "default" OpenGL states can be found here:<br>
+          <a href="http://www.opengl.org/documentation/specs" target="_blank">
+          http://www.opengl.org/documentation/specs</a> and <br>
+          <a href="http://www.opengl.org/documentation/specs/man_pages/hardcopy/GL/html/gl/get.html" target="_blank">
+          http://www.opengl.org/documentation/specs/man_pages/hardcopy/GL/html/gl/get.html</a>
+        </li>
     </ul></td>
   </tr>
   <tr>
