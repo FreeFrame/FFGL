@@ -1922,8 +1922,12 @@ failed. (32-bit unsigned integer)
   </tr>
   <tr>
     <td valign=top>GPU PLUGINS:</td>
-    <td>BEFORE RETURNING FROM PROCESSOPENGL, PLUGINS MUST RESTORE ANY CHANGED OPENGL STATES BACK TO THE DEFAULT OPENGL STATE AS DEFINED BY THE OPENGL SPEC WITH THE FOLLOWING EXCEPTIONS:
+    <td>Before returning from ProcessOpenGL, plugins MUST RESTORE ANY CHANGED OPENGL STATES BACK TO THE DEFAULT OPENGL STATE as defined by the OpenGL spec - WITH THE FOLLOWING EXCEPTIONS:
       <ul>
+        <li>
+          The 'current color', set with calls to glColor3f, glColor4f, etc, need not be restored. Similarly, plugins should not rely on the host to ensure that the default color (white) is set when ProcessOpenGL is called.
+        <br><br>
+        </li>
         <li>
           If a plugin uses its own EXT_framebuffer_object ("FBO") for internal rendering, the plugin must restore the host's FBO binding using the HostFBO field from <a href="#ProcessOpenGLStruct">processOpenGLStruct</a> by calling glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, HostFBO) .
            <br><br>
@@ -1944,7 +1948,10 @@ failed. (32-bit unsigned integer)
   </tr>
   <tr>
     <td valign=top>GPU HOST:</td>
-    <td>Hosts must provide textures of type GL_TEXTURE_2D. GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_3D, etc, are NOT supported.</td>
+    <td>
+      Hosts must provide textures of type GL_TEXTURE_2D. GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_3D, etc, are NOT supported.
+      Hosts must ensure that OpenGL is in its default state when ProcessOpenGL is called - with the exceptions listed above.
+    </td>
   </tr>
 </table>
 <hr>
