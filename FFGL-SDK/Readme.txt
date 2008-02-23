@@ -59,9 +59,9 @@ Parameter control is via the lower right panel, select a parameter from the list
 OSX Instructions
 ----------------
 
-The source code was written and compiled with XCode 2.4. Older versions of XCode probably won't work.
+The source code was written and compiled with XCode 2.4 and XCode 3.0. Older versions of XCode probably won't work.
 
-To test the FFGL host and sample plugins, open a terminal window, navigate to the Binaries/OSX folder, and run ./FFGLHost (for some reason, running FFGLHost from the finder does not work because the finder doesnt start the application in its own directory)
+To test the FFGL host and sample plugins, launch the Binaries/OSX/FFGLHost executable.
 
 Mouse movement is used to assign values to plugin #1 parameter #0 and plugin #2 parameter #0.
 
