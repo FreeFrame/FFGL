@@ -50,10 +50,14 @@ DWORD FFGLTime::SetTime(double time)
 
 DWORD FFGLTime::ProcessOpenGL(ProcessOpenGLStruct *pGL)
 {
+  //set color to white
+  glColor4f(1.f,1.f,1.f,1.f);
+
   //start out by just filling our output with the input texture
   if (pGL->numInputTextures<1 || pGL->inputTextures[0]==NULL)
   {
     //no input? just clear
+    glClearColor(0.f,0.f,0.f,0.f);
     glClear(GL_COLOR_BUFFER_BIT);
   }
   else
@@ -65,7 +69,7 @@ DWORD FFGLTime::ProcessOpenGL(ProcessOpenGLStruct *pGL)
 
     //enable texturemapping
     glEnable(GL_TEXTURE_2D);
-
+    
     //get the max s,t that correspond to the 
     //width,height of the used portion of the allocated texture space
     FFGLTexCoords maxCoords = GetMaxGLTexCoords(Texture);

@@ -58,7 +58,7 @@ DWORD FFGLMirror::ProcessOpenGL(ProcessOpenGLStruct *pGL)
   //width,height of the used portion of the allocated texture space
   FFGLTexCoords maxCoords = GetMaxGLTexCoords(Texture);
 
-  //set the gl rgb color to the brightness level
+  //make sure the gl color is white
   //(default texturemapping behavior of OpenGL is to
   //multiply texture colors by the current gl color)
   glColor4f(1.0,1.0,1.0,1.0);
