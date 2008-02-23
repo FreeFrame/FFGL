@@ -33,21 +33,8 @@
 	2D7743D90C4C84B1008A80BD /* FFGLTime */ = {
 		activeExec = 0;
 	};
-	2D7A48A00C4C8CDA00B5186A /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 2DA285A50AEE5F780030A4DD /* FFGLBrightness.cpp */;
-	};
-	2D7A48A80C4C8D2800B5186A /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 2DA285A50AEE5F780030A4DD /* FFGLBrightness.cpp */;
-		name = "FFGLBrightness.cpp: 87";
-		rLen = 0;
-		rLoc = 2726;
-		rType = 0;
-		vrLen = 977;
-		vrLoc = 2141;
-	};
 	2DA285930AEE5D640030A4DD /* Project object */ = {
+		activeArchitecture = i386;
 		activeBuildConfigurationName = Release;
 		activeTarget = 2D21905A0AF0270A007154B7 /* FFGLBrightness */;
 		addToTargets = (
@@ -57,7 +44,6 @@
 			2DFDB3C00AF6850200367FE2 /* FFGLHeat.cpp:98 */,
 			2DFDB41D0AF689D600367FE2 /* FFGLShader.cpp:104 */,
 		);
-		breakpointsGroup = 2DA285AF0AEE60590030A4DD /* XCBreakpointsBucket */;
 		codeSenseManager = 2DA285980AEE5D640030A4DD /* Code sense */;
 		ignoreBreakpointsInProjectsDict = {
 		};
@@ -89,8 +75,8 @@
 				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
-					200,
-					51,
+					191,
+					60,
 					20,
 					48,
 					43,
@@ -106,12 +92,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 206343357;
-			PBXWorkspaceStateSaveDate = 206343357;
-		};
-		perUserProjectItems = {
-			2D7A48A00C4C8CDA00B5186A /* PBXBookmark */ = 2D7A48A00C4C8CDA00B5186A /* PBXBookmark */;
-			2D7A48A80C4C8D2800B5186A /* PBXTextBookmark */ = 2D7A48A80C4C8D2800B5186A /* PBXTextBookmark */;
+			PBXPerProjectTemplateStateSaveDate = 225484406;
+			PBXWorkspaceStateSaveDate = 225484406;
 		};
 		sourceControlManager = 2DA285970AEE5D640030A4DD /* Source Control */;
 		userBuildSettings = {
@@ -136,14 +118,6 @@
 			sepNavVisRect = "{{0, 969}, {915, 517}}";
 			sepNavWindowFrame = "{{130, 76}, {954, 646}}";
 		};
-	};
-	2DA285AF0AEE60590030A4DD /* XCBreakpointsBucket */ = {
-		isa = XCBreakpointsBucket;
-		name = FFGLPlugins;
-		objects = (
-			2DFDB3C00AF6850200367FE2 /* FFGLHeat.cpp:98 */,
-			2DFDB41D0AF689D600367FE2 /* FFGLShader.cpp:104 */,
-		);
 	};
 	2DA285C80AEE61AF0030A4DD /* FFGLPluginInfo.cpp */ = {
 		uiCtxt = {
@@ -243,10 +217,12 @@
 		);
 		breakpointStyle = 0;
 		continueAfterActions = 0;
+		countType = 0;
 		delayBeforeContinue = 0;
 		fileReference = 2DFDB2E90AF674AB00367FE2 /* FFGLHeat.cpp */;
 		functionName = "FFGLHeat::ProcessOpenGL()";
 		hitCount = 1;
+		ignoreCount = 0;
 		lineNumber = 98;
 		location = FFGLHeat_debug;
 		modificationTime = 202410716.4553;
@@ -258,10 +234,12 @@
 		);
 		breakpointStyle = 0;
 		continueAfterActions = 0;
+		countType = 0;
 		delayBeforeContinue = 0;
 		fileReference = 2DC88A380AF40E6300199EB1 /* FFGLShader.cpp */;
 		functionName = "FFGLShader::Compile()";
 		hitCount = 1;
+		ignoreCount = 0;
 		lineNumber = 104;
 		location = FFGLTile_debug;
 		modificationTime = 202410586.923948;

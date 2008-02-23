@@ -385,6 +385,7 @@
 				HEADER_SEARCH_PATHS = ../../../Include;
 				INFOPLIST_FILE = "FFGLBrightness-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_LDFLAGS = (
 					"-framework",
 					OpenGL,
@@ -410,6 +411,7 @@
 				HEADER_SEARCH_PATHS = ../../../Include;
 				INFOPLIST_FILE = "FFGLBrightness-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_LDFLAGS = (
 					"-framework",
 					OpenGL,
@@ -440,6 +442,7 @@
 				HEADER_SEARCH_PATHS = ../../../Include;
 				INFOPLIST_FILE = "FFGLMirror-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_LDFLAGS = (
 					"-framework",
 					OpenGL,
@@ -465,6 +468,7 @@
 				HEADER_SEARCH_PATHS = ../../../Include;
 				INFOPLIST_FILE = "FFGLMirror-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_LDFLAGS = (
 					"-framework",
 					OpenGL,
@@ -495,6 +499,7 @@
 				HEADER_SEARCH_PATHS = ../../../Include;
 				INFOPLIST_FILE = "/Users/trey/ffglsdk/trunk/FFGL-SDK/Projects/FFGLPlugins/XCode/FFGLTime-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_LDFLAGS = (
 					"-framework",
 					OpenGL,
@@ -520,6 +525,7 @@
 				HEADER_SEARCH_PATHS = ../../../Include;
 				INFOPLIST_FILE = "FFGLTime-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_LDFLAGS = (
 					"-framework",
 					OpenGL,
@@ -534,14 +540,24 @@
 		2DA285950AEE5D640030A4DD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					i386,
+					ppc,
+				);
 				COPY_PHASE_STRIP = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Debug;
 		};
 		2DA285960AEE5D640030A4DD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					i386,
+					ppc,
+				);
 				COPY_PHASE_STRIP = YES;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Release;
 		};
@@ -564,6 +580,7 @@
 				HEADER_SEARCH_PATHS = ../../../Include;
 				INFOPLIST_FILE = "FFGLTile-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_LDFLAGS = (
 					"-framework",
 					OpenGL,
@@ -589,6 +606,7 @@
 				HEADER_SEARCH_PATHS = ../../../Include;
 				INFOPLIST_FILE = "FFGLTile-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_LDFLAGS = (
 					"-framework",
 					OpenGL,
@@ -619,6 +637,7 @@
 				HEADER_SEARCH_PATHS = ../../../Include;
 				INFOPLIST_FILE = "FFGLHeat-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_LDFLAGS = (
 					"-framework",
 					OpenGL,
@@ -644,6 +663,7 @@
 				HEADER_SEARCH_PATHS = ../../../Include;
 				INFOPLIST_FILE = "FFGLHeat-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_LDFLAGS = (
 					"-framework",
 					OpenGL,
