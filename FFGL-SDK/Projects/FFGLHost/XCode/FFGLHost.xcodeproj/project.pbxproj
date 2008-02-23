@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2D4F185E0D70A4B900D929D8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D4F185D0D70A4B900D929D8 /* Foundation.framework */; };
 		2DA286070AEE64020030A4DD /* FFGLFBO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DA284030AE9EA770030A4DD /* FFGLFBO.cpp */; };
 		2DA286080AEE64030030A4DD /* FFGLExtensions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DA284040AE9EA770030A4DD /* FFGLExtensions.cpp */; };
 		2DA286090AEE64030030A4DD /* OSXMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2DA284F30AEA03FA0030A4DD /* OSXMain.cpp */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2D4F185D0D70A4B900D929D8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = ../../../../../../../../../System/Library/Frameworks/Foundation.framework; sourceTree = SOURCE_ROOT; };
 		2DA284030AE9EA770030A4DD /* FFGLFBO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; name = FFGLFBO.cpp; path = ../../../Source/Common/FFGLFBO.cpp; sourceTree = SOURCE_ROOT; tabWidth = 2; usesTabs = 0; };
 		2DA284040AE9EA770030A4DD /* FFGLExtensions.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; indentWidth = 2; name = FFGLExtensions.cpp; path = ../../../Source/Common/FFGLExtensions.cpp; sourceTree = SOURCE_ROOT; tabWidth = 2; usesTabs = 0; };
 		2DA2840D0AE9EAA70030A4DD /* FFGLHost-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "FFGLHost-Info.plist"; sourceTree = "<group>"; };
@@ -39,6 +41,7 @@
 			files = (
 				2DA287320AEEA6C70030A4DD /* GLUT.framework in Frameworks */,
 				2DA287360AEEA6D90030A4DD /* OpenGL.framework in Frameworks */,
+				2D4F185E0D70A4B900D929D8 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -48,6 +51,7 @@
 		2DA283F40AE9EA060030A4DD = {
 			isa = PBXGroup;
 			children = (
+				2D4F185D0D70A4B900D929D8 /* Foundation.framework */,
 				2DA287660AEEA9C60030A4DD /* OSXTimer.cpp */,
 				2DA287350AEEA6D90030A4DD /* OpenGL.framework */,
 				2DA287310AEEA6C70030A4DD /* GLUT.framework */,

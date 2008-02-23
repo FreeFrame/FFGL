@@ -88,8 +88,19 @@ void FFGLHostVisibilityChange(int visible);
 float mouseX = 0.5;
 float mouseY = 0.5;
 
+//this locates the host binary and plugin binaries so that
+//they can be found when the host is launched from the finder
+void SetCorrectWorkingPath();
+
+
 int main(int argc, char **argv)
 {
+  //this sets the 'working' path to the folder that
+  //contains the plugins, for some reason this is necessary
+  //in order for the host to run when launched from the finder
+  //(but not necessary when launched from the terminal)
+  SetCorrectWorkingPath();
+  
   //load first plugin (does not instantiate!)
   plugin1 = FFGLPluginInstance::New();
   if (plugin1->Load(FFGLHeatFile)==FF_FAIL)
@@ -466,4 +477,35 @@ void AllocateInputTexture(int textureWidth, int textureHeight)
   
   t.HardwareWidth = glTextureWidth;
   t.HardwareHeight = glTextureHeight;
+}
+
+#include <CoreServices/CoreServices.h> //for CFBundle*
+#include <unistd.h> //for chdir()
+
+void SetCorrectWorkingPath()
+{
+  CFBundleRef mainBundle = CFBundleGetMainBundle();
+  CFURLRef url = CFBundleCopyExecutableURL(mainBundle);
+  if (!url)
+    return;
+  
+  char binPath[1024];
+  if (CFURLGetFileSystemRepresentation(url, true, (UInt8 *)binPath, sizeof(binPath)))
+  {
+  #ifdef _DEBUG
+    const char *binaryName = "FFGLHost_debug";
+  #else
+    const char *binaryName = "FFGLHost";
+  #endif
+  
+    int chopLength = strlen(binaryName);
+    
+    //cut the binary name off the end of the binPath
+    //string so that only the path remains
+    binPath[strlen(binPath)-chopLength] = 0;
+    
+    chdir(binPath);
+  }
+  
+  CFRelease(url);
 }

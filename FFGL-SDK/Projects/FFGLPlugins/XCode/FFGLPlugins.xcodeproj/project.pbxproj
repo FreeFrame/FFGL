@@ -497,7 +497,7 @@
 					"_DEBUG=1",
 				);
 				HEADER_SEARCH_PATHS = ../../../Include;
-				INFOPLIST_FILE = "/Users/trey/ffglsdk/trunk/FFGL-SDK/Projects/FFGLPlugins/XCode/FFGLTime-Info.plist";
+				INFOPLIST_FILE = "FFGLTime-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Bundles";
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_LDFLAGS = (

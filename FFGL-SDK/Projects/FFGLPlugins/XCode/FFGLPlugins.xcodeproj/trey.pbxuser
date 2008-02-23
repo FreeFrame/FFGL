@@ -41,8 +41,6 @@
 			2D7743D90C4C84B1008A80BD /* FFGLTime */,
 		);
 		breakpoints = (
-			2DFDB3C00AF6850200367FE2 /* FFGLHeat.cpp:98 */,
-			2DFDB41D0AF689D600367FE2 /* FFGLShader.cpp:104 */,
 		);
 		codeSenseManager = 2DA285980AEE5D640030A4DD /* Code sense */;
 		ignoreBreakpointsInProjectsDict = {
@@ -92,8 +90,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 225484406;
-			PBXWorkspaceStateSaveDate = 225484406;
+			PBXPerProjectTemplateStateSaveDate = 225486026;
+			PBXWorkspaceStateSaveDate = 225486026;
 		};
 		sourceControlManager = 2DA285970AEE5D640030A4DD /* Source Control */;
 		userBuildSettings = {
@@ -210,39 +208,5 @@
 			sepNavVisRect = "{{0, 2665}, {678, 424}}";
 			sepNavWindowFrame = "{{345, 251}, {750, 558}}";
 		};
-	};
-	2DFDB3C00AF6850200367FE2 /* FFGLHeat.cpp:98 */ = {
-		isa = PBXFileBreakpoint;
-		actions = (
-		);
-		breakpointStyle = 0;
-		continueAfterActions = 0;
-		countType = 0;
-		delayBeforeContinue = 0;
-		fileReference = 2DFDB2E90AF674AB00367FE2 /* FFGLHeat.cpp */;
-		functionName = "FFGLHeat::ProcessOpenGL()";
-		hitCount = 1;
-		ignoreCount = 0;
-		lineNumber = 98;
-		location = FFGLHeat_debug;
-		modificationTime = 202410716.4553;
-		state = 1;
-	};
-	2DFDB41D0AF689D600367FE2 /* FFGLShader.cpp:104 */ = {
-		isa = PBXFileBreakpoint;
-		actions = (
-		);
-		breakpointStyle = 0;
-		continueAfterActions = 0;
-		countType = 0;
-		delayBeforeContinue = 0;
-		fileReference = 2DC88A380AF40E6300199EB1 /* FFGLShader.cpp */;
-		functionName = "FFGLShader::Compile()";
-		hitCount = 1;
-		ignoreCount = 0;
-		lineNumber = 104;
-		location = FFGLTile_debug;
-		modificationTime = 202410586.923948;
-		state = 1;
 	};
 }
