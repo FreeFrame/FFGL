@@ -101,7 +101,10 @@ DWORD FFGLBrightness::ProcessOpenGL(ProcessOpenGLStruct *pGL)
 
   //disable texturemapping
   glDisable(GL_TEXTURE_2D);
-
+  
+  //restore default color
+  glColor4f(1.f,1.f,1.f,1.f);
+  
   return FF_SUCCESS;
 }
 

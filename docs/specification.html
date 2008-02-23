@@ -1925,10 +1925,6 @@ failed. (32-bit unsigned integer)
     <td>Before returning from ProcessOpenGL, plugins MUST RESTORE ANY CHANGED OPENGL STATES BACK TO THE DEFAULT OPENGL STATE as defined by the OpenGL spec - WITH THE FOLLOWING EXCEPTIONS:
       <ul>
         <li>
-          The 'current color', set with calls to glColor3f, glColor4f, etc, need not be restored. Similarly, plugins should not rely on the host to ensure that the default color (white) is set when ProcessOpenGL is called.
-        <br><br>
-        </li>
-        <li>
           If a plugin uses its own EXT_framebuffer_object ("FBO") for internal rendering, the plugin must restore the host's FBO binding using the HostFBO field from <a href="#ProcessOpenGLStruct">processOpenGLStruct</a> by calling glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, HostFBO) .
            <br><br>
         </li>

@@ -58,10 +58,11 @@ DWORD FFGLMirror::ProcessOpenGL(ProcessOpenGLStruct *pGL)
   //width,height of the used portion of the allocated texture space
   FFGLTexCoords maxCoords = GetMaxGLTexCoords(Texture);
 
-  //make sure the gl color is white
+  //modulate texture colors with white (just show
+  //the texture colors as they are)
+  glColor4f(1.f, 1.f, 1.f, 1.f);
   //(default texturemapping behavior of OpenGL is to
   //multiply texture colors by the current gl color)
-  glColor4f(1.0,1.0,1.0,1.0);
   
   //first, the left side of the mirror
   glBegin(GL_QUADS);
