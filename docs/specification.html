@@ -940,7 +940,10 @@ FFGLTextureStruct {
 </table>
 
 <h4>Remarks:</h4>
-<p>Hosts must provide textures of type GL_TEXTURE_2D. GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_3D, etc, are NOT supported.
+<p>Hosts must provide textures of type GL_TEXTURE_2D stored with the
+standard OpenGL image orientation where texture coordinate (0,0) is
+the lower left corner of the image. GL_TEXTURE_RECTANGLE_EXT, 
+GL_TEXTURE_3D, etc, are not supported.
 </p>
 
 <hr>
@@ -1028,7 +1031,10 @@ ProcessOpenGLStruct {
 </table>
 
 <h4>Remarks:</h4>
-<p>Hosts must provide textures of type GL_TEXTURE_2D. GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_3D, etc, are NOT supported.
+<p>Hosts must provide textures of type GL_TEXTURE_2D stored with the
+standard OpenGL image orientation where texture coordinate (0,0) is
+the lower left corner of the image. GL_TEXTURE_RECTANGLE_EXT, 
+GL_TEXTURE_3D, etc, are not supported.
 
 <p>Hosts will often wish to capture the output of a GPU plugin to an offscreen texture. Hosts and plugins *must* use the
    the EXT_framebuffer_object ("FBO") extension to do this. Use of any other methods (such as 'PBuffers') is not supported.
@@ -1945,8 +1951,11 @@ failed. (32-bit unsigned integer)
   <tr>
     <td valign=top>GPU HOST:</td>
     <td>
-      Hosts must provide textures of type GL_TEXTURE_2D. GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_3D, etc, are NOT supported.
-      Hosts must ensure that OpenGL is in its default state when ProcessOpenGL is called - with the exceptions listed above.
+      Hosts must ensure that OpenGL is in its default state when ProcessOpenGL is called - with the exceptions listed above.<br>
+      Hosts must provide textures of type GL_TEXTURE_2D stored with the
+      standard OpenGL image orientation where texture coordinate (0,0) is
+      the lower left corner of the image. GL_TEXTURE_RECTANGLE_EXT, 
+      GL_TEXTURE_3D, etc, are not supported.
     </td>
   </tr>
 </table>
