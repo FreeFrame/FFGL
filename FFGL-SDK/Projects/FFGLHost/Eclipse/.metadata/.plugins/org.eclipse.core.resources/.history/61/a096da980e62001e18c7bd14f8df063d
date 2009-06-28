@@ -1,0 +1,6 @@
+Please set the 
+
+This FFGLHost project was created and tested on Windows Vista using 
+the MinGW ToolChain. You should be able to use it with Cygwin or other
+tool chains but you may need to change the tool chain settings from
+the project properties menu.  

@@ -1,0 +1,53 @@
+Eclipse Project setup for Windows with MinGW
+
+Setup:
+Make sure you have your Toolchain for cdt setup. Some good information
+can be found with a little googling. This was a good resource as well:
+http://www.ritgamedev.com/tutorials/glutEclipse/. My environment uses 
+the following:
+- MinGW 5.1.4
+- MSys 1.0.10
+- GDB 6.3 (I had issues with the newer versions of GBD + CDT)
+- GLUT MinGW
+
+You will need to add an environment variable defining the install 
+location of your FreeFrame SDK:
+- Window > Preferences > C/C++ > Environment
+  - Click the Add button
+  - Set the name to FFGLSDKHome
+  - Set the value to the root folder for your FreeFrame SDK (ex.
+    C:\User\username\FFGLSDK )
+    
+When you want to run the project, there is an FFGLHost run/debug configuration.
+However, you will need to edit the source code mapping to match the 
+location of your code:
+- Run > Run Configurations > C++/C Local Application > FFGLHost
+  - Click on the Source tab
+  - Click Path Mappings : Found Mappings
+  - Click Edit
+  - Click on the mapping in the list and click Edit to change it
+  - Change the location to match the root of your FFGL SDK checkout
+    (the same url as the environment variable you setup earlier). 
+
+Notes:
+I've added a builder that moves both the Debug and Release versions
+of the output executable into the binaries folder of the FFGLSDK
+on successful builds. They are currently deactivated but you can
+activate them by going to:
+- Project > Properties > Builders
+  - Select the Move Debug Files and Move Release Files builders.
+
+This FFGLHost project was created and tested on Windows Vista using 
+the MinGW ToolChain. You should be able to use it with Cygwin or other
+tool chains but you may need to change the tool chain settings from
+the project properties menu. You may also find that the FreeFrame SDK is
+is not compatible with other compiler types. See the FreeFrame SourceForge
+site for more details.  
+
+TODO:
+Test MinGW source code changes.
+
+Can I set the environment variable to a relative path from the workspace?
+
+Create OSX and Linux project versions. They will probably need different
+linker properties.

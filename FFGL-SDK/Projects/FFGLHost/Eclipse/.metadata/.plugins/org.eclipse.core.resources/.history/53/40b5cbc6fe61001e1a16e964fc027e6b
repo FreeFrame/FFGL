@@ -1,0 +1,4 @@
+#Thu Jun 25 21:05:56 MDT 2009
+eclipse.preferences.version=1
+environment/project/cdt.managedbuild.config.gnu.mingw.exe.debug.2126008723=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<environment append\="true" appendContributed\="true">\r\n<variable delimiter\=";" name\="FFGLSDKHome" operation\="append" value\="C\:\\Users\\marc\\workspaceC\\FFGL-SDK"/>\r\n</environment>\r\n
+environment/project/cdt.managedbuild.config.gnu.mingw.exe.release.978660682=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<environment append\="true" appendContributed\="true">\r\n<variable delimiter\=";" name\="FFGLSDKHome" operation\="append" value\="C\:\\Users\\marc\\workspaceC\\FFGL-SDK"/>\r\n</environment>\r\n

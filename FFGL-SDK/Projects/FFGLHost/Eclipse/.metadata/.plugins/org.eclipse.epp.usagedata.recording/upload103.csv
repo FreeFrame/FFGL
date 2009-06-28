@@ -1,0 +1,26 @@
+what,kind,bundleId,bundleVersion,description,time
+closed,view,org.eclipse.debug.ui,3.4.2.v20090110_r342,org.eclipse.debug.ui.ModuleView,1246143910076
+activated,perspective,org.eclipse.cdt.ui,5.0.2.200902130801,org.eclipse.cdt.ui.CPerspective,1246143910100
+activated,view,org.eclipse.ui.console,3.3.1.v20090128_r342,org.eclipse.ui.console.ConsoleView,1246143910106
+activated,editor,org.eclipse.ui.editors,3.4.0.v20080603-2000,org.eclipse.ui.DefaultTextEditor,1246143912279
+executed,command,org.eclipse.ui,3.4.2.M20090204-0800,org.eclipse.ui.edit.delete,1246143916376
+deactivated,workbench,org.eclipse.ui.workbench,3.4.2.M20090127-1700,,1246143944083
+executed,command,org.eclipse.ui,3.4.2.M20090204-0800,org.eclipse.ui.edit.paste,1246144031548
+no handler,command,org.eclipse.ui,3.4.2.M20090204-0800,org.eclipse.ui.edit.undo,1246144032725
+executed,command,org.eclipse.ui,3.4.2.M20090204-0800,org.eclipse.ui.edit.copy,1246144040091
+executed,command,org.eclipse.ui,3.4.2.M20090204-0800,org.eclipse.ui.edit.paste,1246144049449
+activated,workbench,org.eclipse.ui.workbench,3.4.2.M20090127-1700,,1246144128441
+deactivated,workbench,org.eclipse.ui.workbench,3.4.2.M20090127-1700,,1246144140594
+activated,workbench,org.eclipse.ui.workbench,3.4.2.M20090127-1700,,1246144143132
+executed,command,org.eclipse.ui.ide,3.4.2.M20090127-1700,org.eclipse.ui.project.cleanAction,1246144143160
+deactivated,workbench,org.eclipse.ui.workbench,3.4.2.M20090127-1700,,1246144143489
+activated,workbench,org.eclipse.ui.workbench,3.4.2.M20090127-1700,,1246144143531
+executed,command,org.eclipse.ui,3.4.2.M20090204-0800,org.eclipse.ui.edit.delete,1246144156720
+executed,command,org.eclipse.ui,3.4.2.M20090204-0800,org.eclipse.ui.file.save,1246144160489
+deactivated,workbench,org.eclipse.ui.workbench,3.4.2.M20090127-1700,,1246144165619
+activated,workbench,org.eclipse.ui.workbench,3.4.2.M20090127-1700,,1246144168155
+activated,perspective,org.eclipse.debug.ui,3.4.2.v20090110_r342,org.eclipse.debug.ui.DebugPerspective,1246144181820
+opened,view,org.eclipse.debug.ui,3.4.2.v20090110_r342,org.eclipse.debug.ui.MemoryView,1246144181894
+opened,view,org.eclipse.debug.ui,3.4.2.v20090110_r342,org.eclipse.debug.ui.RegisterView,1246144181910
+opened,view,org.eclipse.debug.ui,3.4.2.v20090110_r342,org.eclipse.debug.ui.ModuleView,1246144181927
+activated,editor,org.eclipse.cdt.ui,5.0.2.200902130801,org.eclipse.cdt.ui.editor.CEditor,1246144182048

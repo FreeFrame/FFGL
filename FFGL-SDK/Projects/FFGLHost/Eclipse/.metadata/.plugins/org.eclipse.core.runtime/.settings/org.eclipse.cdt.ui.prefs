@@ -1,0 +1,10 @@
+#Sat Jun 27 17:48:06 MDT 2009
+useQuickDiffPrefPage=true
+wizard.preferred.toolchains=cdt.managedbuild.toolchain.gnu.mingw.exe.debug cdt.managedbuild.toolchain.gnu.mingw.so.debug cdt.managedbuild.toolchain.gnu.mingw.lib.debug cdt.managedbuild.toolchain.gnu.mingw.base
+useAnnotationsPrefPage=true
+sourceHoverBackgroundColor=255,255,225
+properties.multi.write.mode=4
+spelling_locale_initialized=true
+eclipse.preferences.version=1
+properties.multi.displ.mode=1
+content_assist_disabled_computers=org.eclipse.cdt.ui.cdtNoTypeProposalCategory\u0000org.eclipse.cdt.ui.cdtTypeProposalCategory\u0000org.eclipse.cdt.ui.textProposalCategory\u0000org.eclipse.cdt.ui.templateProposalCategory\u0000
