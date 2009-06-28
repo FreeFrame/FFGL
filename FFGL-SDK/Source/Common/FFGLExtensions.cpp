@@ -7,7 +7,7 @@
 //for the NS* calls in GetProcAddress
 #include <mach-o/dyld.h>
 #endif
- 
+
 #ifdef __linux__
 #include <GL/glx.h>
 #endif
@@ -31,17 +31,27 @@ void FFGLExtensions::Initialize()
 void *FFGLExtensions::GetProcAddress(char *name)
 {
 
+// MARC WREN: changed to make MinGW compilation work
 #ifdef _WIN32
+
+#ifdef __MINGW32__
+
+  int *result = (int*) wglGetProcAddress(name);
+
+#endif
+#ifdef _MSC_VER
 
   void *result = wglGetProcAddress(name);
 
+#endif
+
   if (result!=NULL)
     return result;
-    
+
 #else
 
 #ifdef TARGET_OS_MAC
-  
+
   // Prepend a '_' for the Unix C symbol mangling convention
   int symbolLength = strlen(name) + 2; //1 for the _, another for the trailing null
   char symbolName[1024];
@@ -51,15 +61,15 @@ void *FFGLExtensions::GetProcAddress(char *name)
     throw;
     return NULL;
   }
-  
+
   strcpy(symbolName + 1, name);
   symbolName[0] = '_';
 
   NSSymbol symbol = NULL;
-  
+
   if (NSIsSymbolNameDefined(symbolName))
     symbol = NSLookupAndBindSymbol(symbolName);
-  
+
   if (symbol!=NULL)
   {
     return NSAddressOfSymbol(symbol);
@@ -75,9 +85,9 @@ void *FFGLExtensions::GetProcAddress(char *name)
     return result;
 
 #else
-  
+
 #error Define this for your OS
-  
+
 #endif
 #endif
 #endif
@@ -88,7 +98,7 @@ void *FFGLExtensions::GetProcAddress(char *name)
 void FFGLExtensions::InitMultitexture()
 {
   try
-  {  
+  {
   glActiveTexture = (glActiveTexturePROC)(unsigned)GetProcAddress("glActiveTexture");
   glClientActiveTexture = (glClientActiveTexturePROC)(unsigned)GetProcAddress("glClientActiveTexture");
 
@@ -134,7 +144,7 @@ void FFGLExtensions::InitMultitexture()
     multitexture = 0;
     return;
   }
-  
+
   //if we get this far w/no exceptions, ARB_shader_objects shoudl be fully
   //supported
   multitexture = 1;

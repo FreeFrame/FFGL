@@ -8,13 +8,23 @@
 #include "AVIReader.h"
 #include <math.h>
 
+#ifdef __MINGW32__
+
+// MARC WREN: Added this to get things compiling with MinGW.
+// This might only be necessary at the moment because of the
+// compilation order since there are other classes that should
+// be including glext.h for me.
+#include <GL/glext.h>
+
+#endif
+
 //Globals
 HINSTANCE g_hinst; // the process/application "instance"
 HWND      g_hwnd;  // the output window
 HGLRC     g_glrc;  // the opengl rendering context
 
 //this flag is used to tell the application to free gl resources and exit
-int  g_wantToClose = 0; 
+int  g_wantToClose = 0;
 
 //when the mouse moves, these values are updated according to the
 //x/y position of the mouse. (0,0) corresponds to the lower left
@@ -61,7 +71,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
   else
     return 0;
 
-  //open the avi file 
+  //open the avi file
   Win32AVIFile aviFile;
   if (!aviFile.LoadAVI("FFGLTest.avi"))
   {
@@ -76,12 +86,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
   const char *pluginFile2 = FFGLTileFile;
 
   //if a plugin is provided on the command line this will be set to 1
-  int usingCustomPlugin = 0; 
+  int usingCustomPlugin = 0;
 
   //see if a .dll is given on the command line
   if (szCmdLine!=NULL && szCmdLine[0]!=0 &&
       strstr(szCmdLine,".dll")!=NULL)
-  {    
+  {
     //if there's quotes (probably from dragging-and-dropping with windows explorer)
     //around the .dll filename, avoid them
     if (szCmdLine[0]=='"')
@@ -92,7 +102,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
     //use it in place of the 2nd plugin
     pluginFile2 = szCmdLine;
-    usingCustomPlugin = 1;    
+    usingCustomPlugin = 1;
   }
 
   //load first plugin dll (*DOES NOT INSTANTIATE*)
@@ -117,17 +127,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
     FFDebugMessage("Window Open Failed");
     return 0;
   }
-  
+
   //////////////////
   //gl init
   /////////////////
 
   //to do the rest of the GL initialization, we have to have an active
   //GL context. so, activate rendering to the window
-  
+
   //get the window's display context
   HDC hdc = GetDC(g_hwnd);
-  
+
   //activate gl rendering to the window
   //after this statement completes, we have an active OpenGL
   //context, so all calls to gl* methods will work, and plugin
@@ -186,7 +196,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
   windowViewport.y = 0;
   windowViewport.width = clientRect.right - clientRect.left;
   windowViewport.height = clientRect.bottom - clientRect.top;
-      
+
   if (plugin2->InstantiateGL(&windowViewport)!=FF_SUCCESS)
   {
     FFDebugMessage("Plugin2 instantiate failed");
@@ -202,7 +212,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
     FFDebugMessage("Texture allocation failed");
     return 0;
   }
-  
+
   //deactivate rendering to the window
   wglMakeCurrent(NULL,NULL);
 
@@ -225,7 +235,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
   {
     if (g_hwnd!=NULL && g_glrc!=NULL)
     {
-    
+
       //get the window's display context
       HDC hdc = GetDC(g_hwnd);
 
@@ -271,7 +281,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
         fboViewport.height);
 
       //prepare gl state for rendering the first plugin (brightness)
-      
+
       //make sure all the matrices are reset
       glMatrixMode(GL_TEXTURE);
       glLoadIdentity();
@@ -279,7 +289,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
       glLoadIdentity();
       glMatrixMode(GL_MODELVIEW);
       glLoadIdentity();
-      
+
       //clear the depth and color buffers
       glClearColor(0,0,0,0);
       glClearDepth(1.0);
@@ -294,12 +304,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
       //prepare the structure used to call
       //the plugin's ProcessOpenGL method
       ProcessOpenGLStructTag processStruct;
-    
+
       //create the array of OpenGLTextureStruct * to be passed
       //to the plugin
       FFGLTextureStruct *inputTextures[1];
-      inputTextures[0] = &aviTexture;      
-      
+      inputTextures[0] = &aviTexture;
+
       //provide our 1 input texture
       processStruct.numInputTextures = 1;
       processStruct.inputTextures = inputTextures;
@@ -307,7 +317,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
       //we must let the plugin know that it is rendering into a FBO
       //by sharing with it the handle to the currently bound FBO
       processStruct.HostFBO = fbo.GetFBOHandle();
-      
+
       //call the plugin's ProcessOpenGL
       if (plugin1->CallProcessOpenGL(processStruct)==FF_SUCCESS)
       {
@@ -374,7 +384,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
         FFDebugMessage("Plugin 2's ProcessOpenGL failed");
         return 0;
       }
-          
+
       //swapbuffers tells opengl to finish all of the pending
       //drawing instructions (which are to the "back" buffer)
       //and copy/swap them to the front buffer
@@ -383,7 +393,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
       if (g_wantToClose==1)
       {
         //if this is our last frame, we need to free OpenGL resources
-        //while the gl context is still active      
+        //while the gl context is still active
 
         //release plugin resources
         plugin1->DeInstantiateGL();
@@ -472,21 +482,21 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     return 0;
 
   case WM_MOUSEMOVE:
-    //be carefule using ints instead of shorts.. you would 
+    //be carefule using ints instead of shorts.. you would
     //need to sign-extend mx and my with these macros
     mx = LOWORD(lParam);
     my = HIWORD(lParam);
-    
+
     GetClientRect(hWnd, &r);
 
     if (mx<r.left) mx=r.left;
     else
     if (mx>r.right) mx = r.right;
-    
+
     if (my<r.top) my=r.top;
     else
     if (my>r.bottom) mx = r.bottom;
-    
+
     mouseX = (double)(mx - r.left) / (double)((r.right - r.left)-1);
     mouseY = 1.0 - ((double)(my - r.top) / (double)((r.bottom - r.top)-1));
     break;
@@ -504,7 +514,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 void RegisterOpenGLWindowClass()
 {
   static int alreadyRegistered = 0;
-  
+
   if (alreadyRegistered)
     return;
   else
@@ -550,19 +560,19 @@ BOOL CreateOpenGLWindow()
 
   //get the bits-per-pixel of the window's device context (hdc).
   //hopefully its 32.. but the code should work with 24 or 16
-  int hdc_bpp = GetDeviceCaps(hdc, BITSPIXEL);   
-  
+  int hdc_bpp = GetDeviceCaps(hdc, BITSPIXEL);
+
   int zBufferDepth = 16;
 
-  PIXELFORMATDESCRIPTOR pfd;  
-  memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));  
-  pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);  
+  PIXELFORMATDESCRIPTOR pfd;
+  memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
+  pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
   pfd.nVersion = 1;
 
   pfd.dwFlags = PFD_DOUBLEBUFFER |
                 PFD_DRAW_TO_WINDOW |
                 PFD_SUPPORT_OPENGL;
-  
+
   pfd.iPixelType = PFD_TYPE_RGBA;
   pfd.cColorBits = hdc_bpp;
   pfd.cDepthBits = zBufferDepth;
@@ -576,10 +586,10 @@ BOOL CreateOpenGLWindow()
   else
     pfd.cAlphaBits = 0;
 
-  int iPixelFormat = ChoosePixelFormat(hdc, &pfd); 
- 
+  int iPixelFormat = ChoosePixelFormat(hdc, &pfd);
+
   //reset pfd for usage below
-  memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));  
+  memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
   pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
   pfd.nVersion = 1;
 
@@ -621,7 +631,7 @@ FFGLTextureStruct CreateOpenGLTexture(int textureWidth, int textureHeight)
   //ie, wglMakeCurrent(someHDC, someHGLRC)
 
   //find smallest power of two sized
-  //texture that can contain the texture  
+  //texture that can contain the texture
   int glTextureWidth = 1;
   while (glTextureWidth<textureWidth) glTextureWidth *= 2;
 
@@ -634,11 +644,11 @@ FFGLTextureStruct CreateOpenGLTexture(int textureWidth, int textureHeight)
 
   //bind this new texture so that glTex* calls apply to it
   glBindTexture(GL_TEXTURE_2D, glTextureHandle);
-  
+
   //use bilinear interpolation when the texture is scaled larger
   //than its true size
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  
+
   //no mipmapping (for when the texture is scaled smaller than its
   //true size)
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -660,7 +670,7 @@ FFGLTextureStruct CreateOpenGLTexture(int textureWidth, int textureHeight)
 
   //unbind the texture
   glBindTexture(GL_TEXTURE_2D, 0);
-  
+
   //fill the OpenGLTextureStruct
   FFGLTextureStruct t;
 
@@ -668,7 +678,7 @@ FFGLTextureStruct CreateOpenGLTexture(int textureWidth, int textureHeight)
 
   t.Width = textureWidth;
   t.Height = textureHeight;
-  
+
   t.HardwareWidth = glTextureWidth;
   t.HardwareHeight = glTextureHeight;
 
