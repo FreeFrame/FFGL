@@ -55,7 +55,11 @@ location of your code:
   - Click Path Mappings : Found Mappings
   - Click Edit
   - Click on the mapping in the list and click Edit to change it.
-  - Change the location to match the root of your FFGL SDK checkout. 
+  - Change the location to match the root of your FFGL SDK checkout.
+  - Repeat for both run/debug configurations 
+Alternatively, you can open the open the *.launch configuration files with a text
+editor and replace references to PATH_TO_FFGL_SDK with the path to the root of your 
+SDK install.
 
 Notes:
 I've added a builder that moves both the Debug and Release versions
