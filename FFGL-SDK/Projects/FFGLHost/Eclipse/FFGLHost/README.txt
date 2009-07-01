@@ -20,10 +20,13 @@ version of eclipse):
 Otherwise, you can deselect the Ant builders that move files into the SDK
 binaries folders. See the notes for more information.
 
-3. You will need to change the FFGLSDKHome variable path for the project to match
-the location of your FFGL SDK checkout. You can do this by either editing the 
-properties file that defines this or re-linking all of the source code folder paths.
-You can relink the source folders by selecting:
+3. Set your Eclipse workspace to the FFGL SDK Eclipse folder
+- File > Switch Workspace... > Other
+  - set the workspace directory to [FFGL_SDK_root]/Projects/FFGLHost/Eclipse 
+
+4. You will need to change the FFGLSDKHome variable path for the project to match
+the location of your FFGL SDK checkout. You can do this by changing the FFGLSDKHome
+path variable that is already setup:
 - Project > Properties > C/C++ General > Paths and Symbols
   - Select the Source Location tab
   - Click Link Folder
@@ -34,7 +37,7 @@ You can relink the source folders by selecting:
     system (ex. C:\path\to\FFGL-SDK)
   - Click Ok, Ok, Cancel (this is the New Folder dialog), Ok
 Alternatively you can just relink each of the source code folders to match your
-system. Or you can edit the Eclipse properties file directly by opening (Advanced users):
+system or you can edit the Eclipse properties file directly by opening (Advanced users):
 - [FFGLSDK_Eclipse_Project_Folder]/.metadata/.plugins/org.eclipse.core.runtime
   /.settings/org.eclipse.core.resources.prefs
   - Change the pathvariable.FFGLSDKHome path to match the folder path where your
@@ -42,10 +45,6 @@ system. Or you can edit the Eclipse properties file directly by opening (Advance
     you should use forward slashes for folder separators (ex. C\:/path/to/SDK/root)
   - If the source code folders do not show any content when you open the FFGLHost
     project, try refreshing the project from the context menu. 
-
-4. Set your Eclipse workspace to the FFGL SDK Eclipse folder
-- File > Switch Workspace... > Other
-  - set the workspace directory to [FFGL_SDK_root]/Projects/FFGLHost/Eclipse
 
 5. When you want to run the project, there is an FFGLHost run/debug configuration.
 However, you will need to edit the source code mapping to match the 
@@ -76,14 +75,11 @@ is not compatible with other compiler types. See the FreeFrame SourceForge
 site for more details.  
 
 TODO:
-Test MinGW source code changes.
+Find a way to make the source folder paths relative.
 
-Find a way to make the source code paths relative.
+Create a FreeFrame Eclipse plugin that makes setting up these projects simpler.
 
-Is the FFGLSDKHome environment variable necessary?
-
-Log a feature request to be able to utilize environment variables in the 
+Log a CDT feature request to be able to utilize environment variables in the 
 Source Path urls.
 
-Create OSX and Linux project versions. They will probably need different
-linker properties.
+Create OSX and Linux project versions of these Eclipse projects.

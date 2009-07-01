@@ -1,0 +1,27 @@
+<project name="FFGLHost" default="" basedir=".">
+	<description>
+        used for additional processes during build
+    </description>
+
+	<!-- set global properties for this build -->
+	<property name="src.dir" location="src" />
+	<property name="release.dir" location="Release" />
+	<property name="debug.dir" location="Debug" />
+	<property name="host.dir" location="..\..\..\..\binaries\win32" />
+	<property name="debugOutput.file" value="FFGLHost_debug.exe" />
+	<property name="releaseOutput.file" value="FFGLHost.exe" />
+
+	<target name="move-release-files">
+		<!-- copy compiled file into the hosts directory -->
+		<copy todir="${host.dir}" failonerror="false">
+			<fileset dir="${release.dir}" />
+		</copy>
+	</target>
+
+	<target name="move-debug-files">
+		<!-- copy compiled file into the hosts directory -->
+		<copy todir="${host.dir}" failonerror="false">
+			<fileset dir="${debug.dir}" />
+		</copy>
+	</target>
+</project>
