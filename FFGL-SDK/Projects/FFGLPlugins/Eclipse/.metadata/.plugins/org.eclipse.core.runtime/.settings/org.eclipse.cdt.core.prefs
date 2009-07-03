@@ -1,4 +1,0 @@
-#Tue Jun 30 20:40:59 MDT 2009
-macros/workspace=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<macros/>\r\n
-eclipse.preferences.version=1
-environment/workspace=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<environment append\="true" appendContributed\="true">\r\n<variable delimiter\=";" name\="FFGLSDKHome" operation\="append" value\="${WorkspaceDirPath}\\..\\..\\..\\"/>\r\n</environment>\r\n
