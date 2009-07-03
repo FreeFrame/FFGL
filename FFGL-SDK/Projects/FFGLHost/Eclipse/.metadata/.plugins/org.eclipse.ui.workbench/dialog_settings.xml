@@ -9,4 +9,7 @@
 		<item value="true" key="internalFilter"/>
 		<item value="true" key="actionSetFilter"/>
 	</section>
+	<section name="EditorSelectionDialog">
+		<item value="false" key="EditorSelectionDialog.STORE_ID_INTERNAL_EXTERNAL"/>
+	</section>
 </section>
