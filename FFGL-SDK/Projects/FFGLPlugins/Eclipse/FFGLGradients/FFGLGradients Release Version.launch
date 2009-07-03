@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.cdt.launch.localCLaunch">
+<booleanAttribute key="org.eclipse.cdt.debug.mi.core.AUTO_SOLIB" value="true"/>
+<listAttribute key="org.eclipse.cdt.debug.mi.core.AUTO_SOLIB_LIST"/>
+<stringAttribute key="org.eclipse.cdt.debug.mi.core.DEBUG_NAME" value="C:\MinGW\bin\gdb.exe"/>
+<stringAttribute key="org.eclipse.cdt.debug.mi.core.GDB_INIT" value=".gdbinit"/>
+<listAttribute key="org.eclipse.cdt.debug.mi.core.SOLIB_PATH">
+<listEntry value="FFGLSDKBin\win32\FFGLGradients.dll"/>
+</listAttribute>
+<booleanAttribute key="org.eclipse.cdt.debug.mi.core.STOP_ON_SOLIB_EVENTS" value="false"/>
+<booleanAttribute key="org.eclipse.cdt.debug.mi.core.breakpointsFullPath" value="false"/>
+<stringAttribute key="org.eclipse.cdt.debug.mi.core.commandFactory" value="org.eclipse.cdt.debug.mi.core.mingwCommandFactory"/>
+<stringAttribute key="org.eclipse.cdt.debug.mi.core.protocol" value="mi"/>
+<booleanAttribute key="org.eclipse.cdt.debug.mi.core.verboseMode" value="false"/>
+<stringAttribute key="org.eclipse.cdt.launch.DEBUGGER_ID" value="org.eclipse.cdt.debug.mi.core.MinGW"/>
+<stringAttribute key="org.eclipse.cdt.launch.DEBUGGER_REGISTER_GROUPS" value=""/>
+<stringAttribute key="org.eclipse.cdt.launch.DEBUGGER_START_MODE" value="run"/>
+<booleanAttribute key="org.eclipse.cdt.launch.DEBUGGER_STOP_AT_MAIN" value="true"/>
+<stringAttribute key="org.eclipse.cdt.launch.DEBUGGER_STOP_AT_MAIN_SYMBOL" value="WinMain"/>
+<booleanAttribute key="org.eclipse.cdt.launch.ENABLE_REGISTER_BOOKKEEPING" value="false"/>
+<booleanAttribute key="org.eclipse.cdt.launch.ENABLE_VARIABLE_BOOKKEEPING" value="false"/>
+<stringAttribute key="org.eclipse.cdt.launch.FORMAT" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;&lt;contentList/&gt;"/>
+<stringAttribute key="org.eclipse.cdt.launch.GLOBAL_VARIABLES" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;&#13;&#10;&lt;globalVariableList/&gt;&#13;&#10;"/>
+<stringAttribute key="org.eclipse.cdt.launch.MEMORY_BLOCKS" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;&#13;&#10;&lt;memoryBlockExpressionList/&gt;&#13;&#10;"/>
+<stringAttribute key="org.eclipse.cdt.launch.PROGRAM_ARGUMENTS" value="FFGLGradients.dll"/>
+<stringAttribute key="org.eclipse.cdt.launch.PROGRAM_NAME" value="FFGLSDKBin/FFGLHost.exe"/>
+<stringAttribute key="org.eclipse.cdt.launch.PROJECT_ATTR" value="FFGLGradients"/>
+<stringAttribute key="org.eclipse.cdt.launch.PROJECT_BUILD_CONFIG_ID_ATTR" value="cdt.managedbuild.config.gnu.mingw.so.debug.1109149750"/>
+<booleanAttribute key="org.eclipse.cdt.launch.use_terminal" value="true"/>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/FFGLGradients"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="4"/>
+</listAttribute>
+<stringAttribute key="org.eclipse.debug.core.source_locator_id" value="org.eclipse.cdt.debug.core.sourceLocator"/>
+<stringAttribute key="org.eclipse.debug.core.source_locator_memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;&#13;&#10;&lt;sourceLookupDirector&gt;&#13;&#10;&lt;sourceContainers duplicates=&quot;false&quot;&gt;&#13;&#10;&lt;container memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;mapping name=&amp;quot;FFGLSDKHome&amp;quot;&amp;gt;&amp;#13;&amp;#10;&amp;lt;mapEntry memento=&amp;quot;&amp;amp;lt;?xml version=&amp;amp;quot;1.0&amp;amp;quot; encoding=&amp;amp;quot;UTF-8&amp;amp;quot; standalone=&amp;amp;quot;no&amp;amp;quot;?&amp;amp;gt;&amp;amp;#13;&amp;amp;#10;&amp;amp;lt;mapEntry backendPath=&amp;amp;quot;..\..\..\..\..&amp;amp;quot; localPath=&amp;amp;quot;C:\Users\marc\workspaceC\FFGL-SDK&amp;amp;quot;/&amp;amp;gt;&amp;amp;#13;&amp;amp;#10;&amp;quot;/&amp;gt;&amp;#13;&amp;#10;&amp;lt;/mapping&amp;gt;&amp;#13;&amp;#10;&quot; typeId=&quot;org.eclipse.cdt.debug.core.containerType.mapping&quot;/&gt;&#13;&#10;&lt;container memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot; standalone=&amp;quot;no&amp;quot;?&amp;gt;&amp;#13;&amp;#10;&amp;lt;default/&amp;gt;&amp;#13;&amp;#10;&quot; typeId=&quot;org.eclipse.debug.core.containerType.default&quot;/&gt;&#13;&#10;&lt;/sourceContainers&gt;&#13;&#10;&lt;/sourceLookupDirector&gt;&#13;&#10;"/>
+</launchConfiguration>
