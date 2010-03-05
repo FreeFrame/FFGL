@@ -141,6 +141,7 @@ extern "C" {
 #define FF_TYPE_XPOS				5
 #define FF_TYPE_YPOS				6
 #define FF_TYPE_STANDARD			10
+#define FF_TYPE_ALPHA				11
 #define FF_TYPE_TEXT				100
 
 // Input status
