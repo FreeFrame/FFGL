@@ -31,7 +31,7 @@ rights and limitations under the License.
 13-02-2004: removed extra pinclasses for easier handling         
             of formatchanges, now also deals with dv-streams 
 30-06-2007: recompiled with delphi2006 with fresh baseclasses from sourceforge
-    
+05-03-2010: now works again with graphedit. recompiled with delphi2007
                                                                  
 known problems: 								 
 - still crashes if connected to some odd videoformats		 
