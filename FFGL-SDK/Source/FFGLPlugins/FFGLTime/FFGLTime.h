@@ -14,14 +14,14 @@ public:
 	// FreeFrame plugin methods
 	///////////////////////////////////////////////////
 
-	DWORD	ProcessOpenGL(ProcessOpenGLStruct* pGL);
-  DWORD SetTime(double time);
+	FFResult	ProcessOpenGL(ProcessOpenGLStruct* pGL);
+  FFResult SetTime(double time);
 
 	///////////////////////////////////////////////////
 	// Factory method
 	///////////////////////////////////////////////////
 
-	static DWORD __stdcall CreateInstance(CFreeFrameGLPlugin **ppInstance)
+	static FFResult __stdcall CreateInstance(CFreeFrameGLPlugin **ppInstance)
   {
 	*ppInstance = new FFGLTime();
 	  if (*ppInstance != NULL) return FF_SUCCESS;

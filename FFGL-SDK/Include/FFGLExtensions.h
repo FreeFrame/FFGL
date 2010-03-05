@@ -470,7 +470,7 @@ public:
 #endif
 
 private:
-  void *GetProcAddress(char *);
+  void *GetProcAddress(const char *);
   
   void InitMultitexture();
   void InitARBShaderObjects();

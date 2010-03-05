@@ -56,14 +56,14 @@ FFGLGradients::FFGLGradients()
 
 }
 
-DWORD FFGLGradients::InitGL(const FFGLViewportStruct *vp)
+FFResult FFGLGradients::InitGL(const FFGLViewportStruct *vp)
 {
 
 
 	return FF_SUCCESS;
 }
 
-DWORD FFGLGradients::DeInitGL()
+FFResult FFGLGradients::DeInitGL()
 {
 
   return FF_SUCCESS;
@@ -76,7 +76,7 @@ DWORD FFGLGradients::DeInitGL()
 
 
 
-DWORD FFGLGradients::ProcessOpenGL(ProcessOpenGLStruct *pGL)
+FFResult FFGLGradients::ProcessOpenGL(ProcessOpenGLStruct *pGL)
 {
 
 	double rgb1[3];
@@ -109,56 +109,43 @@ DWORD FFGLGradients::ProcessOpenGL(ProcessOpenGLStruct *pGL)
 	return FF_SUCCESS;
 }
 
-DWORD FFGLGradients::GetParameter(DWORD dwIndex)
+float FFGLGradients::GetFloatParameter(unsigned int index)
 {
-	DWORD dwRet;
-
-	switch (dwIndex) {
+	switch (index) {
 
 		case FFPARAM_Hue1:
-			*((float *)(unsigned)&dwRet) = m_Hue1;
-				return dwRet;
+			return m_Hue1;
 		case FFPARAM_Hue2:
-			*((float *)(unsigned)&dwRet) = m_Hue2;
-				return dwRet;
+			return m_Hue2;
 		case FFPARAM_Saturation:
-			*((float *)(unsigned)&dwRet) = m_Saturation;
-				return dwRet;
+			return m_Saturation;
 		case FFPARAM_Brightness:
-			*((float *)(unsigned)&dwRet) = m_Brightness;
-				return dwRet;
+			return m_Brightness;
 		default:
-			return FF_FAIL;
+			return 0.0;
 	}
 }
 
-DWORD FFGLGradients::SetParameter(const SetParameterStruct* pParam)
+FFResult FFGLGradients::SetFloatParameter(unsigned int index, float value)
 {
-	if (pParam != NULL) {
+	switch (index) {
 
-		switch (pParam->ParameterNumber) {
-
-			case FFPARAM_Hue1:
-				m_Hue1 = *((float *)(unsigned)&(pParam->NewParameterValue));
-				break;
-			case FFPARAM_Hue2:
-				m_Hue2 = *((float *)(unsigned)&(pParam->NewParameterValue));
-				break;
-			case FFPARAM_Saturation:
-				m_Saturation = *((float *)(unsigned)&(pParam->NewParameterValue));
-				break;
-			case FFPARAM_Brightness:
-				m_Brightness = *((float *)(unsigned)&(pParam->NewParameterValue));
-				break;
-			default:
-				return FF_FAIL;
-		}
-
-		return FF_SUCCESS;
-
+		case FFPARAM_Hue1:
+			m_Hue1 = value;
+			break;
+		case FFPARAM_Hue2:
+			m_Hue2 = value;
+			break;
+		case FFPARAM_Saturation:
+			m_Saturation = value;
+			break;
+		case FFPARAM_Brightness:
+			m_Brightness = value;
+			break;
+		default:
+			return FF_FAIL;
 	}
-
-	return FF_FAIL;
+	return FF_SUCCESS;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

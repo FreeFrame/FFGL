@@ -42,13 +42,13 @@ FFGLTime::~FFGLTime()
 //  Methods
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-DWORD FFGLTime::SetTime(double time)
+FFResult FFGLTime::SetTime(double time)
 {
   m_curTime = time;
   return FF_SUCCESS;
 }
 
-DWORD FFGLTime::ProcessOpenGL(ProcessOpenGLStruct *pGL)
+FFResult FFGLTime::ProcessOpenGL(ProcessOpenGLStruct *pGL)
 {
   //set color to white
   glColor4f(1.f,1.f,1.f,1.f);

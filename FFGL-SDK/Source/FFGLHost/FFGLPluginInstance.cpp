@@ -20,7 +20,7 @@ FFGLPluginInstance::~FFGLPluginInstance()
   }
 }
 
-void FFGLPluginInstance::SetParameterName(int paramNum, const char *name)
+void FFGLPluginInstance::SetParameterName(unsigned int paramNum, const char *name)
 {
   if (paramNum<0 || paramNum>=MAX_PARAMETERS)
 	  return;
@@ -34,7 +34,7 @@ void FFGLPluginInstance::SetParameterName(int paramNum, const char *name)
   strcpy(m_paramNames[i], name);
 }
 
-const char *FFGLPluginInstance::GetParameterName(int paramNum)
+const char *FFGLPluginInstance::GetParameterName(unsigned int paramNum)
 {
   if (paramNum<0 || paramNum>=MAX_PARAMETERS)
     return "";
@@ -45,7 +45,7 @@ const char *FFGLPluginInstance::GetParameterName(int paramNum)
   return "";
 }
 
-void FFGLPluginInstance::SetFloatParameter(int paramNum, float value)
+void FFGLPluginInstance::SetFloatParameter(unsigned int paramNum, float value)
 {
   if (paramNum<0 || paramNum>=m_numParameters ||
       m_ffInstanceID==INVALIDINSTANCE || m_ffPluginMain==NULL)
@@ -55,17 +55,18 @@ void FFGLPluginInstance::SetFloatParameter(int paramNum, float value)
   }
 
   //make sure its a float parameter type
-  DWORD ffParameterType = m_ffPluginMain(FF_GETPARAMETERTYPE,(DWORD)paramNum,0).ivalue;
+  FFMixed arg;
+  arg.UIntValue = paramNum;
+  FFUInt32 ffParameterType = m_ffPluginMain(FF_GETPARAMETERTYPE, arg, 0).UIntValue;
   if (ffParameterType!=FF_TYPE_TEXT)
   {
     SetParameterStruct ArgStruct;
     ArgStruct.ParameterNumber = paramNum;
 
-    //be careful with this cast.. ArgStruct.NewParameterValue is DWORD
-    //for this to compile correctly, sizeof(DWORD) must == sizeof(float)
-	  *((float *)(unsigned)&ArgStruct.NewParameterValue) = value;
-
-	m_ffPluginMain(FF_SETPARAMETER,(DWORD)(&ArgStruct), m_ffInstanceID);
+	// Cast to pack our float into FFUInt32
+    ArgStruct.NewParameterValue.UIntValue = *(FFUInt32 *)&value;
+    arg.PointerValue = &ArgStruct;
+	m_ffPluginMain(FF_SETPARAMETER, arg, m_ffInstanceID);
   }
 }
 
@@ -76,11 +77,12 @@ void FFGLPluginInstance::SetTime(double curTime)
     FFDebugMessage("Invalid SetTime call");
     return;
   }
-
-	m_ffPluginMain(FF_SETTIME, (DWORD)(&curTime), m_ffInstanceID);
+  FFMixed arg;
+  arg.PointerValue = &curTime;
+	m_ffPluginMain(FF_SETTIME, arg, m_ffInstanceID);
 }
 
-float FFGLPluginInstance::GetFloatParameter(int paramNum)
+float FFGLPluginInstance::GetFloatParameter(unsigned int paramNum)
 {
   if (paramNum<0 || paramNum>=m_numParameters ||
       m_ffInstanceID==INVALIDINSTANCE || m_ffPluginMain==NULL)
@@ -88,25 +90,20 @@ float FFGLPluginInstance::GetFloatParameter(int paramNum)
     FFDebugMessage("Invalid GetFloatParameter call");
     return 0.f;
   }
-
+  FFMixed arg;
+  arg.UIntValue = paramNum;
   //make sure its a float parameter type
-  DWORD ffParameterType = m_ffPluginMain(FF_GETPARAMETERTYPE,(DWORD)paramNum,0).ivalue;
+  FFUInt32 ffParameterType = m_ffPluginMain(FF_GETPARAMETERTYPE, arg, 0).UIntValue;
   if (ffParameterType!=FF_TYPE_TEXT)
   {
-	plugMainUnion result = m_ffPluginMain(FF_GETPARAMETER,(DWORD)paramNum, m_ffInstanceID);
-
-    //make sure the call to get the parameter succeeded before
-    //reading the float value
-    if (result.ivalue!=FF_FAIL)
-    {
-      return result.fvalue;
-    }
+    FFMixed result = m_ffPluginMain(FF_GETPARAMETER, arg, m_ffInstanceID);
+    return *((float *)&result.UIntValue);
   }
 
   return 0.f;
 }
 
-DWORD FFGLPluginInstance::CallProcessOpenGL(ProcessOpenGLStructTag &t)
+FFResult FFGLPluginInstance::CallProcessOpenGL(ProcessOpenGLStructTag &t)
 {
   //make sure we have code to call otherwise return the unprocessed input
   if (m_ffPluginMain==NULL || m_ffInstanceID==INVALIDINSTANCE)
@@ -115,11 +112,12 @@ DWORD FFGLPluginInstance::CallProcessOpenGL(ProcessOpenGLStructTag &t)
     return FF_FAIL;
   }
 
-  DWORD retVal = FF_FAIL;
-
+  FFResult retVal = FF_FAIL;
+  FFMixed arg;
+  arg.PointerValue = &t;
   try
   {
-	retVal = m_ffPluginMain(FF_PROCESSOPENGL, (DWORD)&t, m_ffInstanceID).ivalue;
+	retVal = m_ffPluginMain(FF_PROCESSOPENGL, arg, m_ffInstanceID).UIntValue;
 	}
   catch (...)
   {
@@ -145,32 +143,35 @@ void FFGLPluginInstance::ReleaseParamNames()
   m_numParameters = 0;
 }
 
-DWORD FFGLPluginInstance::InitPluginLibrary()
+FFResult FFGLPluginInstance::InitPluginLibrary()
 {
-  DWORD rval = FF_FAIL;
+  FFResult rval = FF_FAIL;
 
   if (m_ffPluginMain==NULL)
     return rval;
-
+  FFMixed arg;
+  arg.UIntValue = 0;
+  
   //initialize the plugin
-  rval = m_ffPluginMain(FF_INITIALISE,0,0).ivalue;
+  rval = m_ffPluginMain(FF_INITIALISE,arg,0).UIntValue;
   if (rval!=FF_SUCCESS)
     return rval;
 
   //get the parameter names
-  m_numParameters = (int)m_ffPluginMain(FF_GETNUMPARAMETERS, 0, 0).ivalue;
+  m_numParameters = (int)m_ffPluginMain(FF_GETNUMPARAMETERS, arg, 0).UIntValue;
 
-	int i;
+	unsigned int i;
 	for (i=0; i<m_numParameters; i++)
   {
-    plugMainUnion result = m_ffPluginMain(FF_GETPARAMETERNAME,(DWORD)i,0);
+    arg.UIntValue = i;
+    void *result = m_ffPluginMain(FF_GETPARAMETERNAME,arg,0).PointerValue;
 
-    if (result.ivalue!=FF_FAIL && result.svalue!=NULL)
+    if (result!=NULL)
     {
 		  //create a temporary copy as a cstring w/null termination
       char newParamName[32];
 
-      const char *c = result.svalue;
+      const char *c = (const char*)result;
       char *t = newParamName;
 
       //FreeFrame spec defines parameter names to be 16 characters long MAX
@@ -199,36 +200,36 @@ DWORD FFGLPluginInstance::InitPluginLibrary()
   return FF_SUCCESS;
 }
 
-DWORD FFGLPluginInstance::InstantiateGL(const FFGLViewportStruct *viewport)
+FFResult FFGLPluginInstance::InstantiateGL(const FFGLViewportStruct *viewport)
 {
   if (m_ffInstanceID!=INVALIDINSTANCE)
   {
     //already instantiated
     return FF_SUCCESS;
   }
-
+  FFMixed arg;
+  arg.PointerValue = (void *)viewport;
   //instantiate 1 of the plugins
-  m_ffInstanceID = m_ffPluginMain(FF_INSTANTIATEGL, (DWORD)viewport, 0).ivalue;
+  m_ffInstanceID = m_ffPluginMain(FF_INSTANTIATEGL, arg, 0).PointerValue;
 
   //if it instantiated ok, return success
   if (m_ffInstanceID==INVALIDINSTANCE)
     return FF_FAIL;
 
   //make default param assignments
-  int i;
+  unsigned int i;
   for (i=0; i<MAX_PARAMETERS && i<m_numParameters; i++)
   {
-    plugMainUnion result = m_ffPluginMain(FF_GETPARAMETERDEFAULT,(DWORD)i,0);
-    if (result.ivalue!=FF_FAIL)
-    {
-      SetFloatParameter(i,result.fvalue);
-    }
+    arg.UIntValue = i;
+    float result = *((float *)&m_ffPluginMain(FF_GETPARAMETERDEFAULT,arg,0).UIntValue);
+    // Removed check for zero which was wrongly made here - TWB
+    SetFloatParameter(i,result);
   }
 
   return FF_SUCCESS;
 }
 
-DWORD FFGLPluginInstance::DeInstantiateGL()
+FFResult FFGLPluginInstance::DeInstantiateGL()
 {
   if (m_ffInstanceID==INVALIDINSTANCE)
   {
@@ -243,11 +244,12 @@ DWORD FFGLPluginInstance::DeInstantiateGL()
     return FF_FAIL;
   }
 
-  DWORD rval = FF_FAIL;
-
+  FFResult rval = FF_FAIL;
+  FFMixed arg;
+  arg.UIntValue = 0;
   try
   {
-    rval = m_ffPluginMain(FF_DEINSTANTIATEGL, 0, (DWORD)m_ffInstanceID).ivalue;
+    rval = m_ffPluginMain(FF_DEINSTANTIATEGL, arg, m_ffInstanceID).UIntValue;
   }
   catch (...)
   {
@@ -258,7 +260,7 @@ DWORD FFGLPluginInstance::DeInstantiateGL()
   return rval;
 }
 
-DWORD FFGLPluginInstance::DeinitPluginLibrary()
+FFResult FFGLPluginInstance::DeinitPluginLibrary()
 {
   if (m_ffInstanceID!=INVALIDINSTANCE)
   {
@@ -270,11 +272,13 @@ DWORD FFGLPluginInstance::DeinitPluginLibrary()
 
   ReleaseParamNames();
 
-  DWORD rval = FF_FAIL;
+  FFResult rval = FF_FAIL;
 
   if (m_ffPluginMain!=NULL)
   {
-    rval = m_ffPluginMain(FF_DEINITIALISE,0,0).ivalue;
+    FFMixed arg;
+    arg.UIntValue = 0;
+    rval = m_ffPluginMain(FF_DEINITIALISE,arg,0).UIntValue;
     if (rval != FF_SUCCESS)
     {
       FFDebugMessage("FreeFrame DeInit failed");

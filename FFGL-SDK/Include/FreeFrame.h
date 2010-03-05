@@ -2,17 +2,17 @@
 // FreeFrame.h
 //
 // FreeFrame is an open-source cross-platform real-time video effects plugin system.
-// It provides a framework for developing video effects plugins and hosts on Windows,
-// Linux and Mac OSX.
-//
+// It provides a framework for developing video effects plugins and hosts on Windows, 
+// Linux and Mac OSX. 
+// 
 // Copyright (c) 2002, 2003, 2004, 2005, 2006 www.freeframe.org
-// All rights reserved.
+// All rights reserved. 
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// Redistribution and use in source and binary forms, with or without modification,
+// Redistribution and use in source and binary forms, with or without modification, 
 //	are permitted provided that the following conditions are met:
 //
 //  * Redistributions of source code must retain the above copyright
@@ -26,22 +26,22 @@
 //    from this software without specific prior written permission.
 //
 //
-//	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-//	ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-//	WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//	IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
-//	INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
-//	BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-//	DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
-//	OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
-//	OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
-//	OF THE POSSIBILITY OF SUCH DAMAGE.
+//	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
+//	ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+//	WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+//	IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+//	INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
+//	BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
+//	DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY 
+//	OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE 
+//	OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED 
+//	OF THE POSSIBILITY OF SUCH DAMAGE. 
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// First version, Marcus Clements (marcus@freeframe.org)
+// First version, Marcus Clements (marcus@freeframe.org) 
 // www.freeframe.org
 //
 // FreeFrame 1.0 upgrade by Pete Warden
@@ -67,18 +67,21 @@
 // Includes
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-extern "C" {
-
 #ifdef _WIN32
 
 #define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
 #include <windows.h>
 
+typedef unsigned __int32 FFUInt32; 
 #else
+
+extern "C" {
 
 #include <string.h>
 #include <stdlib.h>
+#include <stdint.h>
 
+typedef uint32_t FFUInt32;
 #endif
 
 
@@ -105,13 +108,17 @@ extern "C" {
 #define FF_GETPARAMETERTYPE			15
 #define FF_GETIPUTSTATUS			16
 
+enum {
+	FF_SUCCESS = 0,
+	FF_FAIL = 0xFFFFFFFF
+};
+typedef FFUInt32 FFResult;
+
 // Return values
-#define FF_SUCCESS					0
-#define FF_FAIL						0xFFFFFFFF
 #define FF_TRUE						1
 #define FF_FALSE					0
-#define	FF_SUPPORTED				1
-#define FF_UNSUPPORTED				0
+#define	FF_SUPPORTED				1 
+#define FF_UNSUPPORTED				0 
 
 // Plugin types
 #define FF_EFFECT					0
@@ -133,15 +140,14 @@ extern "C" {
 #define	FF_CAP_PREFER_BOTH			3
 
 // Parameter types
-#define FF_TYPE_BOOLEAN				0
+#define FF_TYPE_BOOLEAN				0    
 #define FF_TYPE_EVENT				1
-#define FF_TYPE_RED					2
+#define FF_TYPE_RED					2 
 #define FF_TYPE_GREEN				3
 #define FF_TYPE_BLUE				4
 #define FF_TYPE_XPOS				5
 #define FF_TYPE_YPOS				6
 #define FF_TYPE_STANDARD			10
-#define FF_TYPE_ALPHA				11
 #define FF_TYPE_TEXT				100
 
 // Input status
@@ -151,7 +157,7 @@ extern "C" {
 // Image depth
 #define FF_DEPTH_16					0
 #define FF_DEPTH_24					1
-#define FF_DEPTH_32					2
+#define FF_DEPTH_32					2	
 
 // Image orientation
 #define FF_ORIENTATION_TL			1
@@ -163,60 +169,54 @@ extern "C" {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Typedefs for Linux and MacOS - in Windows these are defined in files included by windows.h
-#ifndef _WIN32
-typedef unsigned int DWORD;
-typedef unsigned char BYTE;
-typedef void *LPVOID;
-#endif
 
+typedef union FFMixed {
+	FFUInt32    UIntValue;
+	void*	    PointerValue;
+} FFMixed;
+
+typedef void *FFInstanceID;
+	
 // PluginInfoStruct
 typedef struct PluginInfoStructTag {
-	DWORD	APIMajorVersion;
-	DWORD	APIMinorVersion;
-	BYTE	PluginUniqueID[4];		// 4 chars uniqueID - not null terminated
-	BYTE	PluginName[16];			// 16 chars plugin friendly name - not null terminated
-	DWORD	PluginType;				// Effect or source
+	FFUInt32	APIMajorVersion;
+	FFUInt32	APIMinorVersion;
+	char		PluginUniqueID[4];		// 4 chars uniqueID - not null terminated
+	char		PluginName[16];			// 16 chars plugin friendly name - not null terminated
+	FFUInt32	PluginType;				// Effect or source
 } PluginInfoStruct;
 
-// PluginExtendedInfoStruct
+// PluginExtendedInfoStruct   
 typedef struct PluginExtendedInfoStructTag {
-	DWORD PluginMajorVersion;
-	DWORD PluginMinorVersion;
-	char* Description;
-	char* About;
-	DWORD FreeFrameExtendedDataSize;
-	void* FreeFrameExtendedDataBlock;
+	FFUInt32	PluginMajorVersion;
+	FFUInt32	PluginMinorVersion;
+	char*		Description;
+	char*		About;
+	FFUInt32	FreeFrameExtendedDataSize;
+	void*		FreeFrameExtendedDataBlock;
 } PluginExtendedInfoStruct;
 
 // VideoInfoStruct
 typedef struct VideoInfoStructTag {
-	DWORD FrameWidth;				// width of frame in pixels
-	DWORD FrameHeight;				// height of frame in pixels
-	DWORD BitDepth;					// enumerated indicator of bit depth of video: 0 = 16 bit 5-6-5   1 = 24bit packed   2 = 32bit
-	DWORD Orientation;
+	FFUInt32	FrameWidth;				// width of frame in pixels
+	FFUInt32	FrameHeight;				// height of frame in pixels
+	FFUInt32	BitDepth;					// enumerated indicator of bit depth of video: 0 = 16 bit 5-6-5   1 = 24bit packed   2 = 32bit
+	FFUInt32	Orientation;			
 } VideoInfoStruct;
 
 // ProcessFrameCopyStruct
 typedef struct ProcessFrameCopyStructTag {
-	DWORD numInputFrames;
-	void** ppInputFrames;
-	void* pOutputFrame;
+	FFUInt32	numInputFrames;
+	void**		ppInputFrames;
+	void*		pOutputFrame;
 } ProcessFrameCopyStruct;
 
 // SetParameterStruct
 typedef struct SetParameterStructTag {
-	DWORD ParameterNumber;
-	DWORD NewParameterValue;
+	FFUInt32	ParameterNumber;
+	FFMixed		NewParameterValue;
 } SetParameterStruct;
 
-// plugMain function return values
-typedef union plugMainUnionTag {
-	DWORD ivalue;
-	float fvalue;
-	VideoInfoStruct* VISvalue;
-	PluginInfoStruct* PISvalue;
-	char* svalue;
-} plugMainUnion;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -225,7 +225,7 @@ typedef union plugMainUnionTag {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // plugMain - The one and only exposed function
-// parameters:
+// parameters: 
 //	functionCode - tells the plugin which function is being called
 //  pParam - 32-bit parameter or 32-bit pointer to parameter structure
 //
@@ -233,8 +233,8 @@ typedef union plugMainUnionTag {
 //
 // All parameters are cast as 32-bit untyped pointers and cast to appropriate
 // types here
-//
-// All return values are cast to 32-bit untyped pointers here before return to
+// 
+// All return values are cast to 32-bit untyped pointers here before return to 
 // the host
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -242,17 +242,19 @@ typedef union plugMainUnionTag {
 
 BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved);
 
-__declspec(dllexport) plugMainUnion __stdcall plugMain(DWORD functionCode, DWORD inputValue, DWORD instanceID);
-typedef __declspec(dllimport) plugMainUnion (__stdcall *FF_Main_FuncPtr)(DWORD, DWORD, DWORD);
+__declspec(dllexport) FFMixed __stdcall plugMain(FFUInt32 functionCode, FFMixed inputValue, FFInstanceID instanceID);
+typedef __declspec(dllimport) FFMixed (__stdcall *FF_Main_FuncPtr)(FFUInt32, FFMixed, FFInstanceID);
 
 #else
 
 //linux and Mac OSX share these
-plugMainUnion plugMain(DWORD functionCode, DWORD inputValue, DWORD instanceID);
-typedef plugMainUnion (*FF_Main_FuncPtr)(DWORD funcCode, DWORD inputVal, DWORD instanceID);
+FFMixed plugMain(FFUInt32 functionCode, FFMixed inputValue, FFInstanceID instanceID);
+typedef FFMixed (*FF_Main_FuncPtr)(FFUInt32 funcCode, FFMixed inputVal, FFInstanceID instanceID);
 
 #endif
 
+#ifndef _WIN32
 }
+#endif
 
 #endif

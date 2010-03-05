@@ -23,7 +23,7 @@ static CFFGLPluginInfo PluginInfo (
 	"by Edwin de Koning & Trey Harrison - www.resolume.com, www.harrisondigitalmedia.com" // About
 );
 
-char *vertexShaderCode =
+const char *vertexShaderCode =
 "void main()"
 "{"
 "	 gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;"
@@ -32,7 +32,7 @@ char *vertexShaderCode =
 "}";
 
 
-char *fragmentShaderCode =
+const char *fragmentShaderCode =
 "uniform sampler2D inputTexture;"
 "uniform vec2 maxCoords;"
 "uniform vec2 tileAmount;"
@@ -70,7 +70,7 @@ FFGLTile::FFGLTile()
 //  Methods
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-DWORD FFGLTile::InitGL(const FFGLViewportStruct *vp)
+FFResult FFGLTile::InitGL(const FFGLViewportStruct *vp)
 {
   m_extensions.Initialize();
 
@@ -99,13 +99,13 @@ DWORD FFGLTile::InitGL(const FFGLViewportStruct *vp)
   return FF_SUCCESS;
 }
 
-DWORD FFGLTile::DeInitGL()
+FFResult FFGLTile::DeInitGL()
 {
   m_shader.FreeGLResources();
   return FF_SUCCESS;
 }
 
-DWORD FFGLTile::ProcessOpenGL(ProcessOpenGLStruct *pGL)
+FFResult FFGLTile::ProcessOpenGL(ProcessOpenGLStruct *pGL)
 {
   if (pGL->numInputTextures<1)
     return FF_FAIL;
@@ -160,44 +160,30 @@ DWORD FFGLTile::ProcessOpenGL(ProcessOpenGLStruct *pGL)
   return FF_SUCCESS;
 }
 
-DWORD FFGLTile::GetParameter(DWORD dwIndex)
+float FFGLTile::GetFloatParameter(unsigned int index)
 {
-	DWORD dwRet;
-
-	switch (dwIndex) {
-
+	switch (index) {
 	case FFPARAM_TileX:
-    *((float *)(unsigned)&dwRet) = m_TileX;
-		return dwRet;
+      return m_TileX;
 	case FFPARAM_TileY:
-    *((float *)(unsigned)&dwRet) = m_TileY;
-		return dwRet;
-
+      return m_TileY;
 	default:
-		return FF_FAIL;
+		return 0.0;
 	}
 }
 
-DWORD FFGLTile::SetParameter(const SetParameterStruct* pParam)
-{
-	if (pParam != NULL) {
-		
-		switch (pParam->ParameterNumber) {
+FFResult FFGLTile::SetFloatParameter(unsigned int index, float value)
+{		
+		switch (index) {
 
 		case FFPARAM_TileX:
-			m_TileX = *((float *)(unsigned)&(pParam->NewParameterValue));
+			m_TileX = value;
 			break;
 		case FFPARAM_TileY:
-			m_TileY = *((float *)(unsigned)&(pParam->NewParameterValue));
+			m_TileY = value;
 			break;
-
 		default:
 			return FF_FAIL;
 		}
-
 		return FF_SUCCESS;
-	
-	}
-
-	return FF_FAIL;
 }

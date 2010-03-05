@@ -14,13 +14,13 @@ public:
 	// FreeFrame plugin methods
 	///////////////////////////////////////////////////
 	
-	DWORD	ProcessOpenGL(ProcessOpenGLStruct* pGL);
+	FFResult	ProcessOpenGL(ProcessOpenGLStruct* pGL);
 
 	///////////////////////////////////////////////////
 	// Factory method
 	///////////////////////////////////////////////////
 
-	static DWORD __stdcall CreateInstance(CFreeFrameGLPlugin **ppOutInstance)
+	static FFResult __stdcall CreateInstance(CFreeFrameGLPlugin **ppOutInstance)
   {
   	*ppOutInstance = new FFGLMirror();
 	  if (*ppOutInstance != NULL)

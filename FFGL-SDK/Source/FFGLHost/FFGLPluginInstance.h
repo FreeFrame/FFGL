@@ -3,6 +3,7 @@
 
 #include <FFGL.h>
 
+#define INVALIDINSTANCE (FFInstanceID)0xFFFFFFFF
 class FFGLPluginInstance
 {
 public:
@@ -16,31 +17,31 @@ public:
   
   //these methods are virtual because each platform implements
   //dynamic libraries differently
-  virtual DWORD Load(const char *filename)
+  virtual FFResult Load(const char *filename)
   {
     return FF_FAIL;
   }
   
   //calls plugMain(FF_INSTANTIATEGL) and assigns
   //each parameter its default value
-  DWORD InstantiateGL(const FFGLViewportStruct *vp);
+  FFResult InstantiateGL(const FFGLViewportStruct *vp);
   
   //calls plugMain(FF_DEINSTANTIATEGL)
-  DWORD DeInstantiateGL();
+  FFResult DeInstantiateGL();
 
-  virtual DWORD Unload()
+  virtual FFResult Unload()
   {
     return FF_FAIL;
   }
   
   //these methods are shared by the
   //platform-specific implementations
-  const char *GetParameterName(int paramNum);
-  float GetFloatParameter(int paramNum);
-  void SetFloatParameter(int paramNum, float value);
+  const char *GetParameterName(unsigned int paramNum);
+  float GetFloatParameter(unsigned int paramNum);
+  void SetFloatParameter(unsigned int paramNum, float value);
   void SetTime(double curTime);
 
-  DWORD CallProcessOpenGL(ProcessOpenGLStructTag &t);
+  FFResult CallProcessOpenGL(ProcessOpenGLStructTag &t);
   
   virtual ~FFGLPluginInstance();
 
@@ -49,23 +50,23 @@ protected:
   
   //many plugins will return 0x00000000 as the first valid instance,
   //so we use 0xFFFFFFFF to represent an uninitialized/invalid instance
-  enum { INVALIDINSTANCE=0xFFFFFFFF };
-  DWORD m_ffInstanceID;
+//  enum { INVALIDINSTANCE=0xFFFFFFFF };
+  FFInstanceID m_ffInstanceID;
   
   enum { MAX_PARAMETERS = 64 };
-  int m_numParameters;  
+  unsigned int m_numParameters;  
   char *m_paramNames[MAX_PARAMETERS];
   
   //helper methods  
   //calls plugMain(FF_INITIALISE) and gets the
   //parameter names
-  DWORD InitPluginLibrary();
+  FFResult InitPluginLibrary();
   
   //calls DeletePluginInstance if needed, calls
   //ReleaseParamNames, then calls plugMain(FF_DEINITIALISE)
-  DWORD DeinitPluginLibrary();
+  FFResult DeinitPluginLibrary();
   
-  void SetParameterName(int paramNum, const char *srcString);
+  void SetParameterName(unsigned int paramNum, const char *srcString);
   void ReleaseParamNames();
 };
 

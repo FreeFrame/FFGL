@@ -1,5 +1,5 @@
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C++ Express 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FFGLBrightness", "FFGLBrightness.vcproj", "{8EC753F3-118C-41F7-9469-F77F907963C2}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FFGLMirror", "FFGLMirror.vcproj", "{87E03FBB-1636-46CB-9206-6A9B3DF4CDA6}"

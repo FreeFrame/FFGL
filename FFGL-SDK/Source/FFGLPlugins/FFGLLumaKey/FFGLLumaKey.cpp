@@ -73,7 +73,7 @@ FFGLLumaKey::FFGLLumaKey()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //  Methods
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-DWORD FFGLLumaKey::InitGL(const FFGLViewportStruct *vp)
+FFResult FFGLLumaKey::InitGL(const FFGLViewportStruct *vp)
 {
   m_extensions.Initialize();
 
@@ -102,13 +102,13 @@ DWORD FFGLLumaKey::InitGL(const FFGLViewportStruct *vp)
   return FF_SUCCESS;
 }
 
-DWORD FFGLLumaKey::DeInitGL()
+FFResult FFGLLumaKey::DeInitGL()
 {
   m_shader.FreeGLResources();
   return FF_SUCCESS;
 }
 
-DWORD FFGLLumaKey::ProcessOpenGL(ProcessOpenGLStruct *pGL)
+FFResult FFGLLumaKey::ProcessOpenGL(ProcessOpenGLStruct *pGL)
 {
   if (pGL->numInputTextures<2)
     return FF_FAIL;
@@ -175,38 +175,29 @@ DWORD FFGLLumaKey::ProcessOpenGL(ProcessOpenGLStruct *pGL)
   return FF_SUCCESS;
 }
 
-DWORD FFGLLumaKey::GetParameter(DWORD dwIndex)
+float FFGLLumaKey::GetFloatParameter(unsigned int index)
 {
-	DWORD dwRet;
-
-	switch (dwIndex) {
+	switch (index) {
 
 	case FFPARAM_Luma:
-    *((float *)(unsigned)&dwRet) = m_Luma;
-		return dwRet;
+		return m_Luma;
 
 	default:
-		return FF_FAIL;
+		return 0.0;
 	}
 }
 
-DWORD FFGLLumaKey::SetParameter(const SetParameterStruct* pParam)
+FFResult FFGLLumaKey::SetFloatParameter(unsigned int index, float value)
 {
-	if (pParam != NULL) {
 
-		switch (pParam->ParameterNumber) {
+	switch (index) {
 
 		case FFPARAM_Luma:
-			m_Luma = *((float *)(unsigned)&(pParam->NewParameterValue));
+			m_Luma = value;
 			break;
 
 		default:
 			return FF_FAIL;
-		}
-
-		return FF_SUCCESS;
-
 	}
-
-	return FF_FAIL;
+	return FF_SUCCESS;
 }

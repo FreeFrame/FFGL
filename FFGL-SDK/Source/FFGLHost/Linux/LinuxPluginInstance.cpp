@@ -10,8 +10,8 @@ public FFGLPluginInstance
 public:
   LinuxPluginInstance();
 
-  DWORD Load(const char *filename);
-  DWORD Unload();
+  FFResult Load(const char *filename);
+  FFResult Unload();
 
   virtual ~LinuxPluginInstance();
 
@@ -29,7 +29,7 @@ LinuxPluginInstance::LinuxPluginInstance()
 {
 }
 
-DWORD LinuxPluginInstance::Load(const char *fname)
+FFResult LinuxPluginInstance::Load(const char *fname)
 {
   if (fname==NULL || fname[0]==0)
     return FF_FAIL;
@@ -45,7 +45,7 @@ DWORD LinuxPluginInstance::Load(const char *fname)
   }
 
   FF_Main_FuncPtr pFreeFrameMain =
-    (FF_Main_FuncPtr)(unsigned)dlsym(plugin_handle, "plugMain");
+    (FF_Main_FuncPtr)dlsym(plugin_handle, "plugMain");
 
   if (pFreeFrameMain==NULL)
   {
@@ -55,14 +55,14 @@ DWORD LinuxPluginInstance::Load(const char *fname)
 
   m_ffPluginMain = pFreeFrameMain;
 
-  DWORD rval = InitPluginLibrary();
+  FFResult rval = InitPluginLibrary();
   if (rval!=FF_SUCCESS)
     return rval;
 
   return FF_SUCCESS;
 }
 
-DWORD LinuxPluginInstance::Unload()
+FFResult LinuxPluginInstance::Unload()
 {
   DeinitPluginLibrary();
 

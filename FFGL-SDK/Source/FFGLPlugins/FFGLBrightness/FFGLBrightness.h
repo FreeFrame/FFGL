@@ -14,15 +14,15 @@ public:
 	// FreeFrame plugin methods
 	///////////////////////////////////////////////////
 	
-	DWORD	SetParameter(const SetParameterStruct* pParam);		
-	DWORD	GetParameter(DWORD dwIndex);					
-	DWORD	ProcessOpenGL(ProcessOpenGLStruct* pGL);
+	FFResult	SetFloatParameter(unsigned int index, float value);		
+	float		GetFloatParameter(unsigned int index);			
+	FFResult	ProcessOpenGL(ProcessOpenGLStruct* pGL);
 
 	///////////////////////////////////////////////////
 	// Factory method
 	///////////////////////////////////////////////////
 
-	static DWORD __stdcall CreateInstance(CFreeFrameGLPlugin **ppInstance)
+	static FFResult __stdcall CreateInstance(CFreeFrameGLPlugin **ppInstance)
   {
   	*ppInstance = new FFGLBrightness();
 	  if (*ppInstance != NULL) return FF_SUCCESS;

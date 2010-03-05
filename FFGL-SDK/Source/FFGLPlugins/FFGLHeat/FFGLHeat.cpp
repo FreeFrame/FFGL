@@ -22,7 +22,7 @@ static CFFGLPluginInfo PluginInfo (
 	"by Edwin de Koning & Trey Harrison - www.resolume.com, www.harrisondigitalmedia.com" // About
 );
 
-char *vertexShaderCode =
+const char *vertexShaderCode =
 "void main()"
 "{"
 "  gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;"
@@ -31,7 +31,7 @@ char *vertexShaderCode =
 "}";
 
 
-char *fragmentShaderCode =
+const char *fragmentShaderCode =
 "uniform sampler2D inputTexture;"
 "uniform sampler1D heatTexture;"
 "uniform vec2 maxCoords;"
@@ -79,7 +79,7 @@ FFGLHeat::FFGLHeat()
 //  Methods
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-DWORD FFGLHeat::InitGL(const FFGLViewportStruct *vp)
+FFResult FFGLHeat::InitGL(const FFGLViewportStruct *vp)
 {
   //initialize gl extensions and
   //make sure required features are supported
@@ -133,7 +133,7 @@ DWORD FFGLHeat::InitGL(const FFGLViewportStruct *vp)
   return FF_SUCCESS;
 }
 
-DWORD FFGLHeat::DeInitGL()
+FFResult FFGLHeat::DeInitGL()
 {
   m_shader.FreeGLResources();
 
@@ -146,7 +146,7 @@ DWORD FFGLHeat::DeInitGL()
   return FF_SUCCESS;
 }
 
-DWORD FFGLHeat::ProcessOpenGL(ProcessOpenGLStruct *pGL)
+FFResult FFGLHeat::ProcessOpenGL(ProcessOpenGLStruct *pGL)
 {
   if (pGL->numInputTextures<1) return FF_FAIL;
 
@@ -211,37 +211,26 @@ DWORD FFGLHeat::ProcessOpenGL(ProcessOpenGLStruct *pGL)
   return FF_SUCCESS;
 }
 
-DWORD FFGLHeat::GetParameter(DWORD dwIndex)
+float FFGLHeat::GetFloatParameter(unsigned int index)
 {
-	DWORD dwRet;
-
-	switch (dwIndex) {
+	switch (index) {
 
 	case FFPARAM_Heat:
-    *((float *)(unsigned)&dwRet) = m_Heat;
-		return dwRet;
+		return m_Heat;
 	default:
-		return FF_FAIL;
+      return 0.0;
 	}
 }
 
-DWORD FFGLHeat::SetParameter(const SetParameterStruct* pParam)
+FFResult FFGLHeat::SetFloatParameter(unsigned int index, float value)
 {
-	if (pParam != NULL) {
-		
-		switch (pParam->ParameterNumber) {
+		switch (index) {
 
 		case FFPARAM_Heat:
-			m_Heat = *((float *)(unsigned)&(pParam->NewParameterValue));
+			m_Heat = value;
 			break;
-
 		default:
 			return FF_FAIL;
 		}
-
 		return FF_SUCCESS;
-	
-	}
-
-	return FF_FAIL;
 }

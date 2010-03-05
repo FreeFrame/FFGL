@@ -38,7 +38,7 @@ FFGLMirror::FFGLMirror()
 //  Methods
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-DWORD FFGLMirror::ProcessOpenGL(ProcessOpenGLStruct *pGL)
+FFResult FFGLMirror::ProcessOpenGL(ProcessOpenGLStruct *pGL)
 {
   if (pGL->numInputTextures<1)
     return FF_FAIL;

@@ -7,8 +7,8 @@ public FFGLPluginInstance
 public:
   WinPluginInstance();
   
-  DWORD Load(const char *filename);
-  DWORD Unload();
+  FFResult Load(const char *filename);
+  FFResult Unload();
   
   virtual ~WinPluginInstance();
 
@@ -25,7 +25,7 @@ WinPluginInstance::WinPluginInstance()
 :m_ffModule(NULL)
 {}
 
-DWORD WinPluginInstance::Load(const char *fname)
+FFResult WinPluginInstance::Load(const char *fname)
 {
   //warning_printf("FreeFrame Plugin Load Failed: %s", fname);		
   if (fname==NULL || fname[0]==0)
@@ -49,14 +49,14 @@ DWORD WinPluginInstance::Load(const char *fname)
   
   m_ffPluginMain = pFreeFrameMain;
 
-  DWORD rval = InitPluginLibrary();
+  FFResult rval = InitPluginLibrary();
   if (rval!=FF_SUCCESS)
     return rval;
 
   return FF_SUCCESS;
 }
 
-DWORD WinPluginInstance::Unload()
+FFResult WinPluginInstance::Unload()
 {
   if (m_ffInstanceID!=INVALIDINSTANCE)
   {

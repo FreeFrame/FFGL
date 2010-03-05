@@ -46,7 +46,7 @@ FFGLBrightness::~FFGLBrightness()
 //  Methods
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-DWORD FFGLBrightness::ProcessOpenGL(ProcessOpenGLStruct *pGL)
+FFResult FFGLBrightness::ProcessOpenGL(ProcessOpenGLStruct *pGL)
 {
   if (pGL->numInputTextures<1)
     return FF_FAIL;
@@ -108,40 +108,28 @@ DWORD FFGLBrightness::ProcessOpenGL(ProcessOpenGLStruct *pGL)
   return FF_SUCCESS;
 }
 
-DWORD FFGLBrightness::GetParameter(DWORD dwIndex)
+FFResult FFGLBrightness::SetFloatParameter(unsigned int index, float value)
 {
-	DWORD dwRet;
+  switch (index) {
+    case FFPARAM_BRIGHTNESS:
+      m_brightness = value;
+      break;
+    default:
+      return FF_FAIL;
+      break;
+  }
+  return FF_SUCCESS;
+}
 
-	switch (dwIndex) {
+float FFGLBrightness::GetFloatParameter(unsigned int index)
+{
+	switch (index) {
 
 	case FFPARAM_BRIGHTNESS:
-    //sizeof(DWORD) must == sizeof(float)
-    *((float *)(unsigned)(&dwRet)) = m_brightness;
-		return dwRet;
-
+		return m_brightness;
 	default:
-		return FF_FAIL;
+    return 0.0;
 	}
 }
 
-DWORD FFGLBrightness::SetParameter(const SetParameterStruct* pParam)
-{
-	if (pParam != NULL) {
-		
-		switch (pParam->ParameterNumber) {
 
-		case FFPARAM_BRIGHTNESS:
-      //sizeof(DWORD) must == sizeof(float)
-      m_brightness = *((float *)(unsigned)&(pParam->NewParameterValue));
-			break;
-
-		default:
-			return FF_FAIL;
-		}
-
-		return FF_SUCCESS;
-	
-	}
-
-	return FF_FAIL;
-}

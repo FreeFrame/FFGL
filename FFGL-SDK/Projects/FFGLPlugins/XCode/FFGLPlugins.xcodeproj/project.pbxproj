@@ -44,11 +44,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2D21902D0AF02467007154B7 /* FFGLBrightness-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "FFGLBrightness-Info.plist"; sourceTree = "<group>"; };
+		2D21902D0AF02467007154B7 /* FFGLBrightness-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FFGLBrightness-Info.plist"; sourceTree = "<group>"; };
 		2D21905B0AF0270A007154B7 /* FFGLBrightness.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FFGLBrightness.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D2190870AF02BC1007154B7 /* FFGLMirror.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; name = FFGLMirror.cpp; path = ../../../Source/FFGLPlugins/FFGLMirror/FFGLMirror.cpp; sourceTree = SOURCE_ROOT; tabWidth = 2; usesTabs = 0; };
 		2D2190960AF02BD1007154B7 /* FFGLMirror.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FFGLMirror.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
-		2D2190970AF02BD1007154B7 /* FFGLMirror-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "FFGLMirror-Info.plist"; sourceTree = "<group>"; };
+		2D2190970AF02BD1007154B7 /* FFGLMirror-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FFGLMirror-Info.plist"; sourceTree = "<group>"; };
 		2D7743E60C4C84B1008A80BD /* FFGLTime.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FFGLTime.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D7743E90C4C8500008A80BD /* FFGLTime.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = FFGLTime.cpp; path = ../../../Source/FFGLPlugins/FFGLTime/FFGLTime.cpp; sourceTree = SOURCE_ROOT; };
 		2DA285A50AEE5F780030A4DD /* FFGLBrightness.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; name = FFGLBrightness.cpp; path = ../../../Source/FFGLPlugins/FFGLBrightness/FFGLBrightness.cpp; sourceTree = SOURCE_ROOT; tabWidth = 2; usesTabs = 0; };
@@ -59,12 +59,12 @@
 		2DA285CC0AEE61AF0030A4DD /* FFGL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; name = FFGL.cpp; path = ../../../Source/FFGLPlugins/FFGL.cpp; sourceTree = SOURCE_ROOT; tabWidth = 2; usesTabs = 0; };
 		2DA287A70AEEFE950030A4DD /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		2DC889E50AF4057200199EB1 /* FFGLTile.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FFGLTile.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
-		2DC889E60AF4057200199EB1 /* FFGLTile-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "FFGLTile-Info.plist"; sourceTree = "<group>"; };
+		2DC889E60AF4057200199EB1 /* FFGLTile-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FFGLTile-Info.plist"; sourceTree = "<group>"; };
 		2DC889ED0AF405C700199EB1 /* FFGLTile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; name = FFGLTile.cpp; path = ../../../Source/FFGLPlugins/FFGLTile/FFGLTile.cpp; sourceTree = SOURCE_ROOT; tabWidth = 2; usesTabs = 0; };
 		2DC88A380AF40E6300199EB1 /* FFGLShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; name = FFGLShader.cpp; path = ../../../Source/Common/FFGLShader.cpp; sourceTree = SOURCE_ROOT; tabWidth = 2; usesTabs = 0; };
 		2DC88AC60AF4153F00199EB1 /* FFGLExtensions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; name = FFGLExtensions.cpp; path = ../../../Source/Common/FFGLExtensions.cpp; sourceTree = SOURCE_ROOT; tabWidth = 2; usesTabs = 0; };
 		2DFDB2CA0AF6739E00367FE2 /* FFGLHeat.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FFGLHeat.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
-		2DFDB2CB0AF6739E00367FE2 /* FFGLHeat-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "FFGLHeat-Info.plist"; sourceTree = "<group>"; };
+		2DFDB2CB0AF6739E00367FE2 /* FFGLHeat-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FFGLHeat-Info.plist"; sourceTree = "<group>"; };
 		2DFDB2E90AF674AB00367FE2 /* FFGLHeat.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; name = FFGLHeat.cpp; path = ../../../Source/FFGLPlugins/FFGLHeat/FFGLHeat.cpp; sourceTree = SOURCE_ROOT; tabWidth = 2; usesTabs = 0; };
 		CC69231A0CF2ED5B008718B6 /* FFGLTime-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "FFGLTime-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -540,11 +540,9 @@
 		2DA285950AEE5D640030A4DD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					i386,
-					ppc,
-				);
+				ARCHS = "$(ONLY_ACTIVE_ARCH_PRE_XCODE_3_1)";
 				COPY_PHASE_STRIP = NO;
+				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH_ACTUAL)";
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};
 			name = Debug;
@@ -552,10 +550,8 @@
 		2DA285960AEE5D640030A4DD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					i386,
-					ppc,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
 				COPY_PHASE_STRIP = YES;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 			};

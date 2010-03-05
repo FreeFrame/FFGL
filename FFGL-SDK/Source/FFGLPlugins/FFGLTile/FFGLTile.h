@@ -15,17 +15,17 @@ public:
 	// FreeFrame plugin methods
 	///////////////////////////////////////////////////
 
-	DWORD	SetParameter(const SetParameterStruct* pParam);
-	DWORD	GetParameter(DWORD dwIndex);
-	DWORD	ProcessOpenGL(ProcessOpenGLStruct *pGL);
-  DWORD InitGL(const FFGLViewportStruct *vp);
-  DWORD DeInitGL();
+	FFResult	SetFloatParameter(unsigned int index, float value);
+	float		GetFloatParameter(unsigned int index);
+	FFResult	ProcessOpenGL(ProcessOpenGLStruct *pGL);
+	FFResult InitGL(const FFGLViewportStruct *vp);
+	FFResult DeInitGL();
 
 	///////////////////////////////////////////////////
 	// Factory method
 	///////////////////////////////////////////////////
 
-	static DWORD __stdcall CreateInstance(CFreeFrameGLPlugin **ppOutInstance)
+	static FFResult __stdcall CreateInstance(CFreeFrameGLPlugin **ppOutInstance)
   {
 	  *ppOutInstance = new FFGLTile();
 	  if (*ppOutInstance != NULL)

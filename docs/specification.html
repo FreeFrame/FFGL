@@ -17,7 +17,7 @@
 
 <center>
 <h1>FreeFrame Open Video Plugin System Specification</h1>
-<h2>Version 1.5 - 'FreeFrameGL'</h2>
+<h2>Version 1.6 DRAFT</h2>
 </center>
 
 <a href="#CHAPLibrary"><b>1. OS integration</b></a><br>
@@ -31,7 +31,7 @@
 <p>&nbsp;</p>
 
 <p>
-<b>Copyright (c) 2002-2007 <a href="http://www.freeframe.org" target="_blank">www.freeframe.org</a><br>
+<b>Copyright (c) 2002-2010 <a href="http://www.freeframe.org" target="_blank">www.freeframe.org</a><br>
 All rights reserved.</b>
 </p>
 
@@ -86,8 +86,13 @@ Windows.
 
 <p>
 FreeFrame Plugins export a single function: <a href="#plugMain">plugMain</a>. This is passed 3 values:
-a 32-bit function code, a 32-bit input value and a 32-bit instance identifier.
-It returns a 32-bit output value.
+a 32-bit function code, a &lt;pointer-size&gt; input value and a &lt;pointer-size&gt; instance
+identifier.
+It returns a &lt;pointer-size&gt; output value.
+<br>
+&lt;pointer-size&gt; values are 32-bits or the size of pointers on their host, whichever is
+greater. On 32-bit systems this is 32 bits. On LP64 (64-bit Linux, 64-bit Mac OS X) and
+LLP64 (64-bit Windows) systems this is 64 bits.
 <br>
 The input values and output values have different types according to the function code.
 This may be implemented differently on different platforms in different languages, but the
@@ -100,7 +105,7 @@ format of the values must be consistent.
 <a name="plugMain">
 	<table border=0  bgcolor="#E8E8E8"><tr>
 		<td valign=top><h3>plugMain</h3></td>
-		<td valign=top>(unsigned integer functionCode, unsigned integer inputValue, unsigned integer instanceID)</td>
+		<td valign=top>(unsigned integer functionCode, &lt;pointer-size&gt; inputValue, &lt;pointer-size&gt; instanceID)</td>
 	</tr></table>
 </a>
 
@@ -114,13 +119,13 @@ format of the values must be consistent.
 <tr>
 	<td><i>inputValue:</i></td>
 	<td>
-		32-bit value or 32-bit pointer to some structure, depending on function
+		32-bit value or &lt;pointer-size&gt; pointer to some structure, depending on function
 		code.
 	</td>
 </tr>
 <tr>
 	<td><i>instanceID:</i></td>
-	<td>32-bit instance identifier. Only used for instance specific functions (see <a href="#functiontable">function table</a>)</td>
+	<td>&lt;pointer-size&gt; instance identifier. Only used for instance specific functions (see <a href="#functiontable">function table</a>)</td>
 </tr>
 </table>
 
@@ -148,7 +153,7 @@ Depends on function code. See <a href="#functiontable">function table</a> for de
 	<hr><h2>2. Basic types and constants</h2><hr>
 </a>
 <p>
-All numbers in this document are ordinary decimal numbers, expect if specified
+All numbers in this document are ordinary decimal numbers, except if specified
 otherwise.
 </p>
 <p>The following types are used:</p>
@@ -168,8 +173,8 @@ otherwise.
 </tr>
 
 <tr>
-	<td><b>32-bit pointer</b></td>
-	<td>0 to 4294967295</td>
+	<td><b>&lt;pointer-size&gt; pointer</b></td>
+	<td>0 to maximum valid address</td>
 	<td>needs to be a valid memory location</td>
 </tr>
 
@@ -233,7 +238,7 @@ otherwise.
 		In functions that return error codes any value other than 0 is assumed to be an
 		error code. These are to be defined in each function below.	</li>
 	<li>
-		In functions that return a pointer, (hex) FFFFFFFF also represents a failure condition.</li>
+		In functions that return a pointer, (hex) 00000000 represents a failure condition.</li>
 </ul>
 
 <p>&nbsp;</p>
@@ -246,7 +251,7 @@ otherwise.
 	<table border=0 bgcolor="#E8E8E8">
 	<tr>
 		<td valign=top><h3>InstanceIdentifier</h3></td>
-		<td valign=top>&nbsp;(32-bit unsigned integer)</td>
+		<td valign=top>&nbsp;(&lt;pointer-size&gt; unsigned integer)</td>
 	</tr>
 	</table>
 </a>
@@ -272,7 +277,7 @@ otherwise.
 	<table border=0 bgcolor="#E8E8E8">
 	<tr>
 		<td valign=top><h3>NumParameters</h3></td>
-		<td valign=top>&nbsp;(32-bit unsigned integer)
+		<td valign=top>&nbsp;(&lt;pointer-size&gt; the first 32-bits as unsigned integer)
 		</td>
 	</tr>
 	</table>
@@ -330,7 +335,7 @@ otherwise.
 <a name="ParameterValue">
 	<table border=0 bgcolor="#E8E8E8"><tr>
 		<td valign=top><h3>ParameterValue</h3></td>
-		<td valign=top>&nbsp;(32-bit float value OR 32-bit pointer)</td>
+		<td valign=top>&nbsp;(&lt;pointer-size&gt; as pointer OR the first 32-bits as float value)</td>
 	</tr></table>
 </a>
 
@@ -355,7 +360,7 @@ the plugin likes e.g. 0-255, 0-767, 1-256 or whatever.
 The plugin should translate the standard 0-1 float range into the values it
 needs for its processing.
 <br>
-For text parameters, this 32-bit value represents a pointer to a null terminated
+For text parameters, this value represents a pointer to a null terminated
 string.
 </p>
 
@@ -365,7 +370,7 @@ string.
 <a name="ParameterDefaultValue">
 	<table border=0 bgcolor="#E8E8E8"><tr>
 		<td valign=top><h3>ParameterDefaultValue</h3></td>
-		<td valign=top>&nbsp;(32-bit float value OR 32-bit pointer)</td>
+		<td valign=top>&nbsp;(&lt;pointer-size&gt; as pointer OR the first 32-bits as float value)</td>
 	</tr></table>
 </a>
 
@@ -374,7 +379,7 @@ string.
 <table border=0>
 <tr>
 	<td valign=top><i>ParameterDefaultValue:</i></td>
-	<td>The initial default value for this parameter. 32-bit float value or 32-bit pointer to null terminated string. (See remarks)</td>
+	<td>The initial default value for this parameter. 32-bit float value or pointer to null terminated string. (See remarks)</td>
 </tr>
 </table>
 
@@ -386,7 +391,7 @@ so the plugin must use default values until told to do otherwise by the host.
 Apart from text parameters, FreeFrame parameter values are always 32-bit floats,
 and the range of values permitted is STRICTLY 0-1.
 <br>
-For text parameters, this 32-bit value represents a pointer to a null terminated
+For text parameters, this value represents a pointer to a null terminated
 string.
 </p>
 
@@ -472,7 +477,7 @@ pixelformats.
 <a name="ParameterType"></a>
 	<table border=0 bgcolor="#E8E8E8"><tr>
 		<td valign=top><h3>ParameterType</h3></td>
-		<td valign=top>&nbsp;(<a name="NumParameters">32-bit unsigned integer</a>)</td>
+		<td valign=top>&nbsp;(<a name="NumParameters">&lt;pointer-size&gt; the first 32-bits as unsigned integer</a>)</td>
 	</tr></table>
 
 <h4>Definition:</h4>
@@ -585,7 +590,7 @@ and (1,1) at the top right or bottom right, depending on the orientation defined
 <a name="InputStatus">
 	<table border=0 bgcolor="#E8E8E8"><tr>
 		<td valign=top><h3>InputStatus</h3></td>
-		<td valign=top>&nbsp;32-bit unsigned integer</td>
+		<td valign=top>&nbsp;&lt;pointer-size&gt; the first 32-bits as unsigned integer</td>
 	</tr></table>
 </a>
 
@@ -742,7 +747,7 @@ live input (to avoid mirroring of the image).
 <p>
 The byte order of color values depends on the target platform (i.e. big-endian versus little-endian). For little-endian platforms
 (e.g. Intel PC), the byte order is BGRA for 32-bit and BGR for 24-bit colors.
-For big-endian machines (e.g. MAC), the byte order for 32-bit is ARGB and RGB for 24-bit.<br>
+For big-endian machines (e.g. PowerPC Mac), the byte order for 32-bit is ARGB and RGB for 24-bit.<br>
 For all target platforms, the unsigned integer representation of a 32-bit color is the same, namely (in C syntax):
 <pre>
 unsigned int color = (A << 24) + (R << 16) + (G << 8) + (B << 0);
@@ -757,7 +762,7 @@ differences and program their plugins accordingly.
 <a name="SetParameterStruct">
 	<table border=0 bgcolor="#E8E8E8"><tr>
 		<td valign=top><h3>SetParameterStruct</h3></td>
-		<td valign=top>&nbsp;(size = 8 bytes)</td>
+		<td valign=top>&nbsp;(size = 4 bytes + &lt;pointer-size&gt;)</td>
 	</tr></table>
 </a>
 
@@ -790,7 +795,7 @@ SetParameterStruct {
 <a name="PluginExtendedInfoStruct">
 	<table border=0 bgcolor="#E8E8E8"><tr>
 		<td valign=top><h3>PluginExtendedInfoStruct</h3></td>
-		<td valign=top>&nbsp;(size = 24 bytes)</td>
+		<td valign=top>&nbsp;(size = 12 bytes + 3 &lt;pointer-size&gt;)</td>
 	</tr></table>
 </a>
 
@@ -798,10 +803,10 @@ SetParameterStruct {
 PluginExtendedInfoStruct{
   <b>PluginMajorVersion:</b> 32-bit unsigned integer
   <b>PluginMinorVersion:</b> 32-bit unsigned integer
-  <b>Description:</b> 32-bit pointer to null terminated string
-  <b>About:</b> 32-bit pointer to null terminated string
+  <b>Description:</b> &lt;pointer-size&gt; pointer to null terminated string
+  <b>About:</b> &lt;pointer-size&gt; pointer to null terminated string
   <b>FreeFrameExtendedDataSize:</b> 32-bit unsigned integer
-  <b>FreeFrameExtendedDataBlock:</b> 32-bit pointer
+  <b>FreeFrameExtendedDataBlock:</b> &lt;pointer-size&gt; pointer
 }
 </pre>
 
@@ -843,7 +848,7 @@ PluginExtendedInfoStruct{
 <tr>
 	<td valign=top><i>FreeFrameExtendedDataBlock:</i></td>
 	<td>
-		32-bit pointer to a FreeFrame ExtendedDataBlock
+		&lt;pointer-size&gt; pointer to a FreeFrame ExtendedDataBlock
 		- this interface is not yet in use, but provided
 		to allow the FreeFrame project to establish an
 		extended data block format in the future.
@@ -865,15 +870,15 @@ version number.  Example: 0.751 APIMajorVersion=0, APIMinorVersion=751
 <a name="ProcessFrameCopyStruct">
 	<table border=0 bgcolor="#E8E8E8"><tr>
 		<td valign=top><h3>ProcessFrameCopyStruct</h3></td>
-		<td valign=top>&nbsp;(size = 12 bytes)</td>
+		<td valign=top>&nbsp;(size = 4 bytes + 2 &lt;pointer-size&gt;)</td>
 	</tr></table>
 </a>
 
 <pre>
 ProcessFrameCopyStruct{
   <b>numInputFrames:</b> 32-bit unsigned integer
-  <b>ppInputFrames:</b> 32-bit pointer to array of pointers
-  <b>pOutputFrame:</b> 32-bit pointer
+  <b>ppInputFrames:</b> &lt;pointer-size&gt; pointer to array of pointers
+  <b>pOutputFrame:</b> &lt;pointer-size&gt; pointer
 }
 </pre>
 
@@ -1002,14 +1007,14 @@ If the host's viewport changes (perhaps because the user changed their output wi
 <a name="ProcessOpenGLStruct">
 	<table border=0 bgcolor="#E8E8E8"><tr>
 		<td valign=top><h3>ProcessOpenGLStruct</h3></td>
-		<td valign=top>&nbsp;(size = 12 bytes)</td>
+		<td valign=top>&nbsp;(size = 8 bytes + &lt;pointer-size&gt;)</td>
 	</tr></table>
 </a>
 
 <pre>
 ProcessOpenGLStruct {
    <b>numInputTextures:</b> 32-bit unsigned integer
-   <b>ppInputTextures:</b> 32-bit pointer to array of pointers to <a href="#FFGLTextureStruct">FFGLTextureStruct</a>
+   <b>ppInputTextures:</b> &lt;pointer-size&gt; pointer to array of pointers to <a href="#FFGLTextureStruct">FFGLTextureStruct</a>
    <b>HostFBO:</b> 32-bit unsigned integer (GLuint)
 }
 </pre>
@@ -1239,7 +1244,7 @@ that are the same for all instances, and so do not require a valid InstanceID.</
 <i>none</i>
 
 <h4>Return value:</h4>
-32-bit pointer to <A href="#PluginInfoStruct">PluginInfoStruct</a> if successful,
+&lt;pointer-size&gt; pointer to <A href="#PluginInfoStruct">PluginInfoStruct</a> if successful,
 <a href="#FF_FAIL">FF_FAIL</a> otherwise.
 
 <h4>Remarks:</h4>
@@ -1381,7 +1386,7 @@ or <a href="#FF_FAIL">FF_FAIL</a> on error.
 </table>
 
 <h4>Return value:</h4>
-32-bit pointer to <a href="#ParameterName">ParameterName</a> (16 byte char array) containing the name of parameter specified by
+&lt;pointer-size&gt; pointer to <a href="#ParameterName">ParameterName</a> (16 byte char array) containing the name of parameter specified by
 index.
 Returns <a href="#FF_FAIL">FF_FAIL</a> on error.
 
@@ -1406,8 +1411,8 @@ Returns <a href="#FF_FAIL">FF_FAIL</a> on error.
 
 <h4>Return value:</h4>
 <a href="#ParameterDefaultValue">ParameterDefaultValue</a> indicating the default value of parameter specified by index.
-For float parameters, the return value is a 32-bit float (0&lt;=value&lt;=1). Return value
-for text parameters is a 32-bit pointer to a null terminated string.
+For float parameters, the first 32 bits of the return value is a 32-bit float (0&lt;=value&lt;=1). Return value
+for text parameters is a &lt;pointer-size&gt; pointer to a null terminated string.
 <br>
 Returns <a href="#FF_FAIL">FF_FAIL</a> on error.
 
@@ -1431,7 +1436,7 @@ Returns <a href="#FF_FAIL">FF_FAIL</a> on error.
 </table>
 
 <h4>Return value:</h4>
-32-bit unsigned integer<br><Br>
+The first 32 bits of the return value is a 32-bit unsigned integer<br><Br>
 Use the table below to determine what value to return for each capability (see <a href="#PluginCapsIndex">PluginCapsIndex</a>).
 <br><br>
 <table border=1>
@@ -1545,7 +1550,7 @@ check with the plugin to see if those are supported, and use one of them instead
 <i>none</i>
 
 <h4>Return value:</h4>
-32-bit pointer to <a href="#PluginExtendedInfoStruct">PluginExtendedInfoStruct</a> or
+&lt;pointer-size&gt; pointer to <a href="#PluginExtendedInfoStruct">PluginExtendedInfoStruct</a> or
 <a href="#FF_FAIL">FF_FAIL</a> on error.
 
 <hr>
@@ -1598,7 +1603,7 @@ passed as 32-bit floats from 0-1, except text data.
 <tr>
 	<td><i>pFrame:</i></td>
 	<td>
-		32-bit pointer to byte array containing frame of video.
+		&lt;pointer-size&gt; pointer to byte array containing frame of video.
 	</td>
 </tr>
 </table>
@@ -1730,7 +1735,7 @@ depending on the type of the parameter (see <a href="#ParameterValue">ParameterV
 <tr>
 	<td><i>videoInfo:</i></td>
 	<td>
-		32-bit pointer to <a href="#VideoinfoStruct">VideoInfoStruct</a>.
+		&lt;pointer-size&gt; pointer to <a href="#VideoinfoStruct">VideoInfoStruct</a>.
 	</td>
 </tr>
 </table>
@@ -1738,7 +1743,7 @@ depending on the type of the parameter (see <a href="#ParameterValue">ParameterV
 <h4>Return value:</h4>
 An <a href="#InstanceIdentifier">InstanceIdentifier</a> for the newly instantiated
 effect. Will be used as instanceID for future function calls.<br>
-Returns <a href="#FF_FAIL">FF_FAIL</a> on error.
+Returns (hex) 00000000 on error.
 
 <h4>Remarks:</h4>
 
@@ -1758,7 +1763,7 @@ Returns <a href="#FF_FAIL">FF_FAIL</a> on error.
 <tr>
 	<td valign=top>GPU PLUGINS:</td>
 	<td>
-		Do not implement this function, return FF_FAIL. GPU plugins have their own <a href="#instantiateGL">instantiateGL</a> function.<br><br><br>
+		Do not implement this function, return (hex) 00000000. GPU plugins have their own <a href="#instantiateGL">instantiateGL</a> function.<br><br><br>
 	</td>
 </tr>
 <tr><td colspan=2><br></td></tr>
@@ -1828,7 +1833,7 @@ Returns <a href="#FF_SUCCESS">FF_SUCCESS</a> if successful or <a href="#FF_FAIL"
 <tr>
 	<td><i>copyStruct:</i></td>
 	<td>
-		32-bit pointer to <a href="#ProcessFrameCopyStruct">ProcessFrameCopyStruct</a>
+		&lt;pointer-size&gt; pointer to <a href="#ProcessFrameCopyStruct">ProcessFrameCopyStruct</a>
 	</td>
 </tr>
 </table>
@@ -1968,8 +1973,6 @@ failed. (32-bit unsigned integer)
     <td valign=top>&nbsp;(function code = 18, needs valid instanceID!)</td>
   </tr>
 </table>
-<p>#define FF_INSTANTIATEGL       18</p>
-<p>DWORD instantiateGL(const FFGLViewportStruct *pHostGLViewport)</p>
 <h4>Input value:</h4>
 <table border=0>
   <tr>
@@ -1980,11 +1983,11 @@ failed. (32-bit unsigned integer)
 <h4>Return value:</h4>
 An <a href="#InstanceIdentifier">InstanceIdentifier</a> for the newly instantiated
 effect. Will be used as instanceID for future function calls.<br>
-Returns <a href="#FF_FAIL">FF_FAIL</a> on error.
+Returns (hex) 00000000 on error.
 <h4>Remarks:</h4>
 <table border=0>
 <tr><td>CPU PLUGINS:</td>
-<td>Do not implement this function, return FF_FAIL. CPU plugins have their own <a href="#instantiate">instantiate</a> function.</td>
+<td>Do not implement this function, return (hex) 00000000. CPU plugins have their own <a href="#instantiate">instantiate</a> function.</td>
 </tr>
 
 <tr><td colspan=2><br></td></tr>
@@ -2022,8 +2025,6 @@ Returns <a href="#FF_FAIL">FF_FAIL</a> on error.
     <td valign=top>&nbsp;(function code = 19, needs valid instanceID!)</td>
   </tr>
 </table>
-<p>#define FF_DEINSTANTIATEGL     19</p>
-<p>DWORD deInstantiateGL(void *instanceID)</p>
 <h4>Input value:</h4>
 <table border=0>
   <tr>
