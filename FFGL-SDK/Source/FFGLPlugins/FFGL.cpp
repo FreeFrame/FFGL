@@ -138,6 +138,7 @@ char* getParameterName(DWORD index)
 	return s_pPrototype->GetParamName(index);
 }
 
+
 DWORD getParameterDefault(DWORD index)
 {
 	if (s_pPrototype == NULL) {
@@ -148,11 +149,16 @@ DWORD getParameterDefault(DWORD index)
 	void* pValue = s_pPrototype->GetParamDefault(index);
 	if (pValue == NULL) return FF_FAIL;
 	else {
-		DWORD dwRet;
-		memcpy(&dwRet, pValue, 4);
-		return dwRet;
+		if( s_pPrototype->GetParamType(index) == FF_TYPE_TEXT ){
+			return (DWORD)pValue;
+		}else{
+			DWORD dwRet;
+			memcpy(&dwRet, pValue, 4);
+			return dwRet;
+		}
 	}
 }
+
 
 DWORD getPluginCaps(DWORD index)
 {
@@ -257,8 +263,14 @@ DWORD instantiateGL(const FFGLViewportStruct *pGLViewport)
 		void* pValue = s_pPrototype->GetParamDefault(DWORD(i));
 		SetParameterStruct ParamStruct;
 		ParamStruct.ParameterNumber = DWORD(i);
-		memcpy(&ParamStruct.NewParameterValue, pValue, 4);
-		dwRet = pInstance->SetParameter(&ParamStruct);
+    
+    if( s_pPrototype->GetParamType(DWORD(i)) == FF_TYPE_TEXT ){
+    	ParamStruct.NewParameterValue = (DWORD)pValue;
+    }else{
+			memcpy(&ParamStruct.NewParameterValue, pValue, 4);
+		}
+    
+    dwRet = pInstance->SetParameter(&ParamStruct);
 		if (dwRet == FF_FAIL)
     {
       //SetParameter failed, delete the instance
