@@ -221,7 +221,8 @@ FFResult FFGLPluginInstance::InstantiateGL(const FFGLViewportStruct *viewport)
   for (i=0; i<MAX_PARAMETERS && i<m_numParameters; i++)
   {
     arg.UIntValue = i;
-    float result = *((float *)&m_ffPluginMain(FF_GETPARAMETERDEFAULT,arg,0).UIntValue);
+    FFUInt32 returned = m_ffPluginMain(FF_GETPARAMETERDEFAULT,arg,0).UIntValue;
+    float result = *((float *)&returned);
     // Removed check for zero which was wrongly made here - TWB
     SetFloatParameter(i,result);
   }
