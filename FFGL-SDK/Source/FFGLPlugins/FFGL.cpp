@@ -403,7 +403,7 @@ FFResult deInstantiateGL(void *instanceID)
 			retval.UIntValue = FF_FAIL;
     break;
 	
-	case FF_GETIPUTSTATUS:
+	case FF_GETINPUTSTATUS:
 		if (pPlugObj != NULL)
 			retval.UIntValue = pPlugObj->GetInputStatus(inputValue.UIntValue);
 		else
